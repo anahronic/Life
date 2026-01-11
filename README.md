@@ -1,0 +1,2 @@
+# Life
+Ideas about life.
