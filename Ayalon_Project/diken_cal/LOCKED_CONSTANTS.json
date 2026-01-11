@@ -1,0 +1,36 @@
+{
+  "model_version": "1.0-freeze",
+  "constants_version": "AppendixA-v1.2",
+  "frozen_at": "2026-01-08",
+  "physical_constants": {
+    "V_free_kmh": 90.0,
+    "V_free_mps": 25.0,
+    "comment_V_free": "Posted free-flow speed on Highway 20 (Ayalon)"
+  },
+  "fuel_constants": {
+    "Fuel_idle_rate_L_per_h": 0.8,
+    "StopGo_factor": 1.5,
+    "CO2_per_liter_kg": 2.31,
+    "comment_fuel": "Stop-go idle fuel consumption multiplier and CO2 emission factor"
+  },
+  "economic_constants": {
+    "Value_of_Time_ILS_per_h": 62.5,
+    "comment_economic": "Opportunity cost of time (not currently used in leakage calculation)"
+  },
+  "data_validation": {
+    "PRICE_MIN_ILS_per_L": 4.0,
+    "PRICE_MAX_ILS_per_L": 12.0,
+    "comment_validation": "Sanity guard: fuel price must be between 4-12 ILS/L (fail-closed if outside range)"
+  },
+  "source_cadence": {
+    "traffic_cache_ttl_s": 300,
+    "air_quality_cache_ttl_s": 600,
+    "fuel_cache_ttl_s": 86400,
+    "comment_cadence": "Cache TTLs for live data sources"
+  },
+  "canonical_schema": {
+    "segment_keys": ["segment_id", "length_km", "observed_travel_time_s", "vehicle_count"],
+    "provenance_keys": ["model_version", "constants_version", "data_timestamp_utc", "data_source_ids", "pipeline_run_id", "vehicle_count_mode"],
+    "comment_schema": "Canonical keys enforced by methodology.py and sources/*.py"
+  }
+}
