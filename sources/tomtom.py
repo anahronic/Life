@@ -105,10 +105,6 @@ def _call_tomtom(api_key: str, lat: float, lon: float, unit: str = "KMPH") -> Tu
     """Perform TomTom Flow API call, return (json, headers, url_without_key, status_code)."""
     params = {"point": f"{lat},{lon}", "unit": unit, "openLr": "false", "key": api_key}
 
-    allowed, wait_s = can_call_api("tomtom")
-    if not allowed:
-        raise RuntimeError(f"TomTom v4 rate-limited: retry_after_seconds={wait_s:.1f}")
-
     start = datetime.utcnow()
     r = requests.get(BASE, params=params, timeout=20)
     status = r.status_code
@@ -255,12 +251,26 @@ def get_ayalon_segments(api_key: str | None, cache_ttl_s: int = 300, mode: str =
     }
 
     segments: List[Dict[str, Any]] = []
+    probes_to_fetch: List[Dict[str, Any]] = []
+
+    # First, reuse any per-probe cache entries.
     for p in PROBE_POINTS:
         probe_cache_key = f"tt_v4_abs10_{mode}_{p['id']}_{p['lat']:.3f}_{p['lon']:.3f}"
         seg_cached = cache_read(probe_cache_key, max_age_s=cache_ttl_s)
         if seg_cached:
             segments.append(seg_cached)
-            continue
+        else:
+            probes_to_fetch.append(p)
+
+    # Apply rate limiting once per batch refresh (not per probe).
+    # This prevents a single UI refresh from being blocked after the first probe call.
+    if probes_to_fetch and api_key:
+        allowed, wait_s = can_call_api("tomtom")
+        if not allowed:
+            raise RuntimeError(f"TomTom v4 rate-limited: retry_after_seconds={wait_s:.1f}")
+
+    for p in probes_to_fetch:
+        probe_cache_key = f"tt_v4_abs10_{mode}_{p['id']}_{p['lat']:.3f}_{p['lon']:.3f}"
         seg = _segment_from_probe(p, api_key, mode=mode)
         segments.append(seg)
         cache_write(probe_cache_key, seg)

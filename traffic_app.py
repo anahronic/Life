@@ -2,7 +2,8 @@ import os
 import time
 import streamlit as st
 from methodology import AyalonModel
-from sources import tomtom, sviva
+from sources import tomtom
+from sources.air_quality import get_air_quality_for_ayalon
 from sources.fuel_govil import fetch_current_fuel_price_ils_per_l as fetch_current_fuel_price
 from sources.secure_config import SecureConfig
 from sources.health import get_quick_status
@@ -51,7 +52,7 @@ except Exception as e:
     tomtom_data = {"source_id": "tomtom:error", "segments": [], "errors": [api_err.message], "fetched_at": datetime.utcnow().isoformat() + "Z"}
     record_request(success=False, error_code=api_err.code.value)
 
-sviva_data = sviva.get_nearby_aq_for_ayalon(cache_ttl_s=600)
+aq_data = get_air_quality_for_ayalon(cache_ttl_s=600)
 fuel_data = fetch_current_fuel_price()
 vehicle_count_mode = tomtom_data.get('vehicle_count_mode')
 
@@ -79,8 +80,15 @@ st.header("Input Data Sources")
 col1, col2, col3 = st.columns(3)
 col1.metric("Traffic Source", tomtom_data.get('source_id', 'tomtom:unknown'))
 col1.write(f"Updated: {tomtom_data.get('fetched_at')}")
-col2.metric("Air Quality Source", sviva_data.get('station_id', 'sviva:unknown'))
-col2.write(f"Updated: {sviva_data.get('fetched_at')}")
+col2.metric("Air Quality Source", aq_data.get('source_id', 'air:unknown'))
+col2.write(f"Updated: {aq_data.get('fetched_at')}")
+aq_metrics = aq_data.get('metrics') or {}
+if aq_metrics.get('pm2_5_ug_m3') is not None:
+    col2.write(f"PM2.5 (µg/m³): {aq_metrics.get('pm2_5_ug_m3')}")
+if aq_metrics.get('us_aqi') is not None:
+    col2.write(f"US AQI: {aq_metrics.get('us_aqi')}")
+if aq_data.get('error'):
+    col2.warning(str(aq_data.get('error'))[:200])
 col3.metric("Fuel Price Source", fuel_data.get('source_id', 'gov-or-env'))
 col3.write(f"Price (ILS/L): {fuel_data.get('price_ils_per_l', 'n/a')}")
 
@@ -98,7 +106,11 @@ if not segments:
 
 # Run model when data present
 if segments and 'price_ils_per_l' in fuel_data:
-    src_ids = {'traffic': tomtom_data.get('source_id'), 'air': f"sviva:{sviva_data.get('station_id')}", 'fuel': fuel_data.get('source_id')}
+    src_ids = {
+        'traffic': tomtom_data.get('source_id'),
+        'air': aq_data.get('source_id'),
+        'fuel': fuel_data.get('source_id'),
+    }
     data_ts = tomtom_data.get('fetched_at')
     p_fuel = float(fuel_data['price_ils_per_l'])
     results = model.run_model(segments, data_timestamp_utc=data_ts, source_ids=src_ids, p_fuel_ils_per_l=p_fuel, vehicle_count_mode=vehicle_count_mode)
