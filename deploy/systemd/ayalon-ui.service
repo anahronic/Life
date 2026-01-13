@@ -8,7 +8,9 @@ Type=simple
 WorkingDirectory=/opt/Life
 Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=-/etc/default/ayalon-monitor
-ExecStart=/opt/Life/.venv/bin/streamlit run traffic_app.py --server.port 8501 --server.address 0.0.0.0
+# Bind to localhost; put Nginx in front for public access.
+# If you intentionally want to expose Streamlit directly, change address to 0.0.0.0
+ExecStart=/opt/Life/.venv/bin/streamlit run traffic_app.py --server.port 8501 --server.address 127.0.0.1
 Restart=on-failure
 RestartSec=3
 

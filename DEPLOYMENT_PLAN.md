@@ -251,6 +251,22 @@ sudo journalctl -u ayalon-collector.service -n 50 --no-pager
 7) Put behind a reverse proxy (optional)
 - Use Nginx + TLS (Let’s Encrypt) and proxy to `localhost:8501`.
 
+Nginx quickstart:
+```bash
+sudo apt-get install -y nginx
+sudo cp deploy/nginx/ayalon-monitor.conf /etc/nginx/sites-available/ayalon-monitor
+sudo nano /etc/nginx/sites-available/ayalon-monitor   # set server_name
+sudo ln -sf /etc/nginx/sites-available/ayalon-monitor /etc/nginx/sites-enabled/ayalon-monitor
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+HTTPS (Let’s Encrypt):
+```bash
+sudo apt-get install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d example.com
+```
+
 Updating the live site from this workspace
 - This VS Code workspace pushes changes to GitHub (`git push`).
 - On Streamlit Cloud: it auto-redeploys from GitHub.
