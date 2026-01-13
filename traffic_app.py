@@ -12,6 +12,7 @@ from sources.error_handler import ErrorHandler
 from ui_messages import normalization_banner_text
 from datetime import datetime
 from sources.history_store import HistoryStore
+from sources.official_stats import fetch_official_congestion_benchmark
 
 st.set_page_config(page_title="Ayalon Real-Time Physical Impact Model", layout="wide")
 
@@ -69,6 +70,27 @@ _I18N = {
         "history_render_fail": "יש היסטוריה אך לא ניתן להציג אותה כטבלה בסביבה זו.",
         "modeling_note": "**הערת מידול:** המודל אוכף סכימת קטעים קנונית ומצרף מקוריות לכל ריצה.",
         "data_sources_footer": "מקורות נתונים: TomTom Traffic Flow (v4) לתנועה, Sviva לאיכות אוויר, ומקורות ממשלתיים למחיר הדלק. קצב עדכון ~5 דקות (TTL מטמון). ספירות כלי רכב *מוערכות* מזרימה/מהירות ואינן מונה רשמי.",
+
+        "loss_opt_per_hour": "לשעה",
+        "loss_opt_per_day": "ליום",
+        "loss_opt_per_year": "לשנה",
+        "loss_opt_total_window": "סה\"כ (לחלון)",
+        "window_opt_1h": "שעה אחרונה",
+        "window_opt_24h": "24 שעות אחרונות",
+        "window_opt_7d": "7 ימים אחרונים",
+        "window_opt_30d": "30 ימים אחרונים",
+        "window_opt_all": "כל הזמן",
+        "metric_vehicle_hours": "שעות-רכב",
+        "metric_co2": "CO₂",
+        "metric_excess_fuel": "דלק עודף",
+        "metric_fuel_cost": "עלות דלק",
+        "time_value_caption": "אומדן עלות זמן (₪): ₪ {value:,.0f} (בהנחה ₪{rate:.2f}/שעת-רכב)",
+        "extrapolated_caption": "הוחשב בהסקה מ-{window}. משך נצפה: {hours:.2f} שעות.",
+
+        "official_header": "השוואה לנתונים רשמיים (Gov.il)",
+        "official_metric": "שעות אבודות לאדם לשנה (רשמי)",
+        "official_unconfigured": "לא הוגדר מקור רשמי. אפשר להוסיף OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR או OFFICIAL_STATS_JSON_URL ב-secrets.",
+        "official_note": "הערה: הנתון הרשמי הוא בדרך כלל ממוצע שנתי לאדם/נהג; המודל כאן מציג מונים ברמת מערכת (vehicle-hours) עבור המדידה הנוכחית/החלון הנבחר.",
     },
     "en": {
         "app_title": "Ayalon Real-Time Physical Impact Model — Monitor",
@@ -115,6 +137,27 @@ _I18N = {
         "history_render_fail": "History is available but could not be rendered as a table in this environment.",
         "modeling_note": "**Modeling Note:** This model enforces canonical segment schema and attaches provenance to each run.",
         "data_sources_footer": "Data sources: TomTom Traffic Flow (v4) for traffic, Sviva API for air quality, and government sources for fuel price. Update cadence is ~5 minutes (cache TTL). Vehicle counts are *estimated* from flow/speed and are not an official vehicle counter.",
+
+        "loss_opt_per_hour": "Per hour",
+        "loss_opt_per_day": "Per day",
+        "loss_opt_per_year": "Per year",
+        "loss_opt_total_window": "Total (window)",
+        "window_opt_1h": "Last 1 hour",
+        "window_opt_24h": "Last 24 hours",
+        "window_opt_7d": "Last 7 days",
+        "window_opt_30d": "Last 30 days",
+        "window_opt_all": "All time",
+        "metric_vehicle_hours": "Vehicle-Hours",
+        "metric_co2": "CO₂",
+        "metric_excess_fuel": "Excess fuel",
+        "metric_fuel_cost": "Fuel cost",
+        "time_value_caption": "Indicative time-value loss (₪): ₪ {value:,.0f} (assumes ₪{rate:.2f}/vehicle-hour)",
+        "extrapolated_caption": "Extrapolated from {window}. Observed duration: {hours:.2f} hours.",
+
+        "official_header": "Official benchmark (Gov.il)",
+        "official_metric": "Hours lost per person per year (official)",
+        "official_unconfigured": "Official benchmark not configured. Set OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR or OFFICIAL_STATS_JSON_URL in secrets.",
+        "official_note": "Note: the official number is typically an annual per-person/driver average; this model shows system-level counters (vehicle-hours) for the current measurement / selected window.",
     },
     "ar": {
         "app_title": "نموذج الأثر الفيزيائي اللحظي — أيالون",
@@ -161,6 +204,27 @@ _I18N = {
         "history_render_fail": "السجل موجود لكن تعذر عرضه كجدول في هذه البيئة.",
         "modeling_note": "**ملاحظة نمذجة:** يفرض هذا النموذج مخطط مقاطع قياسي ويُلحق المصدرية بكل تشغيل.",
         "data_sources_footer": "مصادر البيانات: TomTom Traffic Flow (v4) للمرور، وSviva لجودة الهواء، ومصادر حكومية لسعر الوقود. وتيرة التحديث ~5 دقائق. أعداد المركبات *مُقدّرة* من التدفق/السرعة وليست عدادًا رسميًا.",
+
+        "loss_opt_per_hour": "لكل ساعة",
+        "loss_opt_per_day": "لكل يوم",
+        "loss_opt_per_year": "لكل سنة",
+        "loss_opt_total_window": "الإجمالي (للنافذة)",
+        "window_opt_1h": "آخر ساعة",
+        "window_opt_24h": "آخر 24 ساعة",
+        "window_opt_7d": "آخر 7 أيام",
+        "window_opt_30d": "آخر 30 يومًا",
+        "window_opt_all": "كل الوقت",
+        "metric_vehicle_hours": "ساعات-مركبة",
+        "metric_co2": "CO₂",
+        "metric_excess_fuel": "وقود زائد",
+        "metric_fuel_cost": "تكلفة الوقود",
+        "time_value_caption": "تقدير خسارة قيمة الوقت (₪): ₪ {value:,.0f} (بافتراض ₪{rate:.2f}/ساعة-مركبة)",
+        "extrapolated_caption": "تمت الاستقراء من {window}. المدة المُلاحظة: {hours:.2f} ساعة.",
+
+        "official_header": "مقارنة ببيانات رسمية (Gov.il)",
+        "official_metric": "ساعات مفقودة للفرد في السنة (رسمي)",
+        "official_unconfigured": "لم يتم إعداد المرجع الرسمي. اضبط OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR أو OFFICIAL_STATS_JSON_URL في secrets.",
+        "official_note": "ملاحظة: الرقم الرسمي عادةً متوسط سنوي للفرد/السائق؛ هذا النموذج يعرض عدّادات على مستوى النظام (ساعات-مركبة) للقياس الحالي/النافذة المختارة.",
     },
     "ru": {
         "app_title": "Ayalon — монитор физического воздействия",
@@ -207,6 +271,27 @@ _I18N = {
         "history_render_fail": "История есть, но её нельзя отрисовать таблицей в этой среде.",
         "modeling_note": "**Примечание по модели:** приложение приводит сегменты к канонической схеме и прикрепляет provenance к каждому прогону.",
         "data_sources_footer": "Источники данных: TomTom Traffic Flow (v4) для трафика, Sviva для воздуха и государственные источники для цены топлива. Период обновления ~5 минут (TTL кэша). Кол-во машин *оценивается* по потоку/скорости и не является официальным счётчиком.",
+
+        "loss_opt_per_hour": "В час",
+        "loss_opt_per_day": "В день",
+        "loss_opt_per_year": "В год",
+        "loss_opt_total_window": "Итого (окно)",
+        "window_opt_1h": "Последний час",
+        "window_opt_24h": "Последние 24 часа",
+        "window_opt_7d": "Последние 7 дней",
+        "window_opt_30d": "Последние 30 дней",
+        "window_opt_all": "За всё время",
+        "metric_vehicle_hours": "Машино‑часы",
+        "metric_co2": "CO₂",
+        "metric_excess_fuel": "Лишнее топливо",
+        "metric_fuel_cost": "Стоимость топлива",
+        "time_value_caption": "Оценка потерь времени (₪): ₪ {value:,.0f} (предположено ₪{rate:.2f}/машино‑час)",
+        "extrapolated_caption": "Экстраполировано по окну: {window}. Наблюдаемая длительность: {hours:.2f} ч.",
+
+        "official_header": "Официальные данные (Gov.il)",
+        "official_metric": "Потерянные часы на человека в год (официально)",
+        "official_unconfigured": "Официальный бенчмарк не настроен. Задай OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR или OFFICIAL_STATS_JSON_URL в secrets.",
+        "official_note": "Примечание: официальный показатель обычно годовой средний на человека/водителя; эта модель показывает системные счётчики (машино‑часы) для текущего измерения/выбранного окна.",
     },
 }
 
@@ -225,6 +310,30 @@ lang_display = st.sidebar.selectbox(
     key="lang_display",
 )
 lang = _lang_display_to_code.get(lang_display, "he")
+
+# RTL/LTR direction
+if lang in ("he", "ar"):
+    st.markdown(
+        """
+        <style>
+        .stApp { direction: rtl; }
+        .stSidebar { direction: rtl; }
+        .stMarkdown, .stText, .stCaption { text-align: right; }
+        [data-testid="stMetricLabel"], [data-testid="stMetricValue"], [data-testid="stMetricDelta"] { text-align: right; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+else:
+    st.markdown(
+        """
+        <style>
+        .stApp { direction: ltr; }
+        .stSidebar { direction: ltr; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 st.title(_t("app_title", lang))
 st.markdown(_t("app_subtitle", lang))
@@ -260,11 +369,11 @@ def _fetch_with_retries(label: str, fn, retries: int = 2, base_delay_s: float = 
 
 def _history_window_seconds(choice: str) -> int | None:
     mapping = {
-        "Last 1 hour": 3600,
-        "Last 24 hours": 24 * 3600,
-        "Last 7 days": 7 * 24 * 3600,
-        "Last 30 days": 30 * 24 * 3600,
-        "All time": None,
+        "1h": 3600,
+        "24h": 24 * 3600,
+        "7d": 7 * 24 * 3600,
+        "30d": 30 * 24 * 3600,
+        "all": None,
     }
     return mapping.get(choice)
 
@@ -313,16 +422,32 @@ api_key = SecureConfig.get_tomtom_api_key()
 auto_refresh = st.sidebar.checkbox(_t("auto_refresh", lang), value=True)
 
 st.sidebar.subheader(_t("loss_display_header", lang))
-loss_display = st.sidebar.selectbox(
+_loss_opts = [
+    ("loss_opt_per_hour", "per_hour"),
+    ("loss_opt_per_day", "per_day"),
+    ("loss_opt_per_year", "per_year"),
+    ("loss_opt_total_window", "total_window"),
+]
+loss_display_label = st.sidebar.selectbox(
     _t("loss_display_label", lang),
-    options=["Per hour", "Per day", "Per year", "Total (window)"],
+    options=[_t(k, lang) for k, _code in _loss_opts],
     index=1,
 )
-history_window_choice = st.sidebar.selectbox(
+loss_display = dict(((_t(k, lang)), code) for k, code in _loss_opts).get(loss_display_label, "per_day")
+
+_window_opts = [
+    ("window_opt_1h", "1h"),
+    ("window_opt_24h", "24h"),
+    ("window_opt_7d", "7d"),
+    ("window_opt_30d", "30d"),
+    ("window_opt_all", "all"),
+]
+history_window_label = st.sidebar.selectbox(
     _t("history_window_label", lang),
-    options=["Last 1 hour", "Last 24 hours", "Last 7 days", "Last 30 days", "All time"],
+    options=[_t(k, lang) for k, _code in _window_opts],
     index=1,
 )
+history_window_choice = dict(((_t(k, lang)), code) for k, code in _window_opts).get(history_window_label, "24h")
 
 # Public-friendly system status (no secrets)
 st.sidebar.info(f"{_t('system_health', lang)}: {get_quick_status()}")
@@ -477,37 +602,37 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
             totals = None
 
         def scale(total_value: float) -> float:
-            if loss_display == "Total (window)":
+            if loss_display == "total_window":
                 return float(total_value)
             rate_per_h = float(total_value) / float(duration_h or 1e-6)
-            if loss_display == "Per hour":
+            if loss_display == "per_hour":
                 return rate_per_h
-            if loss_display == "Per day":
+            if loss_display == "per_day":
                 return rate_per_h * 24.0
-            if loss_display == "Per year":
+            if loss_display == "per_year":
                 return rate_per_h * 24.0 * 365.0
             return float(total_value)
 
         use_history = isinstance(totals, dict) and bool(totals)
         colA, colB, colC, colD = st.columns(4)
         if use_history:
-            colA.metric(f"Vehicle-Hours ({loss_display})", f"{scale(totals.get('delta_T_total_h', 0.0)):,.2f} h")
-            colB.metric(f"CO₂ ({loss_display})", f"{scale(totals.get('co2_emissions_kg', 0.0)):,.2f} kg")
-            colC.metric(f"Excess fuel ({loss_display})", f"{scale(totals.get('fuel_excess_L', 0.0)):,.2f} L")
-            colD.metric(f"Fuel cost ({loss_display})", f"₪ {scale(totals.get('leakage_ils', 0.0)):,.2f}")
-            if loss_display != "Total (window)":
-                st.caption(
-                    f"Extrapolated from {history_window_choice}. Observed duration: {duration_h:.2f} hours."
-                )
+            colA.metric(_t("metric_vehicle_hours", lang), f"{scale(totals.get('delta_T_total_h', 0.0)):,.2f} h")
+            colB.metric(_t("metric_co2", lang), f"{scale(totals.get('co2_emissions_kg', 0.0)):,.2f} kg")
+            colC.metric(_t("metric_excess_fuel", lang), f"{scale(totals.get('fuel_excess_L', 0.0)):,.2f} L")
+            colD.metric(_t("metric_fuel_cost", lang), f"₪ {scale(totals.get('leakage_ils', 0.0)):,.2f}")
+            if loss_display != "total_window":
+                st.caption(_t("extrapolated_caption", lang).format(window=history_window_label, hours=duration_h))
         else:
-            colA.metric("Vehicle-Hours (delay)", f"{delta_T:,.2f} h")
-            colB.metric("CO₂ from excess fuel", f"{results['co2_emissions_kg']:,.2f} kg")
-            colC.metric("Excess fuel burned", f"{results['fuel_excess_L']:,.2f} L")
-            colD.metric("Direct fuel cost", f"₪ {results['leakage_ils']:,.2f}")
+            colA.metric(_t("metric_vehicle_hours", lang), f"{delta_T:,.2f} h")
+            colB.metric(_t("metric_co2", lang), f"{results['co2_emissions_kg']:,.2f} kg")
+            colC.metric(_t("metric_excess_fuel", lang), f"{results['fuel_excess_L']:,.2f} L")
+            colD.metric(_t("metric_fuel_cost", lang), f"₪ {results['leakage_ils']:,.2f}")
 
         st.caption(
-            f"Indicative time-value loss (₪): ₪ {time_value_ils:,.0f} "
-            f"(assumes ₪{float(getattr(model,'Value_of_Time_ILS_per_h',62.5)):.2f}/vehicle-hour)"
+            _t("time_value_caption", lang).format(
+                value=float(time_value_ils),
+                rate=float(getattr(model, 'Value_of_Time_ILS_per_h', 62.5)),
+            )
         )
 
         with st.expander(_t("what_mean", lang), expanded=True):
@@ -575,18 +700,33 @@ with tab_history:
             leak_per_year = rate_per_h * 24.0 * 365.0
 
             c1, c2, c3 = st.columns(3)
-            c1.metric("Total fuel cost (all time, ₪)", f"₪ {total_leak_all:,.0f}")
-            c2.metric("Total CO₂ (all time, kg)", f"{total_co2_all:,.0f}")
-            c3.metric("Avg fuel cost per run (all time, ₪)", f"₪ {avg_leak_all:,.0f}")
+            c1.metric(f"{_t('metric_fuel_cost', lang)} (all time, ₪)", f"₪ {total_leak_all:,.0f}")
+            c2.metric(f"{_t('metric_co2', lang)} (all time, kg)", f"{total_co2_all:,.0f}")
+            c3.metric(f"{_t('metric_fuel_cost', lang)} / run (all time, ₪)", f"₪ {avg_leak_all:,.0f}")
 
-            st.caption(f"Selected window: {history_window_choice} | Observed duration: {duration_h:.2f} hours")
+            st.caption(f"{_t('history_window_label', lang)}: {history_window_label} | {duration_h:.2f} h")
             w1, w2, w3, w4 = st.columns(4)
-            w1.metric(f"Fuel cost (Total window, ₪)", f"₪ {window_leak:,.0f}")
-            w2.metric(f"Fuel cost (Per hour, ₪/h)", f"₪ {rate_per_h:,.0f}")
-            w3.metric(f"Fuel cost (Per day, ₪/day)", f"₪ {leak_per_day:,.0f}")
-            w4.metric(f"Fuel cost (Per year, ₪/yr)", f"₪ {leak_per_year:,.0f}")
+            w1.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_total_window', lang)}, ₪)", f"₪ {window_leak:,.0f}")
+            w2.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_hour', lang)}, ₪/h)", f"₪ {rate_per_h:,.0f}")
+            w3.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_day', lang)}, ₪/day)", f"₪ {leak_per_day:,.0f}")
+            w4.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_year', lang)}, ₪/yr)", f"₪ {leak_per_year:,.0f}")
 
-            st.caption(f"Window totals: delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
+            st.caption(f"delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
+
+            st.subheader(_t("official_header", lang))
+            official = fetch_official_congestion_benchmark(cache_ttl_s=24 * 3600)
+            hours_off = official.get("hours_lost_per_person_per_year")
+            if hours_off is None:
+                st.info(_t("official_unconfigured", lang))
+                if official.get("error"):
+                    st.caption(str(official.get("error"))[:200])
+            else:
+                st.metric(_t("official_metric", lang), f"{float(hours_off):,.0f} h")
+                src_label = official.get("source_label")
+                src_url = official.get("source_url")
+                if src_label or src_url:
+                    st.caption(f"{src_label or ''} {src_url or ''}".strip())
+            st.caption(_t("official_note", lang))
 
             st.subheader(_t("trend", lang))
             df_plot = df.copy().sort_values('recorded_at_utc')
