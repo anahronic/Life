@@ -39,6 +39,36 @@ _I18N = {
         "tab_dashboard": "לוח מחוונים",
         "tab_history": "היסטוריה וסטטיסטיקה",
         "tab_sources": "מקורות ובריאות",
+
+        "input_sources_header": "מקורות נתונים נכנסים",
+        "system_header": "מערכת",
+        "traffic_source": "מקור תנועה",
+        "air_quality_source": "מקור איכות אוויר",
+        "fuel_price_source": "מקור מחיר דלק",
+        "updated": "עודכן",
+        "price_ils_per_l": "מחיר (ש״ח/ליטר)",
+        "traffic_age": "גיל נתוני תנועה",
+        "no_segments": "אין קטעי תנועה זמינים; בדוק הגדרות או רשת",
+        "losses_explained": "הפסדים — הסבר",
+        "what_mean": "מה המשמעות של המספרים האלה (בשפה פשוטה)",
+        "what_mean_body": "- שעות-רכב (עיכוב): זמן עודף כולל שכלי רכב מבלים עקב עומס לעומת זרימה חופשית.\n- דלק עודף (ל׳): דלק נוסף שנשרף בזמן עיכוב (סרק/עצור-וסע).\n- CO₂ (ק״ג): פליטות הנגזרות מהדלק העודף (2.31 ק״ג CO₂ לליטר).\n- עלות דלק ישירה (ש״ח): הדלק העודף כפול מחיר הדלק הנוכחי.\nאלו מונים מערכתיים: מתארים השפעה כוללת, לא נהג יחיד.",
+        "provenance": "מקוריות (Provenance)",
+        "model_version": "גרסת מודל",
+        "constants_version": "גרסת קבועים",
+        "data_timestamp": "חותמת זמן של הנתונים",
+        "pipeline_run_id": "מזהה ריצה",
+        "stale_warning": "נתוני התנועה מיושנים (יותר מפי 2 מהקצב)",
+        "waiting_inputs": "ממתין למחיר דלק תקין או להזנת תנועה. אפשר להגדיר FUEL_PRICE_ILS כגיבוי.",
+        "history_header": "היסטוריה וסטטיסטיקה",
+        "history_caption": "נשמר מקומית בזמן הניטור (SQLite).",
+        "no_history": "עדיין אין היסטוריה. הפעל רענון אוטומטי או הרץ כמה פעמים.",
+        "summary": "סיכום",
+        "trend": "מגמה",
+        "table": "טבלה",
+        "download_csv": "הורד CSV",
+        "history_render_fail": "יש היסטוריה אך לא ניתן להציג אותה כטבלה בסביבה זו.",
+        "modeling_note": "**הערת מידול:** המודל אוכף סכימת קטעים קנונית ומצרף מקוריות לכל ריצה.",
+        "data_sources_footer": "מקורות נתונים: TomTom Traffic Flow (v4) לתנועה, Sviva לאיכות אוויר, ומקורות ממשלתיים למחיר הדלק. קצב עדכון ~5 דקות (TTL מטמון). ספירות כלי רכב *מוערכות* מזרימה/מהירות ואינן מונה רשמי.",
     },
     "en": {
         "app_title": "Ayalon Real-Time Physical Impact Model — Monitor",
@@ -55,6 +85,36 @@ _I18N = {
         "tab_dashboard": "Dashboard",
         "tab_history": "History & Stats",
         "tab_sources": "Sources & Health",
+
+        "input_sources_header": "Input Data Sources",
+        "system_header": "System",
+        "traffic_source": "Traffic Source",
+        "air_quality_source": "Air Quality Source",
+        "fuel_price_source": "Fuel Price Source",
+        "updated": "Updated",
+        "price_ils_per_l": "Price (ILS/L)",
+        "traffic_age": "Traffic age",
+        "no_segments": "No traffic segments available; check configuration or network",
+        "losses_explained": "Losses — explained",
+        "what_mean": "What these numbers mean (plain language)",
+        "what_mean_body": "- Vehicle-Hours (delay): total extra time all vehicles spend due to congestion vs free-flow.\n- Excess fuel (L): extra fuel burned while delayed (idle/stop-go).\n- CO₂ (kg): emissions implied by that extra fuel (using 2.31 kg CO₂ per liter).\n- Direct fuel cost (₪): fuel excess multiplied by current fuel price (ILS/L).\nThese are system-level counters: they describe total impact, not a single driver.",
+        "provenance": "Provenance",
+        "model_version": "Model version",
+        "constants_version": "Constants version",
+        "data_timestamp": "Data timestamp",
+        "pipeline_run_id": "Pipeline run id",
+        "stale_warning": "Traffic data is STALE (older than 2×cadence)",
+        "waiting_inputs": "Waiting for valid fuel price or traffic feed. Set FUEL_PRICE_ILS env var as fallback.",
+        "history_header": "History & Statistics",
+        "history_caption": "Saved locally during monitoring (SQLite).",
+        "no_history": "No history yet. Enable auto-refresh or rerun a few times.",
+        "summary": "Summary",
+        "trend": "Trend",
+        "table": "Table",
+        "download_csv": "Download CSV",
+        "history_render_fail": "History is available but could not be rendered as a table in this environment.",
+        "modeling_note": "**Modeling Note:** This model enforces canonical segment schema and attaches provenance to each run.",
+        "data_sources_footer": "Data sources: TomTom Traffic Flow (v4) for traffic, Sviva API for air quality, and government sources for fuel price. Update cadence is ~5 minutes (cache TTL). Vehicle counts are *estimated* from flow/speed and are not an official vehicle counter.",
     },
     "ar": {
         "app_title": "نموذج الأثر الفيزيائي اللحظي — أيالون",
@@ -71,6 +131,36 @@ _I18N = {
         "tab_dashboard": "لوحة التحكم",
         "tab_history": "السجل والإحصاءات",
         "tab_sources": "المصادر والصحة",
+
+        "input_sources_header": "مصادر البيانات",
+        "system_header": "النظام",
+        "traffic_source": "مصدر المرور",
+        "air_quality_source": "مصدر جودة الهواء",
+        "fuel_price_source": "مصدر سعر الوقود",
+        "updated": "آخر تحديث",
+        "price_ils_per_l": "السعر (شيكل/لتر)",
+        "traffic_age": "عمر بيانات المرور",
+        "no_segments": "لا توجد مقاطع مرور متاحة؛ تحقّق من الإعدادات أو الشبكة",
+        "losses_explained": "الخسائر — شرح",
+        "what_mean": "ماذا تعني هذه الأرقام (بلغة بسيطة)",
+        "what_mean_body": "- ساعات-مركبة (تأخير): مجموع الوقت الإضافي الذي تقضيه كل المركبات بسبب الازدحام مقارنةً بالتدفق الحر.\n- وقود زائد (لتر): وقود إضافي يُحرق أثناء التأخير (توقف/انطلاق).\n- CO₂ (كغ): الانبعاثات الناتجة عن هذا الوقود الزائد (2.31 كغ CO₂ لكل لتر).\n- تكلفة الوقود المباشرة (₪): الوقود الزائد مضروبًا في سعر الوقود الحالي.\nهذه عدّادات على مستوى النظام: تصف الأثر الكلي وليس سائقًا واحدًا.",
+        "provenance": "المصدرية (Provenance)",
+        "model_version": "إصدار النموذج",
+        "constants_version": "إصدار الثوابت",
+        "data_timestamp": "طابع وقت البيانات",
+        "pipeline_run_id": "معرّف التشغيل",
+        "stale_warning": "بيانات المرور قديمة (أكثر من ضعفي الوتيرة)",
+        "waiting_inputs": "بانتظار سعر وقود صالح أو بيانات المرور. يمكن ضبط FUEL_PRICE_ILS كخيار احتياطي.",
+        "history_header": "السجل والإحصاءات",
+        "history_caption": "يُحفظ محليًا أثناء المراقبة (SQLite).",
+        "no_history": "لا يوجد سجل بعد. فعّل التحديث التلقائي أو أعد التشغيل عدة مرات.",
+        "summary": "ملخص",
+        "trend": "الاتجاه",
+        "table": "جدول",
+        "download_csv": "تنزيل CSV",
+        "history_render_fail": "السجل موجود لكن تعذر عرضه كجدول في هذه البيئة.",
+        "modeling_note": "**ملاحظة نمذجة:** يفرض هذا النموذج مخطط مقاطع قياسي ويُلحق المصدرية بكل تشغيل.",
+        "data_sources_footer": "مصادر البيانات: TomTom Traffic Flow (v4) للمرور، وSviva لجودة الهواء، ومصادر حكومية لسعر الوقود. وتيرة التحديث ~5 دقائق. أعداد المركبات *مُقدّرة* من التدفق/السرعة وليست عدادًا رسميًا.",
     },
     "ru": {
         "app_title": "Ayalon — монитор физического воздействия",
@@ -87,6 +177,36 @@ _I18N = {
         "tab_dashboard": "Дашборд",
         "tab_history": "История и статистика",
         "tab_sources": "Источники и здоровье",
+
+        "input_sources_header": "Источники входных данных",
+        "system_header": "Система",
+        "traffic_source": "Источник трафика",
+        "air_quality_source": "Источник качества воздуха",
+        "fuel_price_source": "Источник цены топлива",
+        "updated": "Обновлено",
+        "price_ils_per_l": "Цена (₪/л)",
+        "traffic_age": "Возраст данных трафика",
+        "no_segments": "Нет доступных сегментов трафика; проверь настройки или сеть",
+        "losses_explained": "Потери — объяснение",
+        "what_mean": "Что означают эти числа (простыми словами)",
+        "what_mean_body": "- Vehicle-Hours (delay): суммарное дополнительное время всех машин из‑за пробок относительно свободного потока.\n- Excess fuel (L): лишнее топливо, сожжённое во время задержки (холостой ход/старт‑стоп).\n- CO₂ (kg): выбросы от этого лишнего топлива (2.31 кг CO₂ на литр).\n- Direct fuel cost (₪): лишнее топливо, умноженное на текущую цену топлива.\nЭто системные счётчики: они описывают общий эффект, а не одного водителя.",
+        "provenance": "Происхождение данных (Provenance)",
+        "model_version": "Версия модели",
+        "constants_version": "Версия констант",
+        "data_timestamp": "Метка времени данных",
+        "pipeline_run_id": "ID прогона",
+        "stale_warning": "Данные трафика УСТАРЕЛИ (старше чем 2×период)",
+        "waiting_inputs": "Ожидание корректной цены топлива или трафика. Можно задать FUEL_PRICE_ILS как запасной вариант.",
+        "history_header": "История и статистика",
+        "history_caption": "Сохраняется локально во время мониторинга (SQLite).",
+        "no_history": "Истории пока нет. Включи автообновление или запусти несколько раз.",
+        "summary": "Сводка",
+        "trend": "Тренд",
+        "table": "Таблица",
+        "download_csv": "Скачать CSV",
+        "history_render_fail": "История есть, но её нельзя отрисовать таблицей в этой среде.",
+        "modeling_note": "**Примечание по модели:** приложение приводит сегменты к канонической схеме и прикрепляет provenance к каждому прогону.",
+        "data_sources_footer": "Источники данных: TomTom Traffic Flow (v4) для трафика, Sviva для воздуха и государственные источники для цены топлива. Период обновления ~5 минут (TTL кэша). Кол-во машин *оценивается* по потоку/скорости и не является официальным счётчиком.",
     },
 }
 
@@ -267,7 +387,7 @@ vehicle_count_mode = tomtom_data.get('vehicle_count_mode')
 now_ts = time.time()
 tomtom_ts = _parse_iso_to_ts(tomtom_data.get('fetched_at', '1970-01-01T00:00:00Z'))
 tomtom_age = now_ts - tomtom_ts
-st.sidebar.write(f"Traffic age: {int(tomtom_age)}s")
+st.sidebar.write(f"{_t('traffic_age', lang)}: {int(tomtom_age)}s")
 if auto_refresh and tomtom_age > 300:
     st.rerun()
 
@@ -284,15 +404,15 @@ tab_dashboard, tab_history, tab_sources = st.tabs([
 ])
 
 with tab_sources:
-    st.header("Input Data Sources")
+    st.header(_t("input_sources_header", lang))
     col1, col2, col3 = st.columns(3)
-    col1.metric("Traffic Source", tomtom_data.get('source_id', 'tomtom:unknown'))
-    col1.write(f"Updated: {tomtom_data.get('fetched_at')}")
+    col1.metric(_t("traffic_source", lang), tomtom_data.get('source_id', 'tomtom:unknown'))
+    col1.write(f"{_t('updated', lang)}: {tomtom_data.get('fetched_at')}")
     if tomtom_data.get('errors'):
         col1.warning(str(tomtom_data.get('errors')[0])[:200])
 
-    col2.metric("Air Quality Source", aq_data.get('source_id', 'air:unknown'))
-    col2.write(f"Updated: {aq_data.get('fetched_at')}")
+    col2.metric(_t("air_quality_source", lang), aq_data.get('source_id', 'air:unknown'))
+    col2.write(f"{_t('updated', lang)}: {aq_data.get('fetched_at')}")
     aq_metrics = aq_data.get('metrics') or {}
     if aq_metrics.get('pm2_5_ug_m3') is not None:
         col2.write(f"PM2.5 (µg/m³): {aq_metrics.get('pm2_5_ug_m3')}")
@@ -301,11 +421,11 @@ with tab_sources:
     if aq_data.get('error'):
         col2.warning(str(aq_data.get('error'))[:200])
 
-    col3.metric("Fuel Price Source", fuel_data.get('source_id', 'gov-or-env'))
-    col3.write(f"Price (ILS/L): {fuel_data.get('price_ils_per_l', 'n/a')}")
+    col3.metric(_t("fuel_price_source", lang), fuel_data.get('source_id', 'gov-or-env'))
+    col3.write(f"{_t('price_ils_per_l', lang)}: {fuel_data.get('price_ils_per_l', 'n/a')}")
 
-    st.subheader("System")
-    st.info(f"System health: {get_quick_status()}")
+    st.subheader(_t("system_header", lang))
+    st.info(f"{_t('system_health', lang)}: {get_quick_status()}")
 
 banner = normalization_banner_text(vehicle_count_mode, lang=lang)
 if banner:
@@ -319,7 +439,7 @@ if not segments:
             st.error(tomtom_data["errors"][0])
     else:
         with tab_dashboard:
-            st.error("No traffic segments available; check configuration or network")
+            st.error(_t("no_segments", lang))
 
 # Run model when data present
 results = None
@@ -341,7 +461,7 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
         pass
 
     with tab_dashboard:
-        st.header("Losses — explained")
+        st.header(_t("losses_explained", lang))
         delta_T = float(results['delta_T_total_h'])
         time_value_ils = delta_T * float(getattr(model, 'Value_of_Time_ILS_per_h', 62.5))
         # Use monitoring history to scale numbers for non-technical users (per hour/day/year/total)
@@ -390,24 +510,18 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
             f"(assumes ₪{float(getattr(model,'Value_of_Time_ILS_per_h',62.5)):.2f}/vehicle-hour)"
         )
 
-        with st.expander("What these numbers mean (plain language)", expanded=True):
-            st.write(
-                "- Vehicle-Hours (delay): total extra time all vehicles spend due to congestion vs free-flow.\n"
-                "- Excess fuel (L): extra fuel burned while delayed (idle/stop-go).\n"
-                "- CO₂ (kg): emissions implied by that extra fuel (using 2.31 kg CO₂ per liter).\n"
-                "- Direct fuel cost (₪): fuel excess multiplied by current fuel price (ILS/L).\n"
-                "These are system-level counters: they describe total impact, not a single driver."
-            )
+        with st.expander(_t("what_mean", lang), expanded=True):
+            st.write(_t("what_mean_body", lang))
 
-        st.subheader("Provenance")
-        st.write(f"Model version: {results['model_version']}")
-        st.write(f"Constants version: {results['constants_version']}")
-        st.write(f"Data timestamp: {results['data_timestamp_utc']}")
-        st.write(f"Pipeline run id: {results['pipeline_run_id']}")
+        st.subheader(_t("provenance", lang))
+        st.write(f"{_t('model_version', lang)}: {results['model_version']}")
+        st.write(f"{_t('constants_version', lang)}: {results['constants_version']}")
+        st.write(f"{_t('data_timestamp', lang)}: {results['data_timestamp_utc']}")
+        st.write(f"{_t('pipeline_run_id', lang)}: {results['pipeline_run_id']}")
 
         stale = tomtom_age > 600
         if stale:
-            st.warning("Traffic data is STALE (older than 2×cadence)")
+            st.warning(_t("stale_warning", lang))
             record_stale_data()
 
         # Mini trend chart (last N runs)
@@ -425,19 +539,19 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
             pass
 else:
     with tab_dashboard:
-        st.info("Waiting for valid fuel price or traffic feed. Set FUEL_PRICE_ILS env var as fallback.")
+        st.info(_t("waiting_inputs", lang))
 
 
 with tab_history:
-    st.header("History & Statistics")
-    st.caption("Saved locally during monitoring (SQLite).")
+    st.header(_t("history_header", lang))
+    st.caption(_t("history_caption", lang))
 
     df = history.fetch_runs_df(limit=5000)
     try:
         import pandas as pd  # type: ignore
 
         if not isinstance(df, pd.DataFrame) or df.empty:
-            st.info("No history yet. Enable auto-refresh or rerun a few times.")
+            st.info(_t("no_history", lang))
         else:
             window_s = _history_window_seconds(history_window_choice)
             dfw, totals, duration_h = _compute_aggregates_from_history(df, window_s)
@@ -447,7 +561,7 @@ with tab_history:
             df_table = df_table.sort_values('recorded_at_utc', ascending=False)
 
             # Summary
-            st.subheader("Summary")
+            st.subheader(_t("summary", lang))
             total_leak_all = float(df_table['leakage_ils'].dropna().sum()) if 'leakage_ils' in df_table else 0.0
             total_co2_all = float(df_table['co2_emissions_kg'].dropna().sum()) if 'co2_emissions_kg' in df_table else 0.0
             avg_leak_all = float(df_table['leakage_ils'].dropna().mean()) if 'leakage_ils' in df_table and df_table['leakage_ils'].notna().any() else 0.0
@@ -474,13 +588,13 @@ with tab_history:
 
             st.caption(f"Window totals: delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
 
-            st.subheader("Trend")
+            st.subheader(_t("trend", lang))
             df_plot = df.copy().sort_values('recorded_at_utc')
             df_plot = df_plot[['recorded_at_utc', 'leakage_ils', 'co2_emissions_kg', 'delta_T_total_h']].dropna()
             df_plot = df_plot.set_index('recorded_at_utc')
             st.line_chart(df_plot)
 
-            st.subheader("Table")
+            st.subheader(_t("table", lang))
             cols = [
                 'recorded_at_utc',
                 'data_timestamp_utc',
@@ -498,13 +612,12 @@ with tab_history:
             st.dataframe(df_table[existing], use_container_width=True)
 
             csv = df_table[existing].to_csv(index=False)
-            st.download_button("Download CSV", data=csv, file_name="monitor_history.csv", mime="text/csv")
+            st.download_button(_t("download_csv", lang), data=csv, file_name="monitor_history.csv", mime="text/csv")
     except Exception:
-        st.info("History is available but could not be rendered as a table in this environment.")
+        st.info(_t("history_render_fail", lang))
 
 st.markdown("---")
-st.markdown("**Modeling Note:** This model enforces canonical segment schema and attaches provenance to each run.")
+st.markdown(_t("modeling_note", lang))
 st.caption(
-    "Data sources: TomTom Traffic Flow (v4) for traffic, Sviva API for air quality, and government sources for fuel price. "
-    "Update cadence is ~5 minutes (cache TTL). Vehicle counts are *estimated* from flow/speed and are not an official vehicle counter."
+    _t("data_sources_footer", lang)
 )
