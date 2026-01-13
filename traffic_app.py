@@ -46,10 +46,72 @@ def _fetch_with_retries(label: str, fn, retries: int = 2, base_delay_s: float = 
                 time.sleep(base_delay_s * (2 ** attempt))
     return None, last_exc
 
+
+def _history_window_seconds(choice: str) -> int | None:
+    mapping = {
+        "Last 1 hour": 3600,
+        "Last 24 hours": 24 * 3600,
+        "Last 7 days": 7 * 24 * 3600,
+        "Last 30 days": 30 * 24 * 3600,
+        "All time": None,
+    }
+    return mapping.get(choice)
+
+
+def _compute_aggregates_from_history(df, window_s: int | None):
+    """Return (df_window, totals_dict, duration_hours) using recorded_at_utc."""
+    import pandas as pd  # type: ignore
+
+    if df is None or not isinstance(df, pd.DataFrame) or df.empty:
+        return None, {}, 0.0
+
+    d = df.copy()
+    d['recorded_at_utc'] = pd.to_datetime(d['recorded_at_utc'], errors='coerce', utc=True)
+    d = d.dropna(subset=['recorded_at_utc'])
+    if d.empty:
+        return None, {}, 0.0
+
+    now = pd.Timestamp.utcnow().tz_localize('UTC')
+    if window_s is not None:
+        start = now - pd.Timedelta(seconds=int(window_s))
+        d = d[d['recorded_at_utc'] >= start]
+        if d.empty:
+            return None, {}, 0.0
+
+    d = d.sort_values('recorded_at_utc')
+    duration_h = (d['recorded_at_utc'].max() - d['recorded_at_utc'].min()).total_seconds() / 3600.0
+    duration_h = max(duration_h, 1e-6)
+
+    def total(col: str) -> float:
+        if col not in d.columns:
+            return 0.0
+        s = pd.to_numeric(d[col], errors='coerce').dropna()
+        return float(s.sum()) if not s.empty else 0.0
+
+    totals = {
+        'delta_T_total_h': total('delta_T_total_h'),
+        'fuel_excess_L': total('fuel_excess_L'),
+        'co2_emissions_kg': total('co2_emissions_kg'),
+        'leakage_ils': total('leakage_ils'),
+    }
+    return d, totals, duration_h
+
 # Controls
 st.sidebar.header("Data & Refresh")
 api_key = SecureConfig.get_tomtom_api_key()
 auto_refresh = st.sidebar.checkbox("Auto-refresh every 5 minutes", value=True)
+
+st.sidebar.subheader("Loss Display")
+loss_display = st.sidebar.selectbox(
+    "Show losses as",
+    options=["Per hour", "Per day", "Per year", "Total (window)"],
+    index=1,
+)
+history_window_choice = st.sidebar.selectbox(
+    "History window",
+    options=["Last 1 hour", "Last 24 hours", "Last 7 days", "Last 30 days", "All time"],
+    index=1,
+)
 
 # Public-friendly system status (no secrets)
 st.sidebar.info(f"System health: {get_quick_status()}")
@@ -187,13 +249,51 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
         st.header("Losses — explained")
         delta_T = float(results['delta_T_total_h'])
         time_value_ils = delta_T * float(getattr(model, 'Value_of_Time_ILS_per_h', 62.5))
-        colA, colB, colC, colD = st.columns(4)
-        colA.metric("Vehicle-Hours (delay)", f"{delta_T:,.2f} h")
-        colB.metric("CO₂ from excess fuel", f"{results['co2_emissions_kg']:,.2f} kg")
-        colC.metric("Excess fuel burned", f"{results['fuel_excess_L']:,.2f} L")
-        colD.metric("Direct fuel cost", f"₪ {results['leakage_ils']:,.2f}")
+        # Use monitoring history to scale numbers for non-technical users (per hour/day/year/total)
+        totals = None
+        duration_h = 0.0
+        try:
+            import pandas as pd  # type: ignore
 
-        st.caption(f"Indicative time-value loss (₪): ₪ {time_value_ils:,.0f} (assumes ₪{getattr(model,'Value_of_Time_ILS_per_h',62.5):.2f}/vehicle-hour)")
+            df_hist = history.fetch_runs_df(limit=5000)
+            window_s = _history_window_seconds(history_window_choice)
+            _dfw, totals, duration_h = _compute_aggregates_from_history(df_hist, window_s)
+        except Exception:
+            totals = None
+
+        def scale(total_value: float) -> float:
+            if loss_display == "Total (window)":
+                return float(total_value)
+            rate_per_h = float(total_value) / float(duration_h or 1e-6)
+            if loss_display == "Per hour":
+                return rate_per_h
+            if loss_display == "Per day":
+                return rate_per_h * 24.0
+            if loss_display == "Per year":
+                return rate_per_h * 24.0 * 365.0
+            return float(total_value)
+
+        use_history = isinstance(totals, dict) and bool(totals)
+        colA, colB, colC, colD = st.columns(4)
+        if use_history:
+            colA.metric(f"Vehicle-Hours ({loss_display})", f"{scale(totals.get('delta_T_total_h', 0.0)):,.2f} h")
+            colB.metric(f"CO₂ ({loss_display})", f"{scale(totals.get('co2_emissions_kg', 0.0)):,.2f} kg")
+            colC.metric(f"Excess fuel ({loss_display})", f"{scale(totals.get('fuel_excess_L', 0.0)):,.2f} L")
+            colD.metric(f"Fuel cost ({loss_display})", f"₪ {scale(totals.get('leakage_ils', 0.0)):,.2f}")
+            if loss_display != "Total (window)":
+                st.caption(
+                    f"Extrapolated from {history_window_choice}. Observed duration: {duration_h:.2f} hours."
+                )
+        else:
+            colA.metric("Vehicle-Hours (delay)", f"{delta_T:,.2f} h")
+            colB.metric("CO₂ from excess fuel", f"{results['co2_emissions_kg']:,.2f} kg")
+            colC.metric("Excess fuel burned", f"{results['fuel_excess_L']:,.2f} L")
+            colD.metric("Direct fuel cost", f"₪ {results['leakage_ils']:,.2f}")
+
+        st.caption(
+            f"Indicative time-value loss (₪): ₪ {time_value_ils:,.0f} "
+            f"(assumes ₪{float(getattr(model,'Value_of_Time_ILS_per_h',62.5)):.2f}/vehicle-hour)"
+        )
 
         with st.expander("What these numbers mean (plain language)", expanded=True):
             st.write(
@@ -244,19 +344,40 @@ with tab_history:
         if not isinstance(df, pd.DataFrame) or df.empty:
             st.info("No history yet. Enable auto-refresh or rerun a few times.")
         else:
+            window_s = _history_window_seconds(history_window_choice)
+            dfw, totals, duration_h = _compute_aggregates_from_history(df, window_s)
+
             # Latest first for table readability
             df_table = df.copy()
             df_table = df_table.sort_values('recorded_at_utc', ascending=False)
 
             # Summary
             st.subheader("Summary")
-            total_leak = float(df_table['leakage_ils'].dropna().sum()) if 'leakage_ils' in df_table else 0.0
-            total_co2 = float(df_table['co2_emissions_kg'].dropna().sum()) if 'co2_emissions_kg' in df_table else 0.0
-            avg_leak = float(df_table['leakage_ils'].dropna().mean()) if 'leakage_ils' in df_table and df_table['leakage_ils'].notna().any() else 0.0
+            total_leak_all = float(df_table['leakage_ils'].dropna().sum()) if 'leakage_ils' in df_table else 0.0
+            total_co2_all = float(df_table['co2_emissions_kg'].dropna().sum()) if 'co2_emissions_kg' in df_table else 0.0
+            avg_leak_all = float(df_table['leakage_ils'].dropna().mean()) if 'leakage_ils' in df_table and df_table['leakage_ils'].notna().any() else 0.0
+
+            # Window-based scaling
+            window_leak = float((totals or {}).get('leakage_ils', 0.0))
+            window_co2 = float((totals or {}).get('co2_emissions_kg', 0.0))
+            window_delay_h = float((totals or {}).get('delta_T_total_h', 0.0))
+            rate_per_h = (window_leak / duration_h) if duration_h else 0.0
+            leak_per_day = rate_per_h * 24.0
+            leak_per_year = rate_per_h * 24.0 * 365.0
+
             c1, c2, c3 = st.columns(3)
-            c1.metric("Total fuel cost (₪)", f"₪ {total_leak:,.0f}")
-            c2.metric("Total CO₂ (kg)", f"{total_co2:,.0f}")
-            c3.metric("Avg fuel cost per run (₪)", f"₪ {avg_leak:,.0f}")
+            c1.metric("Total fuel cost (all time, ₪)", f"₪ {total_leak_all:,.0f}")
+            c2.metric("Total CO₂ (all time, kg)", f"{total_co2_all:,.0f}")
+            c3.metric("Avg fuel cost per run (all time, ₪)", f"₪ {avg_leak_all:,.0f}")
+
+            st.caption(f"Selected window: {history_window_choice} | Observed duration: {duration_h:.2f} hours")
+            w1, w2, w3, w4 = st.columns(4)
+            w1.metric(f"Fuel cost (Total window, ₪)", f"₪ {window_leak:,.0f}")
+            w2.metric(f"Fuel cost (Per hour, ₪/h)", f"₪ {rate_per_h:,.0f}")
+            w3.metric(f"Fuel cost (Per day, ₪/day)", f"₪ {leak_per_day:,.0f}")
+            w4.metric(f"Fuel cost (Per year, ₪/yr)", f"₪ {leak_per_year:,.0f}")
+
+            st.caption(f"Window totals: delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
 
             st.subheader("Trend")
             df_plot = df.copy().sort_values('recorded_at_utc')
