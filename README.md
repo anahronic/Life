@@ -1,41 +1,28 @@
-# Life
+Ayalon Real-Time Physical Impact Model
 
-**Project**
+Quickstart
 
-- **Description:** A collection of research and tools for traffic and data integration focused on the Ayalon corridor. The primary working folder is [Ayalon_Project](Ayalon_Project/README.md), which contains data parsers, analysis scripts and a small web/CLI interface.
+1. Install dependencies:
 
-**Quick Start**
-
-- **Create virtualenv:** `python -m venv .venv`
-- **Activate (Windows):** `.venv\Scripts\activate`
-- **Install dependencies:** `pip install -r Ayalon_Project/requirements.txt`
-- **Run main app:** `python Ayalon_Project/app.py` (or try `python Ayalon_Project/traffic_app.py`)
-- **Reproduce analysis:** `python Ayalon_Project/run_reproduce.py`
-
-**Tests**
-
-- **Run tests:** `pytest Ayalon_Project/tests` (install `pytest` if not included in requirements)
-
-**Repository Structure (key files)**
-
-- **Ayalon code:** [Ayalon_Project/app.py](Ayalon_Project/app.py), [Ayalon_Project/traffic_app.py](Ayalon_Project/traffic_app.py), [Ayalon_Project/run_reproduce.py](Ayalon_Project/run_reproduce.py)
-- **Dependencies:** [Ayalon_Project/requirements.txt](Ayalon_Project/requirements.txt)
-- **Raw data:** examples in [Ayalon_Project/raw/tomtom.json](Ayalon_Project/raw/tomtom.json) and other JSON files in `Ayalon_Project/raw`
-- **Parsers & cache:** [Ayalon_Project/sources](Ayalon_Project/sources) and cached outputs in [Ayalon_Project/sources/_cache/tomtom_ayalon.json](Ayalon_Project/sources/_cache/tomtom_ayalon.json)
-- **Constants:** [Ayalon_Project/LOCKED_CONSTANTS.json](Ayalon_Project/LOCKED_CONSTANTS.json)
-- **Tests:** [Ayalon_Project/tests](Ayalon_Project/tests)
-
-**Developer Notes**
-
-- **Caching:** The parsers under [Ayalon_Project/sources](Ayalon_Project/sources) write/read a simple JSON cache in `sources/_cache` to avoid repeated network or heavy parsing.
-- **Data sources:** Parsers include TomTom, fuel and local CSV/JSON formats. Raw sources are kept in `Ayalon_Project/raw` for traceability.
-- **Reproducibility:** Use `run_reproduce.py` to run the documented sequence from `IMPLEMENTATION_REPORT.md` and `FREEZE_MANIFEST.md`.
-
-**Useful Commands**
-
-```powershell
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r Ayalon_Project/requirements.txt
-pytest Ayalon_Project/tests
+```bash
+pip install -r requirements.txt
 ```
+
+2. Set environment variables (recommended):
+
+```bash
+export TOMTOM_API_KEY=your_key_here
+export FUEL_PRICE_ILS=7.5  # optional fallback
+```
+
+3. Run Streamlit monitor:
+
+```bash
+streamlit run traffic_app.py
+```
+
+Notes
+- The model requires live traffic (TomTom) and fuel price (gov or env var). If TomTom key is not set, the app returns sample segments.
+- Data is cached in `sources/_cache` (file-based). Cache TTLs: traffic 300s, air 600s, fuel daily.
+- Use `python run_reproduce.py` to export latest raw JSON for reproducibility.
+- If `vehicle_count_mode = normalized_per_probe`, all totals are normalized per probe; absolute totals require flow-based vehicle counts.
