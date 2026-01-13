@@ -1,9 +1,11 @@
-"""
-Global rate limiter to protect external API quotas.
-Implements a simple token-bucket style rate limiting at application level.
+"""Global rate limiter to protect external API quotas.
+
+Implements a simple app-level rate limiting layer (shared within the process).
+Configured via env var `RATE_LIMIT_SECONDS`.
 """
 
 import time
+import os
 from threading import Lock
 from typing import Dict, Tuple
 
@@ -89,8 +91,8 @@ class RateLimiter:
             return time.time() - last_call if last_call > 0 else float('inf')
 
 
-# Global instance
-_global_limiter = RateLimiter(min_interval_seconds=60)
+# Global instance (configurable)
+_global_limiter = RateLimiter(min_interval_seconds=int(os.getenv("RATE_LIMIT_SECONDS", "60")))
 
 
 def can_call_api(service: str = 'tomtom') -> Tuple[bool, float]:

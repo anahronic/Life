@@ -4,9 +4,13 @@ import requests
 from typing import Dict, Any, List, Tuple
 from datetime import datetime
 from .cache import cache_read, cache_write
+from .rate_limiter import can_call_api, record_api_call, get_quota_status
+from .logger import log_api_call, log_error, log_quota_alert
 
 # TomTom Flow API v4 (absolute, zoom 10)
 BASE = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
+
+TOMTOM_QUOTA_PER_HOUR = int(os.getenv("TOMTOM_QUOTA_PER_HOUR", "2500"))
 
 # Estimation/config constants (override via env for reproducibility/calibration)
 DEFAULT_DENSITY_VEH_PER_KM = float(os.getenv("TT_DEFAULT_DENSITY_VEH_PER_KM", "25"))
@@ -100,13 +104,30 @@ def _windowed_coords(coords: List[Dict[str, float]], center_idx: int, half_windo
 def _call_tomtom(api_key: str, lat: float, lon: float, unit: str = "KMPH") -> Tuple[Dict[str, Any], Dict[str, Any], str, int]:
     """Perform TomTom Flow API call, return (json, headers, url_without_key, status_code)."""
     params = {"point": f"{lat},{lon}", "unit": unit, "openLr": "false", "key": api_key}
+
+    allowed, wait_s = can_call_api("tomtom")
+    if not allowed:
+        raise RuntimeError(f"TomTom v4 rate-limited: retry_after_seconds={wait_s:.1f}")
+
+    start = datetime.utcnow()
     r = requests.get(BASE, params=params, timeout=20)
     status = r.status_code
     # Build URL without key for provenance
     params_no_key = {k: v for k, v in params.items() if k != "key"}
     url_wo_key = f"{BASE}?" + "&".join(f"{k}={v}" for k, v in params_no_key.items())
+
+    elapsed_ms = (datetime.utcnow() - start).total_seconds() * 1000
+    log_api_call("tomtom", url_wo_key, status, elapsed_ms)
+
     if status != 200:
+        log_error("tomtom", f"http_{status}", f"endpoint={url_wo_key}")
         raise RuntimeError(f"TomTom v4 fetch failed: status={status} endpoint={url_wo_key}")
+
+    record_api_call("tomtom", quota_per_hour=TOMTOM_QUOTA_PER_HOUR)
+    quota = get_quota_status("tomtom", quota_per_hour=TOMTOM_QUOTA_PER_HOUR)
+    if quota.get("percent_used", 0) >= 90:
+        log_quota_alert("tomtom", quota.get("calls_this_hour", 0), quota.get("quota_per_hour", TOMTOM_QUOTA_PER_HOUR))
+
     js = r.json()
     return js, dict(r.headers), url_wo_key, status
 
@@ -233,27 +254,23 @@ def get_ayalon_segments(api_key: str | None, cache_ttl_s: int = 300, mode: str =
         "segments": [],
     }
 
-    try:
-        segments: List[Dict[str, Any]] = []
-        for p in PROBE_POINTS:
-            probe_cache_key = f"tt_v4_abs10_{mode}_{p['id']}_{p['lat']:.3f}_{p['lon']:.3f}"
-            seg_cached = cache_read(probe_cache_key, max_age_s=cache_ttl_s)
-            if seg_cached:
-                segments.append(seg_cached)
-                continue
-            seg = _segment_from_probe(p, api_key, mode=mode)
-            segments.append(seg)
-            cache_write(probe_cache_key, seg)
+    segments: List[Dict[str, Any]] = []
+    for p in PROBE_POINTS:
+        probe_cache_key = f"tt_v4_abs10_{mode}_{p['id']}_{p['lat']:.3f}_{p['lon']:.3f}"
+        seg_cached = cache_read(probe_cache_key, max_age_s=cache_ttl_s)
+        if seg_cached:
+            segments.append(seg_cached)
+            continue
+        seg = _segment_from_probe(p, api_key, mode=mode)
+        segments.append(seg)
+        cache_write(probe_cache_key, seg)
 
-        results["segments"] = segments
-        modes = {seg.get("vehicle_count_mode") for seg in segments}
-        if "flow_estimated" in modes:
-            results["vehicle_count_mode"] = "flow_estimated"
-        else:
-            results["vehicle_count_mode"] = "normalized_per_probe"
-    except Exception as e:
-        results.setdefault("errors", []).append(str(e))
-        results["source_id"] = "tomtom_flow_v4:error"
+    results["segments"] = segments
+    modes = {seg.get("vehicle_count_mode") for seg in segments}
+    if "flow_estimated" in modes:
+        results["vehicle_count_mode"] = "flow_estimated"
+    else:
+        results["vehicle_count_mode"] = "normalized_per_probe"
 
     cache_write(aggregate_cache_key, results)
     return results
