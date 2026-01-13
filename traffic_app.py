@@ -36,7 +36,9 @@ _I18N = {
         "history_window_label": "חלון היסטוריה",
         "system_health": "בריאות מערכת",
         "traffic_mode": "מצב תנועה",
-        "traffic_mode_help": "Flow דורש TOMTOM_API_KEY (סוד בצד השרת). Sample הוא סינתטי לדמו/בדיקות.",
+        "traffic_mode_help": "בחר מאיפה להגיע נתוני התנועה: נתונים חיים (TomTom) או נתוני הדגמה (מדומים).",
+        "traffic_mode_opt_flow": "חי (TomTom)",
+        "traffic_mode_opt_sample": "הדגמה (Sample)",
         "tab_dashboard": "לוח מחוונים",
         "tab_history": "היסטוריה וסטטיסטיקה",
         "tab_sources": "מקורות ובריאות",
@@ -84,6 +86,18 @@ _I18N = {
         "metric_co2": "CO₂",
         "metric_excess_fuel": "דלק עודף",
         "metric_fuel_cost": "עלות דלק",
+        "trend_chart_caption": "מקרא צבעים בגרף: כחול = עלות דלק (₪), כתום = CO₂ (ק״ג), ירוק = שעות-רכב (עיכוב).",
+        "series_fuel_cost": "עלות דלק (₪)",
+        "series_co2": "CO₂ (ק״ג)",
+        "series_vehicle_hours": "שעות-רכב (עיכוב)",
+
+        "success_rate": "שיעור הצלחה",
+        "cache_hit_ratio": "יחס פגיעות במטמון",
+        "errors_session": "שגיאות (בסשן)",
+
+        "download_xlsx": "הורד Excel",
+        "download_pdf": "הורד PDF",
+        "export_note": "הייצוא כולל את הטבלה והגרפים (מסוכמים לפי אותו חלון/סקאלה).",
         "time_value_caption": "אומדן עלות זמן (₪): ₪ {value:,.0f} (בהנחה ₪{rate:.2f}/שעת-רכב)",
         "extrapolated_caption": "הוחשב בהסקה מ-{window}. משך נצפה: {hours:.2f} שעות.",
 
@@ -103,7 +117,9 @@ _I18N = {
         "history_window_label": "History window",
         "system_health": "System health",
         "traffic_mode": "Traffic mode",
-        "traffic_mode_help": "Flow requires TOMTOM_API_KEY (server-side secret). Sample is synthetic for demos/testing.",
+        "traffic_mode_help": "Choose where the traffic data comes from: live TomTom traffic, or demo (synthetic) sample data.",
+        "traffic_mode_opt_flow": "Live (TomTom)",
+        "traffic_mode_opt_sample": "Demo (sample)",
         "tab_dashboard": "Dashboard",
         "tab_history": "History & Stats",
         "tab_sources": "Sources & Health",
@@ -151,6 +167,18 @@ _I18N = {
         "metric_co2": "CO₂",
         "metric_excess_fuel": "Excess fuel",
         "metric_fuel_cost": "Fuel cost",
+        "trend_chart_caption": "Chart legend by color: blue = fuel cost (₪), orange = CO₂ (kg), green = vehicle-hours (delay).",
+        "series_fuel_cost": "Fuel cost (₪)",
+        "series_co2": "CO₂ (kg)",
+        "series_vehicle_hours": "Vehicle-hours (delay)",
+
+        "success_rate": "Success rate",
+        "cache_hit_ratio": "Cache hit ratio",
+        "errors_session": "Errors (session)",
+
+        "download_xlsx": "Download Excel",
+        "download_pdf": "Download PDF",
+        "export_note": "Export includes the table and charts (aggregated by the same window/scale).",
         "time_value_caption": "Indicative time-value loss (₪): ₪ {value:,.0f} (assumes ₪{rate:.2f}/vehicle-hour)",
         "extrapolated_caption": "Extrapolated from {window}. Observed duration: {hours:.2f} hours.",
 
@@ -170,7 +198,9 @@ _I18N = {
         "history_window_label": "نافذة السجل",
         "system_health": "صحة النظام",
         "traffic_mode": "وضع المرور",
-        "traffic_mode_help": "وضع Flow يتطلب TOMTOM_API_KEY (سر على الخادم). Sample بيانات اصطناعية للعرض/الاختبار.",
+        "traffic_mode_help": "اختر مصدر بيانات المرور: بيانات مباشرة (TomTom) أو بيانات تجريبية (Sample) للعرض.",
+        "traffic_mode_opt_flow": "مباشر (TomTom)",
+        "traffic_mode_opt_sample": "تجريبي (Sample)",
         "tab_dashboard": "لوحة التحكم",
         "tab_history": "السجل والإحصاءات",
         "tab_sources": "المصادر والصحة",
@@ -218,6 +248,18 @@ _I18N = {
         "metric_co2": "CO₂",
         "metric_excess_fuel": "وقود زائد",
         "metric_fuel_cost": "تكلفة الوقود",
+        "trend_chart_caption": "دليل الألوان في الرسم: الأزرق = تكلفة الوقود (₪)، البرتقالي = CO₂ (كغ)، الأخضر = ساعات-مركبة (تأخير).",
+        "series_fuel_cost": "تكلفة الوقود (₪)",
+        "series_co2": "CO₂ (كغ)",
+        "series_vehicle_hours": "ساعات-مركبة (تأخير)",
+
+        "success_rate": "نسبة النجاح",
+        "cache_hit_ratio": "نسبة إصابات التخزين المؤقت",
+        "errors_session": "الأخطاء (الجلسة)",
+
+        "download_xlsx": "تنزيل Excel",
+        "download_pdf": "تنزيل PDF",
+        "export_note": "يتضمن التصدير الجدول والرسوم (مجمّعة حسب نفس النافذة/المقياس).",
         "time_value_caption": "تقدير خسارة قيمة الوقت (₪): ₪ {value:,.0f} (بافتراض ₪{rate:.2f}/ساعة-مركبة)",
         "extrapolated_caption": "تمت الاستقراء من {window}. المدة المُلاحظة: {hours:.2f} ساعة.",
 
@@ -237,7 +279,9 @@ _I18N = {
         "history_window_label": "Окно истории",
         "system_health": "Состояние системы",
         "traffic_mode": "Режим трафика",
-        "traffic_mode_help": "Flow требует TOMTOM_API_KEY (секрет на сервере). Sample — синтетика для демо/тестов.",
+        "traffic_mode_help": "Выбери источник данных о трафике: реальные данные (TomTom) или демо‑данные (Sample) для просмотра.",
+        "traffic_mode_opt_flow": "Реальные (TomTom)",
+        "traffic_mode_opt_sample": "Демо (Sample)",
         "tab_dashboard": "Дашборд",
         "tab_history": "История и статистика",
         "tab_sources": "Источники и здоровье",
@@ -285,6 +329,18 @@ _I18N = {
         "metric_co2": "CO₂",
         "metric_excess_fuel": "Лишнее топливо",
         "metric_fuel_cost": "Стоимость топлива",
+        "trend_chart_caption": "Легенда по цветам: синий = стоимость топлива (₪), оранжевый = CO₂ (кг), зелёный = машино‑часы (задержка).",
+        "series_fuel_cost": "Стоимость топлива (₪)",
+        "series_co2": "CO₂ (кг)",
+        "series_vehicle_hours": "Машино‑часы (задержка)",
+
+        "success_rate": "Успешные запросы",
+        "cache_hit_ratio": "Попадания в кэш",
+        "errors_session": "Ошибки (сессия)",
+
+        "download_xlsx": "Скачать Excel",
+        "download_pdf": "Скачать PDF",
+        "export_note": "Экспорт включает таблицу и графики (агрегировано по тому же окну/масштабу).",
         "time_value_caption": "Оценка потерь времени (₪): ₪ {value:,.0f} (предположено ₪{rate:.2f}/машино‑час)",
         "extrapolated_caption": "Экстраполировано по окну: {window}. Наблюдаемая длительность: {hours:.2f} ч.",
 
@@ -294,6 +350,183 @@ _I18N = {
         "official_note": "Примечание: официальный показатель обычно годовой средний на человека/водителя; эта модель показывает системные счётчики (машино‑часы) для текущего измерения/выбранного окна.",
     },
 }
+
+
+def _chart_bucket_for_loss_display(loss_display: str) -> str | None:
+    if loss_display == "per_hour":
+        return "1H"
+    if loss_display == "per_day":
+        return "1D"
+    if loss_display == "per_year":
+        return "1Y"
+    return None
+
+
+def _df_to_excel_bytes(df, *, bucket: str | None) -> bytes:
+    import pandas as pd  # type: ignore
+    from io import BytesIO
+
+    buf = BytesIO()
+    with pd.ExcelWriter(buf, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name="history", index=False)
+
+        try:
+            if bucket and 'recorded_at_utc' in df.columns:
+                d = df.copy()
+                d['recorded_at_utc'] = pd.to_datetime(d['recorded_at_utc'], errors='coerce', utc=True)
+                d = d.dropna(subset=['recorded_at_utc'])
+                if not d.empty:
+                    d = d.sort_values('recorded_at_utc')
+                    d = d.set_index('recorded_at_utc')
+                    cols = [c for c in ['leakage_ils', 'co2_emissions_kg', 'delta_T_total_h'] if c in d.columns]
+                    if cols:
+                        trend = d[cols].resample(bucket).sum(min_count=1).dropna(how='all').reset_index()
+                        trend.to_excel(writer, sheet_name="trend", index=False)
+        except Exception:
+            # Excel export must never fail.
+            pass
+
+    return buf.getvalue()
+
+
+def _build_history_pdf_bytes(df, *, lang: str, bucket: str | None) -> bytes | None:
+    """Generate a lightweight PDF report from history data.
+
+    Returns bytes or None if required optional deps are missing.
+    """
+    try:
+        import pandas as pd  # type: ignore
+        from fpdf import FPDF  # type: ignore
+    except Exception:
+        return None
+
+    if df is None or not isinstance(df, pd.DataFrame) or df.empty:
+        return None
+
+    d = df.copy()
+    d['recorded_at_utc'] = pd.to_datetime(d['recorded_at_utc'], errors='coerce', utc=True)
+    d = d.dropna(subset=['recorded_at_utc'])
+    if d.empty:
+        return None
+
+    d = d.sort_values('recorded_at_utc')
+    d = d[['recorded_at_utc', 'leakage_ils', 'co2_emissions_kg', 'delta_T_total_h']]
+    d = d.dropna(how='all', subset=['leakage_ils', 'co2_emissions_kg', 'delta_T_total_h'])
+    if d.empty:
+        return None
+
+    d = d.set_index('recorded_at_utc')
+    if bucket:
+        d = d.resample(bucket).sum(min_count=1)
+    d = d.dropna(how='all')
+    if d.empty:
+        return None
+
+    pdf = FPDF(unit='mm', format='A4')
+    pdf.add_page()
+    pdf.set_font('Helvetica', size=14)
+    pdf.multi_cell(0, 8, _t('history_header', lang))
+    pdf.set_font('Helvetica', size=10)
+    pdf.multi_cell(0, 6, _t('export_note', lang))
+
+    # Add a small aggregated table (download Excel for full data / chart recreation)
+    pdf.ln(2)
+    pdf.set_font('Helvetica', size=11)
+    pdf.multi_cell(0, 6, _t('trend', lang))
+    pdf.set_font('Helvetica', size=9)
+    pdf.multi_cell(0, 5, _t('trend_chart_caption', lang))
+
+    # Table header
+    pdf.set_font('Helvetica', size=8)
+    pdf.set_fill_color(240, 240, 240)
+    pdf.cell(45, 6, 'time', border=1, fill=True)
+    pdf.cell(45, 6, _t('series_fuel_cost', lang), border=1, fill=True)
+    pdf.cell(45, 6, _t('series_co2', lang), border=1, fill=True)
+    pdf.cell(45, 6, _t('series_vehicle_hours', lang), border=1, fill=True)
+    pdf.ln()
+
+    # Last N rows
+    tail = d.tail(20)
+    for idx, row in tail.iterrows():
+        ts = str(idx.to_pydatetime().replace(tzinfo=None))
+        pdf.cell(45, 6, ts[:19], border=1)
+        pdf.cell(45, 6, f"{float(row.get('leakage_ils') or 0.0):,.0f}", border=1)
+        pdf.cell(45, 6, f"{float(row.get('co2_emissions_kg') or 0.0):,.0f}", border=1)
+        pdf.cell(45, 6, f"{float(row.get('delta_T_total_h') or 0.0):,.1f}", border=1)
+        pdf.ln()
+
+    out = pdf.output(dest='S')
+    return out.encode('latin-1') if isinstance(out, str) else bytes(out)
+
+
+def _render_trend_chart(df, lang: str, *, bucket: str | None = None):
+    """Render a stable, localized trend chart with an explicit color legend."""
+    try:
+        import pandas as pd  # type: ignore
+        import altair as alt  # type: ignore
+
+        if df is None or not isinstance(df, pd.DataFrame) or df.empty:
+            return
+
+        d = df.copy()
+        d['recorded_at_utc'] = pd.to_datetime(d['recorded_at_utc'], errors='coerce', utc=True)
+        d = d.dropna(subset=['recorded_at_utc'])
+        d = d.sort_values('recorded_at_utc')
+        cols = ['recorded_at_utc', 'leakage_ils', 'co2_emissions_kg', 'delta_T_total_h']
+        existing = [c for c in cols if c in d.columns]
+        if 'recorded_at_utc' not in existing:
+            return
+        d = d[existing]
+
+        if bucket:
+            d = d.set_index('recorded_at_utc')
+            d = d.resample(bucket).sum(min_count=1)
+            d = d.reset_index()
+
+        d = d.dropna(how='all', subset=[c for c in existing if c != 'recorded_at_utc'])
+        if d.empty:
+            return
+
+        series = [
+            ('leakage_ils', _t('series_fuel_cost', lang), '#1f77b4'),
+            ('co2_emissions_kg', _t('series_co2', lang), '#ff7f0e'),
+            ('delta_T_total_h', _t('series_vehicle_hours', lang), '#2ca02c'),
+        ]
+
+        rows = []
+        for col, label, color in series:
+            if col not in d.columns:
+                continue
+            tmp = d[['recorded_at_utc', col]].rename(columns={col: 'value'})
+            tmp['metric'] = label
+            tmp['color'] = color
+            rows.append(tmp)
+        if not rows:
+            return
+        long_df = pd.concat(rows, ignore_index=True)
+
+        chart = (
+            alt.Chart(long_df)
+            .mark_line()
+            .encode(
+                x=alt.X('recorded_at_utc:T', title=None),
+                y=alt.Y('value:Q', title=None),
+                color=alt.Color('metric:N',
+                                scale=alt.Scale(domain=[s[1] for s in series], range=[s[2] for s in series]),
+                                legend=alt.Legend(title=None)),
+                tooltip=[
+                    alt.Tooltip('recorded_at_utc:T', title='time'),
+                    alt.Tooltip('metric:N', title=_t('trend', lang)),
+                    alt.Tooltip('value:Q', title='value'),
+                ],
+            )
+            .properties(height=260)
+        )
+        st.altair_chart(chart, use_container_width=True)
+        st.caption(_t('trend_chart_caption', lang))
+    except Exception:
+        # Never break UI on chart rendering.
+        return
 
 
 def _t(key: str, lang: str) -> str:
@@ -391,7 +624,12 @@ def _compute_aggregates_from_history(df, window_s: int | None):
     if d.empty:
         return None, {}, 0.0
 
-    now = pd.Timestamp.utcnow().tz_localize('UTC')
+    now = pd.Timestamp.utcnow()
+    # pandas versions differ: Timestamp.utcnow() may be tz-aware already.
+    if getattr(now, 'tzinfo', None) is None:
+        now = now.tz_localize('UTC')
+    else:
+        now = now.tz_convert('UTC')
     if window_s is not None:
         start = now - pd.Timedelta(seconds=int(window_s))
         d = d[d['recorded_at_utc'] >= start]
@@ -455,12 +693,19 @@ st.sidebar.info(f"{_t('system_health', lang)}: {get_quick_status()}")
 # Traffic mode selection
 default_sample = api_key is None and SecureConfig.get_enable_sample_mode()
 traffic_mode = "sample" if default_sample else "flow"
-traffic_mode = st.sidebar.selectbox(
+_traffic_mode_opts = [
+    ("traffic_mode_opt_flow", "flow"),
+    ("traffic_mode_opt_sample", "sample"),
+]
+traffic_mode_display_options = [_t(k, lang) for k, _code in _traffic_mode_opts]
+default_display = _t("traffic_mode_opt_flow", lang) if traffic_mode == "flow" else _t("traffic_mode_opt_sample", lang)
+traffic_mode_display = st.sidebar.selectbox(
     _t("traffic_mode", lang),
-    options=["flow", "sample"],
-    index=0 if traffic_mode == "flow" else 1,
+    options=traffic_mode_display_options,
+    index=traffic_mode_display_options.index(default_display) if default_display in traffic_mode_display_options else 0,
     help=_t("traffic_mode_help", lang),
 )
+traffic_mode = dict(((_t(k, lang)), code) for k, code in _traffic_mode_opts).get(traffic_mode_display, "flow")
 if traffic_mode == "flow" and not api_key:
     err = ErrorHandler.handle_missing_key_error()
     st.sidebar.error(err.message)
@@ -518,9 +763,9 @@ if auto_refresh and tomtom_age > 300:
 
 # Lightweight analytics summary
 summary = get_dashboard_summary()
-st.sidebar.metric("Success rate", summary.get("success_rate", "n/a"))
-st.sidebar.metric("Cache hit ratio", summary.get("cache_hit_ratio", "n/a"))
-st.sidebar.write(f"Errors (session): {summary.get('errors_this_session', 0)}")
+st.sidebar.metric(_t("success_rate", lang), summary.get("success_rate", "n/a"))
+st.sidebar.metric(_t("cache_hit_ratio", lang), summary.get("cache_hit_ratio", "n/a"))
+st.sidebar.write(f"{_t('errors_session', lang)}: {summary.get('errors_this_session', 0)}")
 
 tab_dashboard, tab_history, tab_sources = st.tabs([
     _t("tab_dashboard", lang),
@@ -651,17 +896,7 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
 
         # Mini trend chart (last N runs)
         df = history.fetch_runs_df(limit=300)
-        try:
-            import pandas as pd  # type: ignore
-
-            if isinstance(df, pd.DataFrame) and not df.empty:
-                df2 = df.copy()
-                df2 = df2.sort_values('recorded_at_utc')
-                df2 = df2[['recorded_at_utc', 'leakage_ils', 'co2_emissions_kg', 'delta_T_total_h']].dropna()
-                df2 = df2.set_index('recorded_at_utc')
-                st.line_chart(df2)
-        except Exception:
-            pass
+        _render_trend_chart(df, lang, bucket=_chart_bucket_for_loss_display(loss_display))
 else:
     with tab_dashboard:
         st.info(_t("waiting_inputs", lang))
@@ -674,87 +909,101 @@ with tab_history:
     df = history.fetch_runs_df(limit=5000)
     try:
         import pandas as pd  # type: ignore
-
-        if not isinstance(df, pd.DataFrame) or df.empty:
-            st.info(_t("no_history", lang))
-        else:
-            window_s = _history_window_seconds(history_window_choice)
-            dfw, totals, duration_h = _compute_aggregates_from_history(df, window_s)
-
-            # Latest first for table readability
-            df_table = df.copy()
-            df_table = df_table.sort_values('recorded_at_utc', ascending=False)
-
-            # Summary
-            st.subheader(_t("summary", lang))
-            total_leak_all = float(df_table['leakage_ils'].dropna().sum()) if 'leakage_ils' in df_table else 0.0
-            total_co2_all = float(df_table['co2_emissions_kg'].dropna().sum()) if 'co2_emissions_kg' in df_table else 0.0
-            avg_leak_all = float(df_table['leakage_ils'].dropna().mean()) if 'leakage_ils' in df_table and df_table['leakage_ils'].notna().any() else 0.0
-
-            # Window-based scaling
-            window_leak = float((totals or {}).get('leakage_ils', 0.0))
-            window_co2 = float((totals or {}).get('co2_emissions_kg', 0.0))
-            window_delay_h = float((totals or {}).get('delta_T_total_h', 0.0))
-            rate_per_h = (window_leak / duration_h) if duration_h else 0.0
-            leak_per_day = rate_per_h * 24.0
-            leak_per_year = rate_per_h * 24.0 * 365.0
-
-            c1, c2, c3 = st.columns(3)
-            c1.metric(f"{_t('metric_fuel_cost', lang)} (all time, ₪)", f"₪ {total_leak_all:,.0f}")
-            c2.metric(f"{_t('metric_co2', lang)} (all time, kg)", f"{total_co2_all:,.0f}")
-            c3.metric(f"{_t('metric_fuel_cost', lang)} / run (all time, ₪)", f"₪ {avg_leak_all:,.0f}")
-
-            st.caption(f"{_t('history_window_label', lang)}: {history_window_label} | {duration_h:.2f} h")
-            w1, w2, w3, w4 = st.columns(4)
-            w1.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_total_window', lang)}, ₪)", f"₪ {window_leak:,.0f}")
-            w2.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_hour', lang)}, ₪/h)", f"₪ {rate_per_h:,.0f}")
-            w3.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_day', lang)}, ₪/day)", f"₪ {leak_per_day:,.0f}")
-            w4.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_year', lang)}, ₪/yr)", f"₪ {leak_per_year:,.0f}")
-
-            st.caption(f"delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
-
-            st.subheader(_t("official_header", lang))
-            official = fetch_official_congestion_benchmark(cache_ttl_s=24 * 3600)
-            hours_off = official.get("hours_lost_per_person_per_year")
-            if hours_off is None:
-                st.info(_t("official_unconfigured", lang))
-                if official.get("error"):
-                    st.caption(str(official.get("error"))[:200])
-            else:
-                st.metric(_t("official_metric", lang), f"{float(hours_off):,.0f} h")
-                src_label = official.get("source_label")
-                src_url = official.get("source_url")
-                if src_label or src_url:
-                    st.caption(f"{src_label or ''} {src_url or ''}".strip())
-            st.caption(_t("official_note", lang))
-
-            st.subheader(_t("trend", lang))
-            df_plot = df.copy().sort_values('recorded_at_utc')
-            df_plot = df_plot[['recorded_at_utc', 'leakage_ils', 'co2_emissions_kg', 'delta_T_total_h']].dropna()
-            df_plot = df_plot.set_index('recorded_at_utc')
-            st.line_chart(df_plot)
-
-            st.subheader(_t("table", lang))
-            cols = [
-                'recorded_at_utc',
-                'data_timestamp_utc',
-                'delta_T_total_h',
-                'fuel_excess_L',
-                'co2_emissions_kg',
-                'leakage_ils',
-                'traffic_source_id',
-                'air_source_id',
-                'fuel_source_id',
-                'vehicle_count_mode',
-                'tomtom_age_s',
-            ]
-            existing = [c for c in cols if c in df_table.columns]
-            st.dataframe(df_table[existing], use_container_width=True)
-
-            csv = df_table[existing].to_csv(index=False)
-            st.download_button(_t("download_csv", lang), data=csv, file_name="monitor_history.csv", mime="text/csv")
     except Exception:
-        st.info(_t("history_render_fail", lang))
+        pd = None  # type: ignore
+
+    if pd is None or not isinstance(df, pd.DataFrame) or df.empty:
+        st.info(_t("no_history", lang))
+    else:
+        # Compute window aggregates (never fail the entire tab)
+        window_s = _history_window_seconds(history_window_choice)
+        dfw, totals, duration_h = _compute_aggregates_from_history(df, window_s)
+
+        # Latest first for table readability
+        df_table = df.copy().sort_values('recorded_at_utc', ascending=False)
+
+        # Summary
+        st.subheader(_t("summary", lang))
+        total_leak_all = float(df_table['leakage_ils'].dropna().sum()) if 'leakage_ils' in df_table else 0.0
+        total_co2_all = float(df_table['co2_emissions_kg'].dropna().sum()) if 'co2_emissions_kg' in df_table else 0.0
+        avg_leak_all = float(df_table['leakage_ils'].dropna().mean()) if 'leakage_ils' in df_table and df_table['leakage_ils'].notna().any() else 0.0
+
+        # Window-based scaling
+        window_leak = float((totals or {}).get('leakage_ils', 0.0))
+        window_co2 = float((totals or {}).get('co2_emissions_kg', 0.0))
+        window_delay_h = float((totals or {}).get('delta_T_total_h', 0.0))
+        rate_per_h = (window_leak / duration_h) if duration_h else 0.0
+        leak_per_day = rate_per_h * 24.0
+        leak_per_year = rate_per_h * 24.0 * 365.0
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric(f"{_t('metric_fuel_cost', lang)} (all time, ₪)", f"₪ {total_leak_all:,.0f}")
+        c2.metric(f"{_t('metric_co2', lang)} (all time, kg)", f"{total_co2_all:,.0f}")
+        c3.metric(f"{_t('metric_fuel_cost', lang)} / run (all time, ₪)", f"₪ {avg_leak_all:,.0f}")
+
+        st.caption(f"{_t('history_window_label', lang)}: {history_window_label} | {duration_h:.2f} h")
+        w1, w2, w3, w4 = st.columns(4)
+        w1.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_total_window', lang)}, ₪)", f"₪ {window_leak:,.0f}")
+        w2.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_hour', lang)}, ₪/h)", f"₪ {rate_per_h:,.0f}")
+        w3.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_day', lang)}, ₪/day)", f"₪ {leak_per_day:,.0f}")
+        w4.metric(f"{_t('metric_fuel_cost', lang)} ({_t('loss_opt_per_year', lang)}, ₪/yr)", f"₪ {leak_per_year:,.0f}")
+
+        st.caption(f"delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
+
+        st.subheader(_t("official_header", lang))
+        official = fetch_official_congestion_benchmark(cache_ttl_s=24 * 3600)
+        hours_off = official.get("hours_lost_per_person_per_year")
+        if hours_off is None:
+            st.info(_t("official_unconfigured", lang))
+            if official.get("error"):
+                st.caption(str(official.get("error"))[:200])
+        else:
+            st.metric(_t("official_metric", lang), f"{float(hours_off):,.0f} h")
+            src_label = official.get("source_label")
+            src_url = official.get("source_url")
+            if src_label or src_url:
+                st.caption(f"{src_label or ''} {src_url or ''}".strip())
+        st.caption(_t("official_note", lang))
+
+        # Trend chart (bucketed by selected loss display)
+        st.subheader(_t("trend", lang))
+        _render_trend_chart(df, lang, bucket=_chart_bucket_for_loss_display(loss_display))
+
+        # Table + downloads
+        st.subheader(_t("table", lang))
+        cols = [
+            'recorded_at_utc',
+            'data_timestamp_utc',
+            'delta_T_total_h',
+            'fuel_excess_L',
+            'co2_emissions_kg',
+            'leakage_ils',
+            'traffic_source_id',
+            'air_source_id',
+            'fuel_source_id',
+            'vehicle_count_mode',
+            'tomtom_age_s',
+        ]
+        existing = [c for c in cols if c in df_table.columns]
+
+        try:
+            st.dataframe(df_table[existing], use_container_width=True)
+        except Exception:
+            st.warning(_t("history_render_fail", lang))
+
+        csv = df_table[existing].to_csv(index=False)
+        export_bucket = _chart_bucket_for_loss_display(loss_display)
+        xlsx_bytes = _df_to_excel_bytes(df_table[existing], bucket=export_bucket)
+        pdf_bytes = _build_history_pdf_bytes(df_table[existing], lang=lang, bucket=export_bucket)
+
+        b1, b2, b3 = st.columns(3)
+        b1.download_button(_t("download_csv", lang), data=csv, file_name="monitor_history.csv", mime="text/csv")
+        b2.download_button(_t("download_xlsx", lang), data=xlsx_bytes, file_name="monitor_history.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        if pdf_bytes:
+            b3.download_button(_t("download_pdf", lang), data=pdf_bytes, file_name="monitor_history_report.pdf", mime="application/pdf")
+        else:
+            b3.write("")
+        st.caption(_t("export_note", lang))
 
 st.markdown("---")
 st.markdown(_t("modeling_note", lang))
