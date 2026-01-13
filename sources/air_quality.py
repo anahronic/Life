@@ -109,3 +109,8 @@ def get_air_quality_for_ayalon(cache_ttl_s: int = 600) -> Dict[str, Any]:
             "raw": {},
             "error": str(e),
         }
+
+
+def get_cached_air_quality(max_age_s: int = 24 * 3600) -> Dict[str, Any] | None:
+    """Return last cached air quality payload even if stale (for resilience/UI fallback)."""
+    return cache_read("air_quality_ayalon", max_age_s=max_age_s)

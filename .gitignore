@@ -18,5 +18,11 @@ venv/
 # Local caches
 sources/_cache/
 
+# Local monitoring history
+data/
+*.db
+*.sqlite
+*.sqlite3
+
 # OS
 .DS_Store

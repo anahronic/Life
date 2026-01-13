@@ -284,3 +284,9 @@ def get_ayalon_segments(api_key: str | None, cache_ttl_s: int = 300, mode: str =
 
     cache_write(aggregate_cache_key, results)
     return results
+
+
+def get_cached_ayalon_segments(mode: str = "flow", max_age_s: int = 24 * 3600) -> Dict[str, Any] | None:
+    """Return last cached aggregate payload even if stale (for resilience/UI fallback)."""
+    aggregate_cache_key = f"tomtom_ayalon_v4_abs10_{mode}"
+    return cache_read(aggregate_cache_key, max_age_s=max_age_s)

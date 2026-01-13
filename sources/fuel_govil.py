@@ -132,3 +132,8 @@ def fetch_current_fuel_price_ils_per_l(cache_ttl_s: int = 86400) -> dict:
     }
     cache_write('fuel_govil', out)
     return out
+
+
+def get_cached_fuel_price(max_age_s: int = 7 * 86400) -> dict | None:
+    """Return last cached fuel price even if stale (for resilience/UI fallback)."""
+    return cache_read('fuel_govil', max_age_s=max_age_s)
