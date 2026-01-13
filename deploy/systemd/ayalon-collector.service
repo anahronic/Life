@@ -1,0 +1,22 @@
+[Unit]
+Description=Ayalon Monitor Collector (headless)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/Life
+Environment=PYTHONUNBUFFERED=1
+# Secrets/config (recommended to place in /etc/default/ayalon-monitor)
+EnvironmentFile=-/etc/default/ayalon-monitor
+ExecStart=/opt/Life/.venv/bin/python /opt/Life/collector.py --once
+
+# Hardening (safe defaults)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/Life/data /opt/Life/sources/_cache
+
+[Install]
+WantedBy=multi-user.target

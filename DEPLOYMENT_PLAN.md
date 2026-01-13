@@ -60,6 +60,10 @@ git push origin main
    - Branch: main
    - Main file path: traffic_app.py
 
+Important note about automatic collection
+
+Streamlit Cloud is great for public viewing, but it does not guarantee a 24/7 background scheduler. The app executes when users open it; it may sleep when idle. If you need continuous data collection regardless of viewers, deploy on a VPS (below) or use an external database + external scheduler.
+
 ### Step 3: Configure Secrets on Streamlit Cloud
 1. In Streamlit Cloud dashboard, click your app
 2. Go to Settings (gear icon) → Secrets
@@ -72,6 +76,8 @@ RATE_LIMIT_SECONDS = 60
 TOMTOM_QUOTA_PER_HOUR = 2500
 LOG_LEVEL = "WARNING"
 TT_ALLOW_SAMPLE = "0"
+AQ_LAT = "32.078"
+AQ_LON = "34.796"
 ```
 4. Click Save
 
@@ -186,6 +192,74 @@ Error: Cannot write to cache (disk full)
 ### If you need more control
 - Migrate to **Render** or **Railway** for more customization
 - Deploy with Docker for production-grade DevOps
+
+## Always-on (VPS) deployment with automatic collection (recommended)
+
+Goal: make the site public AND collect data automatically even when nobody is watching.
+
+Architecture:
+- `collector.py --once` runs every 5 minutes (systemd timer) and appends into SQLite history.
+- Streamlit UI (`traffic_app.py`) serves the dashboard reading the same SQLite DB.
+
+1) Provision a VPS
+- Any Linux VM with a public IP works.
+
+2) Install system deps
+```bash
+sudo apt-get update
+sudo apt-get install -y python3 python3-venv git
+```
+
+3) Deploy the repo
+```bash
+sudo mkdir -p /opt/Life
+sudo chown -R $USER:$USER /opt/Life
+git clone https://github.com/anahronic/Life.git /opt/Life
+cd /opt/Life
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+```
+
+4) Create server secrets file (NOT in git)
+Create `/etc/default/ayalon-monitor`:
+```bash
+TOMTOM_API_KEY=YOUR_KEY
+AQ_LAT=32.078
+AQ_LON=34.796
+HISTORY_DB_PATH=/opt/Life/data/monitor.sqlite3
+TRAFFIC_MODE=flow
+```
+
+5) Install systemd units
+```bash
+sudo cp deploy/systemd/ayalon-collector.service /etc/systemd/system/
+sudo cp deploy/systemd/ayalon-collector.timer /etc/systemd/system/
+sudo cp deploy/systemd/ayalon-ui.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now ayalon-ui.service
+sudo systemctl enable --now ayalon-collector.timer
+```
+
+6) Verify
+```bash
+sudo systemctl status ayalon-ui.service
+sudo systemctl status ayalon-collector.timer
+sudo journalctl -u ayalon-collector.service -n 50 --no-pager
+```
+
+7) Put behind a reverse proxy (optional)
+- Use Nginx + TLS (Let’s Encrypt) and proxy to `localhost:8501`.
+
+Updating the live site from this workspace
+- This VS Code workspace pushes changes to GitHub (`git push`).
+- On Streamlit Cloud: it auto-redeploys from GitHub.
+- On VPS: pull and restart:
+```bash
+cd /opt/Life
+git pull
+sudo systemctl restart ayalon-ui.service
+```
 
 ## Next Steps
 
