@@ -15,8 +15,99 @@ from sources.history_store import HistoryStore
 
 st.set_page_config(page_title="Ayalon Real-Time Physical Impact Model", layout="wide")
 
-st.title("Ayalon Real-Time Physical Impact Model — Monitor")
-st.markdown("**Version:** 1.0 (Freeze) | **Layer:** L5 — Transport / Physical Truth | **Scope:** Highway 20 (Ayalon), Israel")
+LANG_CHOICES = [
+    ("עברית", "he"),
+    ("English", "en"),
+    ("العربية", "ar"),
+    ("Русский", "ru"),
+]
+_lang_display_to_code = {d: c for d, c in LANG_CHOICES}
+
+_I18N = {
+    "he": {
+        "app_title": "מודל השפעה פיזיקלית בזמן אמת — איילון",
+        "app_subtitle": "**גרסה:** 1.0 (Freeze) | **שכבה:** L5 — תחבורה / אמת פיזיקלית | **תחום:** כביש 20 (איילון), ישראל",
+        "language_label": "שפה",
+        "sidebar_data_refresh": "נתונים ורענון",
+        "auto_refresh": "רענון אוטומטי כל 5 דקות",
+        "loss_display_header": "תצוגת הפסדים",
+        "loss_display_label": "הצג הפסדים כ",
+        "history_window_label": "חלון היסטוריה",
+        "system_health": "בריאות מערכת",
+        "traffic_mode": "מצב תנועה",
+        "traffic_mode_help": "Flow דורש TOMTOM_API_KEY (סוד בצד השרת). Sample הוא סינתטי לדמו/בדיקות.",
+        "tab_dashboard": "לוח מחוונים",
+        "tab_history": "היסטוריה וסטטיסטיקה",
+        "tab_sources": "מקורות ובריאות",
+    },
+    "en": {
+        "app_title": "Ayalon Real-Time Physical Impact Model — Monitor",
+        "app_subtitle": "**Version:** 1.0 (Freeze) | **Layer:** L5 — Transport / Physical Truth | **Scope:** Highway 20 (Ayalon), Israel",
+        "language_label": "Language",
+        "sidebar_data_refresh": "Data & Refresh",
+        "auto_refresh": "Auto-refresh every 5 minutes",
+        "loss_display_header": "Loss Display",
+        "loss_display_label": "Show losses as",
+        "history_window_label": "History window",
+        "system_health": "System health",
+        "traffic_mode": "Traffic mode",
+        "traffic_mode_help": "Flow requires TOMTOM_API_KEY (server-side secret). Sample is synthetic for demos/testing.",
+        "tab_dashboard": "Dashboard",
+        "tab_history": "History & Stats",
+        "tab_sources": "Sources & Health",
+    },
+    "ar": {
+        "app_title": "نموذج الأثر الفيزيائي اللحظي — أيالون",
+        "app_subtitle": "**الإصدار:** 1.0 (Freeze) | **الطبقة:** L5 — النقل / الحقيقة الفيزيائية | **النطاق:** الطريق السريع 20 (أيالون)، إسرائيل",
+        "language_label": "اللغة",
+        "sidebar_data_refresh": "البيانات والتحديث",
+        "auto_refresh": "تحديث تلقائي كل 5 دقائق",
+        "loss_display_header": "عرض الخسائر",
+        "loss_display_label": "اعرض الخسائر كـ",
+        "history_window_label": "نافذة السجل",
+        "system_health": "صحة النظام",
+        "traffic_mode": "وضع المرور",
+        "traffic_mode_help": "وضع Flow يتطلب TOMTOM_API_KEY (سر على الخادم). Sample بيانات اصطناعية للعرض/الاختبار.",
+        "tab_dashboard": "لوحة التحكم",
+        "tab_history": "السجل والإحصاءات",
+        "tab_sources": "المصادر والصحة",
+    },
+    "ru": {
+        "app_title": "Ayalon — монитор физического воздействия",
+        "app_subtitle": "**Версия:** 1.0 (Freeze) | **Слой:** L5 — Транспорт / Физическая истина | **Область:** трасса 20 (Аялон), Израиль",
+        "language_label": "Язык",
+        "sidebar_data_refresh": "Данные и обновление",
+        "auto_refresh": "Автообновление каждые 5 минут",
+        "loss_display_header": "Отображение потерь",
+        "loss_display_label": "Показывать потери как",
+        "history_window_label": "Окно истории",
+        "system_health": "Состояние системы",
+        "traffic_mode": "Режим трафика",
+        "traffic_mode_help": "Flow требует TOMTOM_API_KEY (секрет на сервере). Sample — синтетика для демо/тестов.",
+        "tab_dashboard": "Дашборд",
+        "tab_history": "История и статистика",
+        "tab_sources": "Источники и здоровье",
+    },
+}
+
+
+def _t(key: str, lang: str) -> str:
+    table = _I18N.get((lang or "en").lower(), _I18N["en"])
+    return str(table.get(key, _I18N["en"].get(key, key)))
+
+
+# Language selector (above Data & Refresh)
+default_lang_display = LANG_CHOICES[0][0]  # Hebrew
+lang_display = st.sidebar.selectbox(
+    _t("language_label", "he") + " / " + _t("language_label", "en"),
+    options=[d for d, _c in LANG_CHOICES],
+    index=0,
+    key="lang_display",
+)
+lang = _lang_display_to_code.get(lang_display, "he")
+
+st.title(_t("app_title", lang))
+st.markdown(_t("app_subtitle", lang))
 
 model = AyalonModel()
 history = HistoryStore()
@@ -97,33 +188,33 @@ def _compute_aggregates_from_history(df, window_s: int | None):
     return d, totals, duration_h
 
 # Controls
-st.sidebar.header("Data & Refresh")
+st.sidebar.header(_t("sidebar_data_refresh", lang))
 api_key = SecureConfig.get_tomtom_api_key()
-auto_refresh = st.sidebar.checkbox("Auto-refresh every 5 minutes", value=True)
+auto_refresh = st.sidebar.checkbox(_t("auto_refresh", lang), value=True)
 
-st.sidebar.subheader("Loss Display")
+st.sidebar.subheader(_t("loss_display_header", lang))
 loss_display = st.sidebar.selectbox(
-    "Show losses as",
+    _t("loss_display_label", lang),
     options=["Per hour", "Per day", "Per year", "Total (window)"],
     index=1,
 )
 history_window_choice = st.sidebar.selectbox(
-    "History window",
+    _t("history_window_label", lang),
     options=["Last 1 hour", "Last 24 hours", "Last 7 days", "Last 30 days", "All time"],
     index=1,
 )
 
 # Public-friendly system status (no secrets)
-st.sidebar.info(f"System health: {get_quick_status()}")
+st.sidebar.info(f"{_t('system_health', lang)}: {get_quick_status()}")
 
 # Traffic mode selection
 default_sample = api_key is None and SecureConfig.get_enable_sample_mode()
 traffic_mode = "sample" if default_sample else "flow"
 traffic_mode = st.sidebar.selectbox(
-    "Traffic mode",
+    _t("traffic_mode", lang),
     options=["flow", "sample"],
     index=0 if traffic_mode == "flow" else 1,
-    help="Flow requires TOMTOM_API_KEY (server-side secret). Sample is synthetic for demos/testing.",
+    help=_t("traffic_mode_help", lang),
 )
 if traffic_mode == "flow" and not api_key:
     err = ErrorHandler.handle_missing_key_error()
@@ -186,7 +277,11 @@ st.sidebar.metric("Success rate", summary.get("success_rate", "n/a"))
 st.sidebar.metric("Cache hit ratio", summary.get("cache_hit_ratio", "n/a"))
 st.sidebar.write(f"Errors (session): {summary.get('errors_this_session', 0)}")
 
-tab_dashboard, tab_history, tab_sources = st.tabs(["Dashboard", "History & Stats", "Sources & Health"])
+tab_dashboard, tab_history, tab_sources = st.tabs([
+    _t("tab_dashboard", lang),
+    _t("tab_history", lang),
+    _t("tab_sources", lang),
+])
 
 with tab_sources:
     st.header("Input Data Sources")
@@ -212,7 +307,7 @@ with tab_sources:
     st.subheader("System")
     st.info(f"System health: {get_quick_status()}")
 
-banner = normalization_banner_text(vehicle_count_mode)
+banner = normalization_banner_text(vehicle_count_mode, lang=lang)
 if banner:
     st.warning(banner)
 
