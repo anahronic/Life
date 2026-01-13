@@ -96,7 +96,6 @@ _I18N = {
         "errors_session": "שגיאות (בסשן)",
 
         "download_xlsx": "הורד Excel",
-        "download_pdf": "הורד PDF",
         "export_note": "הייצוא כולל את הטבלה והגרפים (מסוכמים לפי אותו חלון/סקאלה).",
         "time_value_caption": "אומדן עלות זמן (₪): ₪ {value:,.0f} (בהנחה ₪{rate:.2f}/שעת-רכב)",
         "extrapolated_caption": "הוחשב בהסקה מ-{window}. משך נצפה: {hours:.2f} שעות.",
@@ -177,7 +176,6 @@ _I18N = {
         "errors_session": "Errors (session)",
 
         "download_xlsx": "Download Excel",
-        "download_pdf": "Download PDF",
         "export_note": "Export includes the table and charts (aggregated by the same window/scale).",
         "time_value_caption": "Indicative time-value loss (₪): ₪ {value:,.0f} (assumes ₪{rate:.2f}/vehicle-hour)",
         "extrapolated_caption": "Extrapolated from {window}. Observed duration: {hours:.2f} hours.",
@@ -258,7 +256,6 @@ _I18N = {
         "errors_session": "الأخطاء (الجلسة)",
 
         "download_xlsx": "تنزيل Excel",
-        "download_pdf": "تنزيل PDF",
         "export_note": "يتضمن التصدير الجدول والرسوم (مجمّعة حسب نفس النافذة/المقياس).",
         "time_value_caption": "تقدير خسارة قيمة الوقت (₪): ₪ {value:,.0f} (بافتراض ₪{rate:.2f}/ساعة-مركبة)",
         "extrapolated_caption": "تمت الاستقراء من {window}. المدة المُلاحظة: {hours:.2f} ساعة.",
@@ -339,7 +336,6 @@ _I18N = {
         "errors_session": "Ошибки (сессия)",
 
         "download_xlsx": "Скачать Excel",
-        "download_pdf": "Скачать PDF",
         "export_note": "Экспорт включает таблицу и графики (агрегировано по тому же окну/масштабу).",
         "time_value_caption": "Оценка потерь времени (₪): ₪ {value:,.0f} (предположено ₪{rate:.2f}/машино‑час)",
         "extrapolated_caption": "Экстраполировано по окну: {window}. Наблюдаемая длительность: {hours:.2f} ч.",
@@ -387,76 +383,6 @@ def _df_to_excel_bytes(df, *, bucket: str | None) -> bytes:
             pass
 
     return buf.getvalue()
-
-
-def _build_history_pdf_bytes(df, *, lang: str, bucket: str | None) -> bytes | None:
-    """Generate a lightweight PDF report from history data.
-
-    Returns bytes or None if required optional deps are missing.
-    """
-    try:
-        import pandas as pd  # type: ignore
-        from fpdf import FPDF  # type: ignore
-    except Exception:
-        return None
-
-    if df is None or not isinstance(df, pd.DataFrame) or df.empty:
-        return None
-
-    d = df.copy()
-    d['recorded_at_utc'] = pd.to_datetime(d['recorded_at_utc'], errors='coerce', utc=True)
-    d = d.dropna(subset=['recorded_at_utc'])
-    if d.empty:
-        return None
-
-    d = d.sort_values('recorded_at_utc')
-    d = d[['recorded_at_utc', 'leakage_ils', 'co2_emissions_kg', 'delta_T_total_h']]
-    d = d.dropna(how='all', subset=['leakage_ils', 'co2_emissions_kg', 'delta_T_total_h'])
-    if d.empty:
-        return None
-
-    d = d.set_index('recorded_at_utc')
-    if bucket:
-        d = d.resample(bucket).sum(min_count=1)
-    d = d.dropna(how='all')
-    if d.empty:
-        return None
-
-    pdf = FPDF(unit='mm', format='A4')
-    pdf.add_page()
-    pdf.set_font('Helvetica', size=14)
-    pdf.multi_cell(0, 8, _t('history_header', lang))
-    pdf.set_font('Helvetica', size=10)
-    pdf.multi_cell(0, 6, _t('export_note', lang))
-
-    # Add a small aggregated table (download Excel for full data / chart recreation)
-    pdf.ln(2)
-    pdf.set_font('Helvetica', size=11)
-    pdf.multi_cell(0, 6, _t('trend', lang))
-    pdf.set_font('Helvetica', size=9)
-    pdf.multi_cell(0, 5, _t('trend_chart_caption', lang))
-
-    # Table header
-    pdf.set_font('Helvetica', size=8)
-    pdf.set_fill_color(240, 240, 240)
-    pdf.cell(45, 6, 'time', border=1, fill=True)
-    pdf.cell(45, 6, _t('series_fuel_cost', lang), border=1, fill=True)
-    pdf.cell(45, 6, _t('series_co2', lang), border=1, fill=True)
-    pdf.cell(45, 6, _t('series_vehicle_hours', lang), border=1, fill=True)
-    pdf.ln()
-
-    # Last N rows
-    tail = d.tail(20)
-    for idx, row in tail.iterrows():
-        ts = str(idx.to_pydatetime().replace(tzinfo=None))
-        pdf.cell(45, 6, ts[:19], border=1)
-        pdf.cell(45, 6, f"{float(row.get('leakage_ils') or 0.0):,.0f}", border=1)
-        pdf.cell(45, 6, f"{float(row.get('co2_emissions_kg') or 0.0):,.0f}", border=1)
-        pdf.cell(45, 6, f"{float(row.get('delta_T_total_h') or 0.0):,.1f}", border=1)
-        pdf.ln()
-
-    out = pdf.output(dest='S')
-    return out.encode('latin-1') if isinstance(out, str) else bytes(out)
 
 
 def _render_trend_chart(df, lang: str, *, bucket: str | None = None):
@@ -994,15 +920,10 @@ with tab_history:
         csv = df_table[existing].to_csv(index=False)
         export_bucket = _chart_bucket_for_loss_display(loss_display)
         xlsx_bytes = _df_to_excel_bytes(df_table[existing], bucket=export_bucket)
-        pdf_bytes = _build_history_pdf_bytes(df_table[existing], lang=lang, bucket=export_bucket)
 
-        b1, b2, b3 = st.columns(3)
+        b1, b2 = st.columns(2)
         b1.download_button(_t("download_csv", lang), data=csv, file_name="monitor_history.csv", mime="text/csv")
         b2.download_button(_t("download_xlsx", lang), data=xlsx_bytes, file_name="monitor_history.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        if pdf_bytes:
-            b3.download_button(_t("download_pdf", lang), data=pdf_bytes, file_name="monitor_history_report.pdf", mime="application/pdf")
-        else:
-            b3.write("")
         st.caption(_t("export_note", lang))
 
 st.markdown("---")
