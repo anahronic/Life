@@ -21,6 +21,24 @@ export FUEL_PRICE_ILS=7.5  # optional fallback
 streamlit run traffic_app.py
 ```
 
+GitHub Pages (static landing page)
+
+- GitHub Pages can host only static files, so it cannot run `traffic_app.py` directly.
+- This repo includes a simple landing page in `docs/index.html` plus a Pages workflow.
+- Enable it in GitHub: Settings → Pages → Source: GitHub Actions.
+
+Minimal always-on collection (no server): GitHub Actions + SQLite
+
+This repo includes a scheduled workflow that runs `collector.py --once` and commits the updated SQLite DB back into the repo.
+
+Setup:
+1) In GitHub repo: Settings → Secrets and variables → Actions → New repository secret
+	- Name: `TOMTOM_API_KEY`
+	- Value: your TomTom key
+2) Ensure Actions are enabled.
+3) The workflow is in `.github/workflows/collector.yml` (default: every 10 minutes).
+4) Collected history is stored in `history/monitor.sqlite3`.
+
 Public deployment + automatic data collection
 
 Option A (fast demo): Streamlit Community Cloud

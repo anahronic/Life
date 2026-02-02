@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ayalon Traffic Monitor</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 48px 20px; }
+    .card { border: 1px solid rgba(127,127,127,.35); border-radius: 14px; padding: 22px; }
+    h1 { margin: 0 0 10px; font-size: 28px; }
+    p { line-height: 1.5; }
+    a.btn {
+      display: inline-block; padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(127,127,127,.5); text-decoration: none;
+      margin-right: 10px;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .muted { opacity: .8; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Ayalon Real-Time Traffic Monitor</h1>
+      <p class="muted">
+        This repository contains a Python/Streamlit app (<code>traffic_app.py</code>) that requires a server runtime and a secret
+        <code>TOMTOM_API_KEY</code>. GitHub Pages can host only static files, so the live dashboard must be hosted elsewhere.
+      </p>
+
+      <p>
+        <strong>Next step:</strong> deploy the Streamlit app on Streamlit Community Cloud and paste the URL below.
+      </p>
+
+      <p>
+        <a class="btn" href="https://streamlit.io/cloud" target="_blank" rel="noopener">Deploy on Streamlit Cloud</a>
+        <a class="btn" href="https://github.com/" target="_blank" rel="noopener">View repo on GitHub</a>
+      </p>
+
+      <h2>Local run</h2>
+      <p>Run locally (WSL/Linux/macOS):</p>
+      <pre><code>pip install -r requirements.txt
+streamlit run traffic_app.py</code></pre>
+
+      <p class="muted">
+        Tip: create <code>.streamlit/secrets.toml</code> and set <code>TOMTOM_API_KEY</code> there.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

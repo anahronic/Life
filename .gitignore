@@ -24,5 +24,8 @@ data/
 *.sqlite
 *.sqlite3
 
+# Allow committing GitHub Actions history DB (override ignore above)
+!history/monitor.sqlite3
+
 # OS
 .DS_Store
