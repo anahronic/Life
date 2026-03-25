@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DTI Time Converter — translate between Gregorian, Hebrew, and Dikenocratic dates." />
+  <title>DTI Time Converter — Dikenocracy</title>
+  <link rel="canonical" href="https://dikenocracy.com/pages/converter.html" />
+  <link rel="icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+  <meta property="og:title" content="DTI Time Converter — Dikenocracy" />
+  <meta property="og:description" content="Deterministic date conversion between Gregorian, Hebrew, and DTI formats." />
+  <meta property="og:image" content="https://dikenocracy.com/assets/main_screen.webp" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dikenocracy.com/pages/converter.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ─── Navigation ──────────────────────────────────────────────────────── -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="../index.html">Dikenocracy</a>
+
+      <button
+        class="site-nav__toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+        aria-controls="site-nav-links"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="site-nav__links" id="site-nav-links" role="list">
+        <li><a href="about.html">About</a></li>
+        <li><a href="protocols.html">Protocols</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="converter.html" aria-current="page">Converter</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ─── Main Content ─────────────────────────────────────────────────────── -->
+  <main id="main">
+    <div class="page-wrapper">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">DTI Time Converter</h1>
+        <p class="hero__sub">Deterministic date conversion for the Dikenocracy framework</p>
+      </header>
+
+      <div class="divider"></div>
+
+      <!-- Explanation -->
+      <section class="section" aria-labelledby="converter-what-heading">
+        <h2 class="section__heading" id="converter-what-heading">What it does</h2>
+        <p class="section__text">
+          The DTI Time Converter translates between Gregorian dates, Hebrew dates,
+          and the Dikenocratic Time Interface (DTI). The DTI model is based on
+          deterministic mapping through JDN and a 360-day derived year
+          representation.
+        </p>
+        <p class="section__text">
+          The canonical rules are: <code>DTI-Day&nbsp;=&nbsp;JDN</code>,
+          <code>DY&nbsp;=&nbsp;floor(JDN&nbsp;/&nbsp;360)</code>,
+          <code>DOY&nbsp;=&nbsp;(JDN&nbsp;mod&nbsp;360)&nbsp;+&nbsp;1</code>.
+          Every conversion is fully reversible and machine-auditable.
+        </p>
+      </section>
+
+      <!-- Launch area -->
+      <section class="section" aria-labelledby="converter-launch-heading">
+        <h2 class="section__heading" id="converter-launch-heading">Open the converter</h2>
+
+        <noscript>
+          <p class="section__text">
+            The converter requires JavaScript to operate.
+          </p>
+        </noscript>
+
+        <div class="converter-launch">
+          <div class="converter-launch__text">
+            The standalone client-side converter runs directly in your browser —
+            no server required. It supports three conversion modes
+            (Gregorian, DTI, and Hebrew), 10 interface languages,
+            and both numeric and Hebrew-letter date input.
+            All conversion logic follows DKP-0-TIME-001 and
+            uses integer-only arithmetic.
+          </div>
+          <a
+            class="btn"
+            href="../converter/index.html"
+            aria-label="Open the DTI Time Converter"
+          >
+            Open Converter
+          </a>
+        </div>
+
+        <div class="info-note">
+          The converter is a zero-dependency client-side application.
+          Hebrew calendar calculations use a full Gauss/Reingold–Dershowitz
+          algorithm implemented entirely in JavaScript — no Python backend required.
+        </div>
+      </section>
+
+      <!-- Technical details -->
+      <section class="section" aria-labelledby="converter-details-heading">
+        <h2 class="section__heading" id="converter-details-heading">Technical details</h2>
+        <p class="section__text">
+          The converter is a standalone client-side application built with
+          vanilla HTML, CSS, and JavaScript. It loads the site design system
+          (<code>styles.css</code>) and two dedicated modules:
+          <code>converter.js</code> (conversion logic) and
+          <code>converter-i18n.js</code> (translations).
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <span class="card__label">Modes</span>
+            <h3 class="card__title">Three conversion paths</h3>
+            <p class="card__text">
+              Gregorian → DTI / Hebrew<br />
+              DTI → Gregorian / Hebrew<br />
+              Hebrew → Gregorian / DTI
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__label">Protocol</span>
+            <h3 class="card__title">DKP-0-TIME-001</h3>
+            <p class="card__text">
+              Implements all normative test vectors. The 2000-01-01 vector
+              follows canonical formula output (DY6809-306).
+              See PROTOCOL_NOTES.md for the rationale.
+            </p>
+          </div>
+          <div class="card">
+            <span class="card__label">Source</span>
+            <h3 class="card__title">GitHub</h3>
+            <p class="card__text">
+              <a
+                href="https://github.com/anahronic/Dikenocracy/tree/main/Converter%20DTI"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                anahronic/Dikenocracy &rarr; Converter DTI
+              </a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ecosystem note -->
+      <section class="section" aria-labelledby="converter-ecosystem-heading">
+        <h2 class="section__heading" id="converter-ecosystem-heading">Ecosystem context</h2>
+        <p class="section__text">
+          This tool is part of the broader Dikenocracy protocol ecosystem. It
+          serves as the reference implementation for the time layer
+          (DKP-0-TIME-001) and provides a foundation for time-indexed
+          governance records, accountability cycles, and audit trails.
+        </p>
+      </section>
+
+    </div><!-- /.page-wrapper -->
+  </main>
+
+  <!-- ─── Footer ─────────────────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>Dikenocracy &mdash; public framework. Built openly alongside the old world.</p>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

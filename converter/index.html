@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DTI Time Converter — translate between Gregorian, Hebrew, and Dikenocratic dates in 10 languages." />
+  <title>DTI Time Converter — Dikenocracy</title>
+  <link rel="canonical" href="https://dikenocracy.com/converter/" />
+  <link rel="icon" href="../assets/favicon.ico" />
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+  <meta property="og:title" content="DTI Time Converter — Dikenocracy" />
+  <meta property="og:description" content="Deterministic date conversion between Gregorian, Hebrew, and DTI formats." />
+  <meta property="og:image" content="https://dikenocracy.com/assets/main_screen.webp" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dikenocracy.com/converter/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* ── Converter-specific styles (extends site design system) ─── */
+    .conv-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: var(--gap-md);
+      flex: 1;
+      width: 100%;
+    }
+    .conv-header { text-align: center; padding: var(--gap-md) 0 var(--gap-sm); }
+    .conv-header h1 {
+      font-family: var(--font-main);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: normal;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      margin-bottom: var(--gap-xs);
+    }
+    .conv-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      letter-spacing: 0.06em;
+    }
+    .conv-header p a { color: var(--accent); }
+
+    /* Language selector */
+    .lang-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-xs);
+      margin-bottom: var(--gap-md);
+      flex-wrap: wrap;
+    }
+    .lang-bar label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .lang-select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .lang-select:focus { outline: none; border-color: var(--accent); }
+
+    /* Tabs */
+    .conv-tabs {
+      display: flex;
+      gap: var(--gap-xs);
+      margin-bottom: var(--gap-md);
+      flex-wrap: wrap;
+    }
+    .conv-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.55rem 1.1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .conv-tab:hover { color: var(--text-primary); border-color: var(--accent); }
+    .conv-tab.active { background: var(--accent); color: var(--bg-deep); border-color: var(--accent); }
+
+    /* Panels */
+    .conv-panel { display: none; }
+    .conv-panel.active { display: block; }
+
+    /* Form fields */
+    .field { margin-bottom: var(--gap-sm); }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.04em;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      font-size: 0.95rem;
+      font-family: var(--font-ui);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-primary);
+      transition: border-color 0.15s;
+    }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--accent); }
+    .row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--gap-xs);
+    }
+    .hint {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-bottom: var(--gap-xs);
+    }
+
+    /* Input type radio */
+    .input-type-row {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-sm);
+      margin-bottom: var(--gap-sm);
+    }
+    .input-type-row span { font-size: 0.82rem; color: var(--text-muted); }
+    .radio-group { display: flex; gap: var(--gap-xs); }
+    .radio-btn {
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .radio-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+    .radio-btn.active { background: var(--accent); color: var(--bg-deep); border-color: var(--accent); }
+
+    /* Convert button */
+    .btn-convert {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: var(--gap-xs);
+    }
+    .btn-convert:hover { background: var(--accent); color: var(--bg-deep); }
+
+    /* Result card */
+    .conv-result {
+      margin-top: var(--gap-md);
+      padding: var(--gap-sm) var(--gap-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: none;
+    }
+    .conv-result.visible { display: block; }
+    .conv-result h2 {
+      font-family: var(--font-main);
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: var(--gap-xs);
+      font-weight: normal;
+    }
+    .result-grid { display: grid; grid-template-columns: 1fr; gap: 0.15rem; }
+    .result-grid dt { color: var(--text-muted); font-size: 0.75rem; margin-top: 0.4rem; }
+    .result-grid dd { font-family: var(--font-mono); font-size: 1rem; }
+    .conv-error {
+      color: #e74c3c;
+      margin-top: var(--gap-sm);
+      font-size: 0.88rem;
+      display: none;
+      padding: 0.5rem 0.75rem;
+      border-left: 3px solid #e74c3c;
+      background: rgba(231,76,60,0.06);
+      border-radius: 0 4px 4px 0;
+    }
+    .conv-error.visible { display: block; }
+
+    /* Info block */
+    .conv-info {
+      margin-top: var(--gap-lg);
+      padding-top: var(--gap-md);
+      border-top: 1px solid var(--border);
+    }
+    .conv-info h2 {
+      font-family: var(--font-main);
+      font-size: 1.1rem;
+      font-weight: normal;
+      color: var(--text-primary);
+      margin-bottom: var(--gap-xs);
+    }
+    .conv-info p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      margin-bottom: var(--gap-xs);
+      max-width: 650px;
+    }
+    .conv-info code {
+      font-family: var(--font-mono);
+      font-size: 0.84em;
+      background: var(--bg-panel);
+      padding: 0.12em 0.35em;
+      border-radius: 3px;
+    }
+
+    /* RTL support */
+    [dir="rtl"] .conv-tabs { direction: rtl; }
+    [dir="rtl"] .lang-bar { direction: rtl; }
+    [dir="rtl"] .result-grid dd { direction: ltr; text-align: right; }
+
+    @media (max-width: 500px) {
+      .conv-tabs { gap: 0.3rem; }
+      .conv-tab { padding: 0.45rem 0.7rem; font-size: 0.78rem; }
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ─── Navigation ──────────────────────────────────────── -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="../index.html">Dikenocracy</a>
+      <button class="site-nav__toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav-links">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="site-nav__links" id="site-nav-links" role="list">
+        <li><a href="../pages/about.html">About</a></li>
+        <li><a href="../pages/protocols.html">Protocols</a></li>
+        <li><a href="../pages/projects.html">Projects</a></li>
+        <li><a href="../pages/converter.html" aria-current="page">Converter</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ─── Main Content ─────────────────────────────────────── -->
+  <div class="conv-wrapper" id="main" role="main">
+
+    <header class="conv-header">
+      <h1>DTI Time Converter</h1>
+      <p>Deterministic date conversion per <a href="../pages/protocols/dkp-0-time-001.html">DKP-0-TIME-001</a></p>
+    </header>
+
+    <!-- Language selector -->
+    <div class="lang-bar">
+      <label for="lang-select">Language</label>
+      <select class="lang-select" id="lang-select">
+        <option value="EN" selected>English</option>
+        <option value="RU">Русский</option>
+        <option value="HE">עברית</option>
+        <option value="AR">العربية</option>
+        <option value="ZH">中文</option>
+        <option value="ES">Español</option>
+        <option value="FR">Français</option>
+        <option value="DE">Deutsch</option>
+        <option value="IT">Italiano</option>
+        <option value="PT">Português</option>
+      </select>
+    </div>
+
+    <!-- Tabs -->
+    <div class="conv-tabs" role="tablist">
+      <button class="conv-tab active" role="tab" aria-selected="true" aria-controls="panel-g2d" id="tab-g2d" data-i18n="tab1"></button>
+      <button class="conv-tab" role="tab" aria-selected="false" aria-controls="panel-d2g" id="tab-d2g" data-i18n="tab2"></button>
+      <button class="conv-tab" role="tab" aria-selected="false" aria-controls="panel-h2g" id="tab-h2g" data-i18n="tab3"></button>
+    </div>
+
+    <!-- ── Panel 1: Gregorian → DTI/Hebrew ───────────────── -->
+    <div class="conv-panel active" id="panel-g2d" role="tabpanel" aria-labelledby="tab-g2d">
+      <div class="field">
+        <label for="g-date" data-i18n="gregDateLabel"></label>
+        <input type="date" id="g-date" />
+      </div>
+      <p class="hint" data-i18n="or"></p>
+      <div class="row">
+        <div class="field">
+          <label for="g-year" data-i18n="year"></label>
+          <input type="number" id="g-year" placeholder="2026" />
+        </div>
+        <div class="field">
+          <label for="g-month" data-i18n="month"></label>
+          <input type="number" id="g-month" placeholder="3" min="1" max="12" />
+        </div>
+        <div class="field">
+          <label for="g-day" data-i18n="day"></label>
+          <input type="number" id="g-day" placeholder="25" min="1" max="31" />
+        </div>
+      </div>
+      <button class="btn-convert" id="btn-g2d" data-i18n-text="convert"></button>
+    </div>
+
+    <!-- ── Panel 2: DTI → Gregorian/Hebrew ───────────────── -->
+    <div class="conv-panel" id="panel-d2g" role="tabpanel" aria-labelledby="tab-d2g">
+      <div class="row">
+        <div class="field">
+          <label for="d-dy" data-i18n="dyLabel"></label>
+          <input type="number" id="d-dy" placeholder="6818" />
+        </div>
+        <div class="field">
+          <label for="d-doy" data-i18n="doyLabel"></label>
+          <input type="number" id="d-doy" placeholder="196" min="1" max="360" />
+        </div>
+      </div>
+      <button class="btn-convert" id="btn-d2g" data-i18n-text="convert"></button>
+    </div>
+
+    <!-- ── Panel 3: Hebrew → Gregorian/DTI ───────────────── -->
+    <div class="conv-panel" id="panel-h2g" role="tabpanel" aria-labelledby="tab-h2g">
+      <!-- Input type toggle -->
+      <div class="input-type-row">
+        <span data-i18n="inputType"></span>
+        <div class="radio-group">
+          <button class="radio-btn active" id="heb-numeric-btn" data-i18n-text="numeric"></button>
+          <button class="radio-btn" id="heb-letter-btn" data-i18n-text="letter"></button>
+        </div>
+      </div>
+
+      <!-- Numeric input -->
+      <div id="heb-numeric-fields">
+        <div class="row">
+          <div class="field">
+            <label for="h-year" data-i18n="year"></label>
+            <input type="number" id="h-year" placeholder="5786" min="1" max="9999" />
+          </div>
+          <div class="field">
+            <label for="h-month" data-i18n="month"></label>
+            <input type="number" id="h-month" placeholder="7" min="1" max="13" />
+          </div>
+          <div class="field">
+            <label for="h-day" data-i18n="day"></label>
+            <input type="number" id="h-day" placeholder="25" min="1" max="30" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Letter input -->
+      <div id="heb-letter-fields" style="display:none">
+        <div class="row">
+          <div class="field">
+            <label for="h-year-let" data-i18n="yearLetters"></label>
+            <input type="text" id="h-year-let" placeholder="תשפ״ו" dir="rtl" />
+          </div>
+          <div class="field">
+            <label for="h-month-sel" data-i18n="monthSelect"></label>
+            <select id="h-month-sel" dir="rtl"></select>
+          </div>
+          <div class="field">
+            <label for="h-day-let" data-i18n="dayLetters"></label>
+            <input type="text" id="h-day-let" placeholder="כ״ה" dir="rtl" />
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-convert" id="btn-h2g" data-i18n-text="convert"></button>
+    </div>
+
+    <!-- Result & Error -->
+    <div class="conv-result" id="result" aria-live="polite">
+      <h2 data-i18n="result"></h2>
+      <dl class="result-grid" id="result-grid"></dl>
+    </div>
+    <p class="conv-error" id="error" aria-live="assertive"></p>
+
+    <!-- Info -->
+    <section class="conv-info">
+      <h2>How it works</h2>
+      <p>
+        Every conversion passes through the <strong>Julian Day Number (JDN)</strong>,
+        a single authoritative time scalar. The DTI layer is a deterministic
+        360-day derived representation:
+      </p>
+      <p>
+        <code>DTI‑Day = JDN</code> ·
+        <code>DY = floor(JDN / 360)</code> ·
+        <code>DOY = (JDN mod 360) + 1</code>
+      </p>
+      <p>
+        This conversion is fully reversible: <code>JDN = DY × 360 + (DOY − 1)</code>.
+        All operations are integer-only and machine-auditable per DKP-0-TIME-001.
+      </p>
+      <p>
+        Hebrew dates are computed via a full calendar algorithm (Gauss/Reingold–Dershowitz)
+        implemented entirely in client-side JavaScript — no server required.
+      </p>
+    </section>
+  </div>
+
+  <!-- ─── Footer ─────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>Dikenocracy &mdash; public framework. Built openly alongside the old world.</p>
+  </footer>
+
+  <script src="converter-i18n.js"></script>
+  <script src="converter.js"></script>
+  <script>
+  /* ═══════════════════════════════════════════════════════
+   *  UI Controller
+   * ═══════════════════════════════════════════════════════ */
+  'use strict';
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => document.querySelectorAll(s);
+
+  let currentLang = 'EN';
+  const resultEl = $('#result');
+  const gridEl   = $('#result-grid');
+  const errEl    = $('#error');
+
+  /* ── i18n ─────────────────────────────────────────────── */
+  function applyI18n(lang) {
+    currentLang = lang;
+    const L = I18N[lang];
+    if (!L) return;
+
+    // Text direction
+    const dir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
+    document.documentElement.setAttribute('dir', dir);
+    document.documentElement.setAttribute('lang', lang.toLowerCase());
+
+    // data-i18n → textContent (labels, headings)
+    $$('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (L[key] !== undefined) el.textContent = L[key];
+    });
+    // data-i18n-text → textContent (buttons)
+    $$('[data-i18n-text]').forEach(el => {
+      const key = el.getAttribute('data-i18n-text');
+      if (L[key] !== undefined) el.textContent = L[key];
+    });
+
+    // Hebrew month dropdown
+    populateHebrewMonths();
+  }
+
+  function populateHebrewMonths() {
+    const sel = $('#h-month-sel');
+    sel.innerHTML = '';
+    HEBREW_MONTHS.forEach((name, i) => {
+      const opt = document.createElement('option');
+      opt.value = i + 1; // pyluach order: 1=Nisan..13=Adar II
+      opt.textContent = name;
+      sel.appendChild(opt);
+    });
+    // Default to Tishrei (index 6 → value 7)
+    sel.value = '7';
+  }
+
+  /* ── Tabs ─────────────────────────────────────────────── */
+  $$('.conv-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.conv-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      $$('.conv-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      const panel = $('#' + btn.getAttribute('aria-controls'));
+      if (panel) panel.classList.add('active');
+      resultEl.classList.remove('visible');
+      errEl.classList.remove('visible');
+    });
+  });
+
+  /* ── Hebrew input mode toggle ─────────────────────────── */
+  const hebNumBtn = $('#heb-numeric-btn');
+  const hebLetBtn = $('#heb-letter-btn');
+  const hebNumFields = $('#heb-numeric-fields');
+  const hebLetFields = $('#heb-letter-fields');
+
+  hebNumBtn.addEventListener('click', () => {
+    hebNumBtn.classList.add('active');
+    hebLetBtn.classList.remove('active');
+    hebNumFields.style.display = '';
+    hebLetFields.style.display = 'none';
+  });
+  hebLetBtn.addEventListener('click', () => {
+    hebLetBtn.classList.add('active');
+    hebNumBtn.classList.remove('active');
+    hebLetFields.style.display = '';
+    hebNumFields.style.display = 'none';
+  });
+
+  /* ── Display helpers ──────────────────────────────────── */
+  function showError(msg) {
+    errEl.textContent = msg;
+    errEl.classList.add('visible');
+    resultEl.classList.remove('visible');
+  }
+
+  function showResult(pairs) {
+    errEl.classList.remove('visible');
+    let html = '';
+    for (const [label, value] of pairs) {
+      html += `<dt>${label}</dt><dd>${value}</dd>`;
+    }
+    gridEl.innerHTML = html;
+    resultEl.classList.add('visible');
+  }
+
+  /* ── Panel 1: Gregorian → DTI/Hebrew ──────────────────── */
+  $('#btn-g2d').addEventListener('click', () => {
+    const L = I18N[currentLang];
+    try {
+      let year, month, day;
+      const yInput = $('#g-year').value;
+      const dateInput = $('#g-date').value;
+
+      if (yInput) {
+        year = parseInt(yInput, 10);
+        month = parseInt($('#g-month').value, 10);
+        day = parseInt($('#g-day').value, 10);
+      } else if (dateInput) {
+        const [y, m, d] = dateInput.split('-').map(Number);
+        year = y; month = m; day = d;
+      } else {
+        throw new Error(L.error);
+      }
+      if (isNaN(year) || isNaN(month) || isNaN(day)) throw new Error(L.error);
+      if (!isValidGregorian(year, month, day)) throw new Error(L.error);
+
+      const jdn = gregorianToJdn(year, month, day);
+      const dti = jdnToDti(jdn);
+      const pairs = [
+        [L.gregDate, fmtGreg({ year, month, day }, currentLang)],
+        [L.jdn, String(jdn)],
+        [L.dtiId, fmtDti(dti)],
+        [L.dtiYear, String(dti.dy)],
+        [L.doy, String(dti.doy)],
+      ];
+
+      // Hebrew date
+      try {
+        const heb = jdnToHebrew(jdn);
+        pairs.push([L.hebDate, fmtHebrewNumeric(heb.year, heb.month, heb.day)]);
+        pairs.push([L.hebStr, fmtHebrewDateString(heb.year, heb.month, heb.day)]);
+      } catch (e) { /* Hebrew conversion out of range — skip */ }
+
+      showResult(pairs);
+    } catch (e) { showError(e.message); }
+  });
+
+  /* ── Panel 2: DTI → Gregorian/Hebrew ──────────────────── */
+  $('#btn-d2g').addEventListener('click', () => {
+    const L = I18N[currentLang];
+    try {
+      const dy = parseInt($('#d-dy').value, 10);
+      const doy = parseInt($('#d-doy').value, 10);
+      if (isNaN(dy) || isNaN(doy)) throw new Error(L.error);
+
+      const jdn = dtiToJdn(dy, doy);
+      const greg = jdnToGregorian(jdn);
+      const pairs = [
+        [L.dtiId, fmtDti({ dy, doy })],
+        [L.jdn, String(jdn)],
+        [L.gregDate, fmtGreg(greg, currentLang)],
+      ];
+
+      try {
+        const heb = jdnToHebrew(jdn);
+        pairs.push([L.hebDate, fmtHebrewNumeric(heb.year, heb.month, heb.day)]);
+        pairs.push([L.hebStr, fmtHebrewDateString(heb.year, heb.month, heb.day)]);
+      } catch (e) { /* skip */ }
+
+      showResult(pairs);
+    } catch (e) { showError(e.message); }
+  });
+
+  /* ── Panel 3: Hebrew → Gregorian/DTI ──────────────────── */
+  $('#btn-h2g').addEventListener('click', () => {
+    const L = I18N[currentLang];
+    try {
+      let y, m, d;
+      const isNumeric = hebNumBtn.classList.contains('active');
+
+      if (isNumeric) {
+        y = parseInt($('#h-year').value, 10);
+        m = parseInt($('#h-month').value, 10);
+        d = parseInt($('#h-day').value, 10);
+      } else {
+        const yearText = $('#h-year-let').value.trim();
+        const dayText = $('#h-day-let').value.trim();
+        if (!yearText || !dayText) throw new Error(L.error);
+        y = fromHebrewNumberYear(yearText);
+        m = parseInt($('#h-month-sel').value, 10);
+        d = fromHebrewNumberDay(dayText);
+      }
+
+      if (isNaN(y) || isNaN(m) || isNaN(d)) throw new Error(L.error);
+      if (!isValidHebrew(y, m, d)) throw new Error(L.error);
+
+      const jdn = hebrewToJdn(y, m, d);
+      const greg = jdnToGregorian(jdn);
+      const dti = jdnToDti(jdn);
+
+      showResult([
+        [L.hebDate, fmtHebrewNumeric(y, m, d)],
+        [L.hebStr, fmtHebrewDateString(y, m, d)],
+        [L.gregDate, fmtGreg(greg, currentLang)],
+        [L.jdn, String(jdn)],
+        [L.dtiId, fmtDti(dti)],
+        [L.dtiYear, String(dti.dy)],
+        [L.doy, String(dti.doy)],
+      ]);
+    } catch (e) { showError(e.message); }
+  });
+
+  /* ── Language change ──────────────────────────────────── */
+  $('#lang-select').addEventListener('change', (e) => {
+    applyI18n(e.target.value);
+    resultEl.classList.remove('visible');
+    errEl.classList.remove('visible');
+  });
+
+  /* ── Enter key support ────────────────────────────────── */
+  function handleEnter(panelId, buttonId) {
+    const panel = document.getElementById(panelId);
+    const btn = document.getElementById(buttonId);
+    if (!panel || !btn) return;
+    panel.querySelectorAll('input').forEach(input => {
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); btn.click(); }
+      });
+    });
+  }
+  handleEnter('panel-g2d', 'btn-g2d');
+  handleEnter('panel-d2g', 'btn-d2g');
+  handleEnter('panel-h2g', 'btn-h2g');
+
+  /* ── Mobile nav toggle ────────────────────────────────── */
+  const navToggle = document.querySelector('.site-nav__toggle');
+  const navLinks = document.getElementById('site-nav-links');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', open);
+    });
+  }
+
+  /* ── Init ─────────────────────────────────────────────── */
+  (function init() {
+    // Pre-fill today
+    const today = new Date();
+    $('#g-date').value = today.toISOString().slice(0, 10);
+
+    // Pre-fill today's DTI
+    const jdn = gregorianToJdn(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const dti = jdnToDti(jdn);
+    $('#d-dy').value = dti.dy;
+    $('#d-doy').value = dti.doy;
+
+    // Pre-fill today's Hebrew
+    try {
+      const heb = jdnToHebrew(jdn);
+      $('#h-year').value = heb.year;
+      $('#h-month').value = heb.month;
+      $('#h-day').value = heb.day;
+    } catch (e) {}
+
+    applyI18n('EN');
+  })();
+  </script>
+</body>
+</html>
