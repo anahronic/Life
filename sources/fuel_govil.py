@@ -79,6 +79,8 @@ def _fetch_from_ckan() -> dict:
     from .gov_catalog import (
         fetch_latest_benzine95_wholesale,
         fetch_latest_benzine_excise,
+        CkanSchemaError,
+        CkanUnitError,
     )
 
     wholesale = fetch_latest_benzine95_wholesale()
