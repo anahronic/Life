@@ -61,9 +61,16 @@ class SecureConfig:
         return int(SecureConfig._get_value("CACHE_TTL_SECONDS") or "300")
     
     @staticmethod
-    def get_quota_per_hour() -> int:
-        """Max API calls per hour (for monitoring)."""
-        return int(SecureConfig._get_value("TOMTOM_QUOTA_PER_HOUR") or "2500")
+    def get_quota_per_day() -> int:
+        """Max TomTom API calls per day (free plan = 2500/day).
+        Reads TOMTOM_QUOTA_PER_DAY first; falls back to legacy TOMTOM_QUOTA_PER_HOUR."""
+        val = SecureConfig._get_value("TOMTOM_QUOTA_PER_DAY")
+        if val is None:
+            val = SecureConfig._get_value("TOMTOM_QUOTA_PER_HOUR")
+        return int(val or "2500")
+
+    # Backward-compat alias
+    get_quota_per_hour = get_quota_per_day
     
     @staticmethod
     def is_production() -> bool:
