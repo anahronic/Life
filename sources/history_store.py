@@ -156,3 +156,22 @@ class HistoryStore:
         with self._connect() as con:
             row = con.execute("SELECT pipeline_run_id FROM runs ORDER BY recorded_at_utc DESC LIMIT 1").fetchone()
         return row[0] if row and row[0] else None
+
+    # ── read-only helpers for UI (no TomTom / no model calls) ──
+
+    def fetch_latest_run(self) -> Optional[Dict[str, Any]]:
+        """Return the most recent run as a dict, or None if no runs exist."""
+        with self._connect() as con:
+            row = con.execute(
+                "SELECT * FROM runs ORDER BY recorded_at_utc DESC LIMIT 1"
+            ).fetchone()
+        return dict(row) if row else None
+
+    def fetch_latest_n_runs(self, n: int = 300) -> List[Dict[str, Any]]:
+        """Return the *n* most recent runs (newest first)."""
+        with self._connect() as con:
+            rows = con.execute(
+                "SELECT * FROM runs ORDER BY recorded_at_utc DESC LIMIT ?",
+                (int(n),),
+            ).fetchall()
+        return [dict(r) for r in rows]

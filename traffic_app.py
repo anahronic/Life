@@ -12,7 +12,12 @@ from sources.error_handler import ErrorHandler
 from ui_messages import normalization_banner_text
 from datetime import datetime
 from sources.history_store import HistoryStore
-from sources.official_stats import fetch_official_congestion_benchmark
+from sources.official_stats import fetch_official_reference_card
+
+# ── UI operation mode ──────────────────────────────────────────────────
+# Default: "readonly" — dashboard reads only from SQLite (no TomTom API calls).
+# Set AYALON_UI_MODE=live to restore the old behaviour (debug / manual testing).
+_UI_MODE = os.getenv("AYALON_UI_MODE", "readonly").strip().lower()
 
 st.set_page_config(page_title="Ayalon Real-Time Physical Impact Model", layout="wide")
 
@@ -100,10 +105,18 @@ _I18N = {
         "time_value_caption": "אומדן עלות זמן (₪): ₪ {value:,.0f} (בהנחה ₪{rate:.2f}/שעת-רכב)",
         "extrapolated_caption": "הוחשב בהסקה מ-{window}. משך נצפה: {hours:.2f} שעות.",
 
-        "official_header": "השוואה לנתונים רשמיים (Gov.il)",
-        "official_metric": "שעות אבודות לאדם לשנה (רשמי)",
-        "official_unconfigured": "לא הוגדר מקור רשמי. אפשר להוסיף OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR או OFFICIAL_STATS_JSON_URL בהגדרות סביבה.",
-        "official_note": "הערה: הנתון הרשמי הוא בדרך כלל ממוצע שנתי לאדם/נהג; המודל כאן מציג מונים ברמת מערכת (vehicle-hours) עבור המדידה הנוכחית/החלון הנבחר.",
+        "official_card_title": "ייחוס רשמי — כקונטקסט בלבד",
+        "official_card_subtitle_context_only": "מסגרת ייחוס (reference-only): מקור רשמי מצוטט לצורך הקשר, לא מדד אמת.",
+        "official_not_configured": "מקור רשמי מומלץ (reference-only) מארכיון מבקר המדינה: דו\"ח מבקר המדינה — Abstracts\nhttps://library.mevaker.gov.il/sites/DigitalLibrary/Documents/2024/2024.11-75A-PartB/EN/2024.11-75A-PartB-All-Abstracts-EN.pdf\nאפשר להשתמש בקישור הזה כ- OFFICIAL_REPORT_URL ולהגדיר OFFICIAL_SOURCE_LABEL / OFFICIAL_REPORT_YEAR / OFFICIAL_METRIC_LABEL / OFFICIAL_VALUE / OFFICIAL_UNIT (למשל ILS_per_year).",
+        "official_source_label": "מקור",
+        "official_report_year": "שנת דו\"ח",
+        "official_value_year": "שנת הערכה",
+        "official_metric_label": "מדד",
+        "official_value_label": "ערך",
+        "official_unit_ils_per_year": "ש\"ח לשנה",
+        "official_metric_state_comptroller_congestion_cost": "הערכת נזק כלכלי שנתי מעומסי תנועה",
+        "official_disclaimer_not_comparable": "אין מקור ממשלתי ציבורי שמספק אנלוג ישיר ל\"מונה חי\" ברמת מסדרון ב-vehicle-hours; לכן הייחוס הרשמי מוצג כאן כערך שנתי/מצרפי לצורך הקשר בלבד.",
+        "official_disclaimer_planning_basis": "היעדר אנלוג ציבורי ישיר אינו מעיד על היעדר כלי תכנון: תכנון תחבורתי נשען לרוב על מודלים מצרפיים, סקרים, נתוני חיישנים/מפעילים והערכות כלכליות — אך בפרסומים לציבור הם מוצגים בדרך כלל כמדדים שנתיים/מצרפיים ולא כמונה חי לפי מסדרון.",
     },
     "en": {
         "app_title": "Ayalon Real-Time Physical Impact Model — Monitor",
@@ -180,10 +193,18 @@ _I18N = {
         "time_value_caption": "Indicative time-value loss (₪): ₪ {value:,.0f} (assumes ₪{rate:.2f}/vehicle-hour)",
         "extrapolated_caption": "Extrapolated from {window}. Observed duration: {hours:.2f} hours.",
 
-        "official_header": "Official benchmark (Gov.il)",
-        "official_metric": "Hours lost per person per year (official)",
-        "official_unconfigured": "Official benchmark not configured. Set OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR or OFFICIAL_STATS_JSON_URL in env.",
-        "official_note": "Note: the official number is typically an annual per-person/driver average; this model shows system-level counters (vehicle-hours) for the current measurement / selected window.",
+        "official_card_title": "Official reference — context only",
+        "official_card_subtitle_context_only": "Reference-only: a cited official number for context, not a truth-source validator.",
+        "official_not_configured": "Recommended official PDF source (reference-only) from the State Comptroller archive: State Comptroller Report — Abstracts\nhttps://library.mevaker.gov.il/sites/DigitalLibrary/Documents/2024/2024.11-75A-PartB/EN/2024.11-75A-PartB-All-Abstracts-EN.pdf\nUse this URL as OFFICIAL_REPORT_URL and set OFFICIAL_SOURCE_LABEL / OFFICIAL_REPORT_YEAR / OFFICIAL_METRIC_LABEL / OFFICIAL_VALUE / OFFICIAL_UNIT (e.g., ILS_per_year).",
+        "official_source_label": "Source",
+        "official_report_year": "Report year",
+        "official_value_year": "Value year",
+        "official_metric_label": "Metric",
+        "official_value_label": "Value",
+        "official_unit_ils_per_year": "ILS per year",
+        "official_metric_state_comptroller_congestion_cost": "Estimated annual economic cost of road congestion",
+        "official_disclaimer_not_comparable": "Public government sources typically do not provide a direct analogue to a live, corridor-level vehicle-hours counter; therefore this official reference is shown as an annual/aggregate context value only.",
+        "official_disclaimer_planning_basis": "Lack of a public direct analogue does not imply lack of planning tools: transport planning commonly relies on aggregated models, surveys, sensor/operator data, and economic assessments, but public releases are usually annual/aggregate indicators rather than a live corridor vehicle-hours counter.",
     },
     "ar": {
         "app_title": "نموذج الأثر الفيزيائي اللحظي — أيالون",
@@ -260,10 +281,18 @@ _I18N = {
         "time_value_caption": "تقدير خسارة قيمة الوقت (₪): ₪ {value:,.0f} (بافتراض ₪{rate:.2f}/ساعة-مركبة)",
         "extrapolated_caption": "تمت الاستقراء من {window}. المدة المُلاحظة: {hours:.2f} ساعة.",
 
-        "official_header": "مقارنة ببيانات رسمية (Gov.il)",
-        "official_metric": "ساعات مفقودة للفرد في السنة (رسمي)",
-        "official_unconfigured": "لم يتم إعداد المرجع الرسمي. اضبط OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR أو OFFICIAL_STATS_JSON_URL في env.",
-        "official_note": "ملاحظة: الرقم الرسمي عادةً متوسط سنوي للفرد/السائق؛ هذا النموذج يعرض عدّادات على مستوى النظام (ساعات-مركبة) للقياس الحالي/النافذة المختارة.",
+        "official_card_title": "مرجع رسمي — للسياق فقط",
+        "official_card_subtitle_context_only": "للإحاطة فقط: رقم رسمي مُقتبس للسياق وليس للتحقق من ""مصدر الحقيقة"".",
+        "official_not_configured": "مصدر PDF رسمي مُوصى به (للسياق فقط) من أرشيف مراقب الدولة: تقرير مراقب الدولة — Abstracts\nhttps://library.mevaker.gov.il/sites/DigitalLibrary/Documents/2024/2024.11-75A-PartB/EN/2024.11-75A-PartB-All-Abstracts-EN.pdf\nاستخدم هذا الرابط كـ OFFICIAL_REPORT_URL واضبط OFFICIAL_SOURCE_LABEL / OFFICIAL_REPORT_YEAR / OFFICIAL_METRIC_LABEL / OFFICIAL_VALUE / OFFICIAL_UNIT (مثل ILS_per_year).",
+        "official_source_label": "المصدر",
+        "official_report_year": "سنة التقرير",
+        "official_value_year": "سنة التقدير",
+        "official_metric_label": "المقياس",
+        "official_value_label": "القيمة",
+        "official_unit_ils_per_year": "شيكل/سنة",
+        "official_metric_state_comptroller_congestion_cost": "تقدير التكلفة الاقتصادية السنوية للازدحام المروري",
+        "official_disclaimer_not_comparable": "عادةً لا توفر المصادر الحكومية العامة نظيرًا مباشرًا لعداد حيّ على مستوى ممر (vehicle-hours). لذلك يُعرض هذا المرجع الرسمي كقيمة سنوية/مجموعة للسياق فقط.",
+        "official_disclaimer_planning_basis": "غياب نظير عام مباشر لا يعني غياب أدوات التخطيط: يعتمد التخطيط المروري غالبًا على نماذج مجمعة، واستبيانات، وبيانات حساسات/مشغلين، وتقييمات اقتصادية، لكن ما يُنشر للعامة يكون عادةً مؤشرات سنوية/مجمعة وليس عدادًا حيًا حسب الممر.",
     },
     "ru": {
         "app_title": "Ayalon — монитор физического воздействия",
@@ -340,10 +369,18 @@ _I18N = {
         "time_value_caption": "Оценка потерь времени (₪): ₪ {value:,.0f} (предположено ₪{rate:.2f}/машино‑час)",
         "extrapolated_caption": "Экстраполировано по окну: {window}. Наблюдаемая длительность: {hours:.2f} ч.",
 
-        "official_header": "Официальные данные (Gov.il)",
-        "official_metric": "Потерянные часы на человека в год (официально)",
-        "official_unconfigured": "Официальный бенчмарк не настроен. Задай OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR или OFFICIAL_STATS_JSON_URL в env.",
-        "official_note": "Примечание: официальный показатель обычно годовой средний на человека/водителя; эта модель показывает системные счётчики (машино‑часы) для текущего измерения/выбранного окна.",
+        "official_card_title": "Официальный ориентир — только контекст",
+        "official_card_subtitle_context_only": "Reference-only: цитируемая официальная оценка для контекста, не валидатор ""источника истины"".",
+        "official_not_configured": "Вот официальный PDF-источник (reference-only) из архива מבקר המדינה: דו\"ח מבקר המדינה — Abstracts\nhttps://library.mevaker.gov.il/sites/DigitalLibrary/Documents/2024/2024.11-75A-PartB/EN/2024.11-75A-PartB-All-Abstracts-EN.pdf\nИспользуй этот URL как OFFICIAL_REPORT_URL и задай OFFICIAL_SOURCE_LABEL / OFFICIAL_REPORT_YEAR / OFFICIAL_METRIC_LABEL / OFFICIAL_VALUE / OFFICIAL_UNIT (например ILS_per_year).",
+        "official_source_label": "Источник",
+        "official_report_year": "Год отчёта",
+        "official_value_year": "Год оценки",
+        "official_metric_label": "Метрика",
+        "official_value_label": "Значение",
+        "official_unit_ils_per_year": "₪ в год",
+        "official_metric_state_comptroller_congestion_cost": "Оценка годового экономического ущерба от дорожных заторов",
+        "official_disclaimer_not_comparable": "Публичные государственные источники, как правило, не предоставляют прямого аналога live-счётчику vehicle-hours по конкретному коридору; поэтому официальный ориентир показан только как годовой/агрегированный контекст.",
+        "official_disclaimer_planning_basis": "Отсутствие публичного прямого аналога не означает отсутствие моделей у государства: транспортное планирование обычно опирается на агрегированные модели, обследования, данные датчиков/операторов и экономические оценки, но в публичных публикациях это чаще годовые/агрегированные индикаторы, а не live-счётчик по коридору.",
     },
 }
 
@@ -458,6 +495,33 @@ def _render_trend_chart(df, lang: str, *, bucket: str | None = None):
 def _t(key: str, lang: str) -> str:
     table = _I18N.get((lang or "en").lower(), _I18N["en"])
     return str(table.get(key, _I18N["en"].get(key, key)))
+
+
+def _maybe_translate(label_or_key: str | None, lang: str) -> str:
+    if not label_or_key:
+        return ""
+    s = str(label_or_key)
+    table = _I18N.get((lang or "en").lower(), _I18N["en"])
+    if s in table or s in _I18N.get("en", {}):
+        return _t(s, lang)
+    return s
+
+
+def _format_int_grouped(n: float, sep: str = ",") -> str:
+    try:
+        i = int(round(float(n)))
+    except Exception:
+        return str(n)
+    s = f"{i:,}"
+    if sep != ",":
+        s = s.replace(",", sep)
+    return s
+
+
+def _format_ils_amount(value: float, lang: str) -> str:
+    # Keep it simple & consistent: Hebrew/English/Arabic use commas, Russian uses spaces.
+    sep = " " if (lang or "").lower() == "ru" else ","
+    return f"₪ {_format_int_grouped(value, sep=sep)}"
 
 
 # Language selector (above Data & Refresh)
@@ -582,8 +646,6 @@ def _compute_aggregates_from_history(df, window_s: int | None):
 
 # Controls
 st.sidebar.header(_t("sidebar_data_refresh", lang))
-api_key = SecureConfig.get_tomtom_api_key()
-auto_refresh = st.sidebar.checkbox(_t("auto_refresh", lang), value=True)
 
 st.sidebar.subheader(_t("loss_display_header", lang))
 _loss_opts = [
@@ -616,82 +678,134 @@ history_window_choice = dict(((_t(k, lang)), code) for k, code in _window_opts).
 # Public-friendly system status (no secrets)
 st.sidebar.info(f"{_t('system_health', lang)}: {get_quick_status()}")
 
-# Traffic mode selection
-default_sample = api_key is None and SecureConfig.get_enable_sample_mode()
-traffic_mode = "sample" if default_sample else "flow"
-_traffic_mode_opts = [
-    ("traffic_mode_opt_flow", "flow"),
-    ("traffic_mode_opt_sample", "sample"),
-]
-traffic_mode_display_options = [_t(k, lang) for k, _code in _traffic_mode_opts]
-default_display = _t("traffic_mode_opt_flow", lang) if traffic_mode == "flow" else _t("traffic_mode_opt_sample", lang)
-traffic_mode_display = st.sidebar.selectbox(
-    _t("traffic_mode", lang),
-    options=traffic_mode_display_options,
-    index=traffic_mode_display_options.index(default_display) if default_display in traffic_mode_display_options else 0,
-    help=_t("traffic_mode_help", lang),
-)
-traffic_mode = dict(((_t(k, lang)), code) for k, code in _traffic_mode_opts).get(traffic_mode_display, "flow")
-if traffic_mode == "flow" and not api_key:
-    err = ErrorHandler.handle_missing_key_error()
-    st.sidebar.error(err.message)
-
-# Fetch sources (cached inside sources module)
-tomtom_data, tomtom_exc = _fetch_with_retries(
-    "tomtom",
-    lambda: tomtom.get_ayalon_segments(api_key, cache_ttl_s=SecureConfig.get_cache_ttl(), mode=traffic_mode),
-    retries=2,
-)
-if tomtom_data is None:
-    # Fall back to stale cached traffic if available.
-    cached = tomtom.get_cached_ayalon_segments(mode=traffic_mode, max_age_s=24 * 3600)
-    if cached:
-        cached = dict(cached)
-        cached["errors"] = ["Using cached traffic due to live fetch failure"]
-        tomtom_data = cached
-    else:
-        api_err = ErrorHandler.handle_api_call_error(tomtom_exc, service="tomtom") if tomtom_exc else ErrorHandler.handle_api_call_error(RuntimeError("TomTom fetch failed"), service="tomtom")
-        tomtom_data = {"source_id": "tomtom:error", "segments": [], "errors": [api_err.message], "fetched_at": datetime.utcnow().isoformat() + "Z"}
-    record_request(success=False, error_code="tomtom_fallback")
-else:
-    if tomtom_data.get("errors"):
-        record_request(success=False, error_code=str(tomtom_data["errors"][0])[:60])
-    else:
-        record_request(success=True)
-
-aq_data, aq_exc = _fetch_with_retries("air_quality", lambda: get_air_quality_for_ayalon(cache_ttl_s=600), retries=1)
-if aq_data is None or aq_data.get("error"):
-    cached_aq = get_cached_air_quality(max_age_s=24 * 3600)
-    if cached_aq:
-        aq_data = dict(cached_aq)
-        aq_data["error"] = aq_data.get("error") or "Using cached air quality due to live fetch failure"
-    elif aq_data is None:
-        aq_data = {"source_id": "air-quality:error", "fetched_at": None, "metrics": {}, "error": str(aq_exc) if aq_exc else "Air quality fetch failed"}
-
-fuel_data, fuel_exc = _fetch_with_retries("fuel", lambda: fetch_current_fuel_price(), retries=1, base_delay_s=1.2)
-if fuel_data is None:
-    cached_fuel = get_cached_fuel_price(max_age_s=14 * 86400)
-    if cached_fuel:
-        fuel_data = dict(cached_fuel)
-        fuel_data["source_id"] = str(fuel_data.get("source_id", "fuel")) + ":cached"
-    else:
-        fuel_data = {"source_id": "fuel:error", "price_ils_per_l": None}
-
-vehicle_count_mode = tomtom_data.get('vehicle_count_mode')
-
-# Freshness and stale logic
-now_ts = time.time()
-tomtom_ts = _parse_iso_to_ts(tomtom_data.get('fetched_at', '1970-01-01T00:00:00Z'))
-tomtom_age = now_ts - tomtom_ts
-st.sidebar.write(f"{_t('traffic_age', lang)}: {int(tomtom_age)}s")
-if auto_refresh and tomtom_age > 300:
-    st.rerun()
-
 # Lightweight analytics summary
 summary = get_dashboard_summary()
 st.sidebar.metric(_t("success_rate", lang), summary.get("success_rate", "n/a"))
 st.sidebar.metric(_t("cache_hit_ratio", lang), summary.get("cache_hit_ratio", "n/a"))
 st.sidebar.write(f"{_t('errors_session', lang)}: {summary.get('errors_this_session', 0)}")
+
+# ── Data acquisition ───────────────────────────────────────────────────
+# readonly (default): read latest run from SQLite only — zero API calls.
+# live (AYALON_UI_MODE=live): old behaviour — fetch TomTom, run model, persist.
+
+def _acquire_live():
+    """Legacy live-fetch path (used only when AYALON_UI_MODE=live)."""
+    api_key = SecureConfig.get_tomtom_api_key()
+    default_sample = api_key is None and SecureConfig.get_enable_sample_mode()
+    traffic_mode = "sample" if default_sample else "flow"
+
+    tomtom_data, tomtom_exc = _fetch_with_retries(
+        "tomtom",
+        lambda: tomtom.get_ayalon_segments(api_key, cache_ttl_s=SecureConfig.get_cache_ttl(), mode=traffic_mode),
+        retries=2,
+    )
+    if tomtom_data is None:
+        cached = tomtom.get_cached_ayalon_segments(mode=traffic_mode, max_age_s=24 * 3600)
+        if cached:
+            cached = dict(cached)
+            cached["errors"] = ["Using cached traffic due to live fetch failure"]
+            tomtom_data = cached
+        else:
+            api_err = ErrorHandler.handle_api_call_error(tomtom_exc, service="tomtom") if tomtom_exc else ErrorHandler.handle_api_call_error(RuntimeError("TomTom fetch failed"), service="tomtom")
+            tomtom_data = {"source_id": "tomtom:error", "segments": [], "errors": [api_err.message], "fetched_at": datetime.utcnow().isoformat() + "Z"}
+        record_request(success=False, error_code="tomtom_fallback")
+    else:
+        if tomtom_data.get("errors"):
+            record_request(success=False, error_code=str(tomtom_data["errors"][0])[:60])
+        else:
+            record_request(success=True)
+
+    aq_data, aq_exc = _fetch_with_retries("air_quality", lambda: get_air_quality_for_ayalon(cache_ttl_s=600), retries=1)
+    if aq_data is None or aq_data.get("error"):
+        cached_aq = get_cached_air_quality(max_age_s=24 * 3600)
+        if cached_aq:
+            aq_data = dict(cached_aq)
+            aq_data["error"] = aq_data.get("error") or "Using cached air quality due to live fetch failure"
+        elif aq_data is None:
+            aq_data = {"source_id": "air-quality:error", "fetched_at": None, "metrics": {}, "error": str(aq_exc) if aq_exc else "Air quality fetch failed"}
+
+    fuel_data, fuel_exc = _fetch_with_retries("fuel", lambda: fetch_current_fuel_price(), retries=1, base_delay_s=1.2)
+    if fuel_data is None:
+        cached_fuel = get_cached_fuel_price(max_age_s=14 * 86400)
+        if cached_fuel:
+            fuel_data = dict(cached_fuel)
+            fuel_data["source_id"] = str(fuel_data.get("source_id", "fuel")) + ":cached"
+        else:
+            fuel_data = {"source_id": "fuel:error", "price_ils_per_l": None}
+
+    vehicle_count_mode = tomtom_data.get('vehicle_count_mode')
+    segments = tomtom_data.get('segments', [])
+
+    results = None
+    if segments and fuel_data.get('price_ils_per_l') is not None:
+        _model = AyalonModel()
+        src_ids = {
+            'traffic': tomtom_data.get('source_id'),
+            'air': aq_data.get('source_id'),
+            'fuel': fuel_data.get('source_id'),
+        }
+        data_ts = tomtom_data.get('fetched_at')
+        p_fuel = float(fuel_data['price_ils_per_l'])
+        results = _model.run_model(segments, data_timestamp_utc=data_ts, source_ids=src_ids, p_fuel_ils_per_l=p_fuel, vehicle_count_mode=vehicle_count_mode)
+        now_ts = time.time()
+        tomtom_ts = _parse_iso_to_ts(tomtom_data.get('fetched_at', '1970-01-01T00:00:00Z'))
+        tomtom_age = now_ts - tomtom_ts
+        try:
+            history.record_run(results=results, tomtom_data=tomtom_data, aq_data=aq_data, fuel_data=fuel_data, tomtom_age_s=tomtom_age)
+        except Exception:
+            pass
+
+    return results, vehicle_count_mode, tomtom_data, aq_data, fuel_data
+
+
+def _acquire_readonly():
+    """Read latest collector run from SQLite — zero API calls."""
+    latest = history.fetch_latest_run()
+    if latest is None:
+        return None, None, None, None, None
+
+    results = {
+        'delta_T_total_h': latest.get('delta_T_total_h'),
+        'fuel_excess_L': latest.get('fuel_excess_L'),
+        'leakage_ils': latest.get('leakage_ils'),
+        'co2_emissions_kg': latest.get('co2_emissions_kg'),
+        'model_version': '1.0-freeze',
+        'constants_version': 'AppendixA-v1.2',
+        'data_timestamp_utc': latest.get('data_timestamp_utc'),
+        'data_source_ids': {
+            'traffic': latest.get('traffic_source_id'),
+            'air': latest.get('air_source_id'),
+            'fuel': latest.get('fuel_source_id'),
+        },
+        'pipeline_run_id': latest.get('pipeline_run_id'),
+        'vehicle_count_mode': latest.get('vehicle_count_mode'),
+    }
+    vehicle_count_mode = latest.get('vehicle_count_mode')
+
+    tomtom_data = {
+        'source_id': latest.get('traffic_source_id') or 'sqlite:readonly',
+        'fetched_at': latest.get('tomtom_fetched_at'),
+        'segments': [],   # not needed for display — metrics already computed
+        'vehicle_count_mode': vehicle_count_mode,
+    }
+    aq_data = {
+        'source_id': latest.get('air_source_id') or 'sqlite:readonly',
+        'fetched_at': latest.get('air_fetched_at'),
+        'metrics': {},
+    }
+    fuel_data = {
+        'source_id': latest.get('fuel_source_id') or 'sqlite:readonly',
+        'fetched_at': latest.get('fuel_fetched_at'),
+    }
+
+    return results, vehicle_count_mode, tomtom_data, aq_data, fuel_data
+
+
+if _UI_MODE == "live":
+    st.sidebar.warning("⚠ UI mode: **live** (TomTom API calls enabled)")
+    results, vehicle_count_mode, tomtom_data, aq_data, fuel_data = _acquire_live()
+else:
+    results, vehicle_count_mode, tomtom_data, aq_data, fuel_data = _acquire_readonly()
 
 tab_dashboard, tab_history, tab_sources = st.tabs([
     _t("tab_dashboard", lang),
@@ -702,35 +816,44 @@ tab_dashboard, tab_history, tab_sources = st.tabs([
 with tab_sources:
     st.header(_t("input_sources_header", lang))
     col1, col2, col3 = st.columns(3)
-    col1.metric(_t("traffic_source", lang), tomtom_data.get('source_id', 'tomtom:unknown'))
-    col1.write(f"{_t('updated', lang)}: {tomtom_data.get('fetched_at')}")
-    if tomtom_data.get('errors'):
-        col1.warning(str(tomtom_data.get('errors')[0])[:200])
+    if tomtom_data:
+        col1.metric(_t("traffic_source", lang), tomtom_data.get('source_id', 'tomtom:unknown'))
+        col1.write(f"{_t('updated', lang)}: {tomtom_data.get('fetched_at')}")
+        if tomtom_data.get('errors'):
+            col1.warning(str(tomtom_data.get('errors')[0])[:200])
+    else:
+        col1.metric(_t("traffic_source", lang), "n/a")
 
-    col2.metric(_t("air_quality_source", lang), aq_data.get('source_id', 'air:unknown'))
-    col2.write(f"{_t('updated', lang)}: {aq_data.get('fetched_at')}")
-    aq_metrics = aq_data.get('metrics') or {}
-    if aq_metrics.get('pm2_5_ug_m3') is not None:
-        col2.write(f"PM2.5 (µg/m³): {aq_metrics.get('pm2_5_ug_m3')}")
-    if aq_metrics.get('us_aqi') is not None:
-        col2.write(f"US AQI: {aq_metrics.get('us_aqi')}")
-    if aq_data.get('error'):
-        col2.warning(str(aq_data.get('error'))[:200])
+    if aq_data:
+        col2.metric(_t("air_quality_source", lang), aq_data.get('source_id', 'air:unknown'))
+        col2.write(f"{_t('updated', lang)}: {aq_data.get('fetched_at')}")
+        aq_metrics = aq_data.get('metrics') or {}
+        if aq_metrics.get('pm2_5_ug_m3') is not None:
+            col2.write(f"PM2.5 (µg/m³): {aq_metrics.get('pm2_5_ug_m3')}")
+        if aq_metrics.get('us_aqi') is not None:
+            col2.write(f"US AQI: {aq_metrics.get('us_aqi')}")
+        if aq_data.get('error'):
+            col2.warning(str(aq_data.get('error'))[:200])
+    else:
+        col2.metric(_t("air_quality_source", lang), "n/a")
 
-    fuel_sid = fuel_data.get('source_id', 'gov-or-env')
-    col3.metric(_t("fuel_price_source", lang), fuel_sid)
-    col3.write(f"{_t('price_ils_per_l', lang)}: {fuel_data.get('price_ils_per_l', 'n/a')}")
-    # Show adapter provenance detail
-    fuel_raw = fuel_data.get('raw') or {}
-    adapter_name = fuel_raw.get('adapter', '')
-    if adapter_name == 'ckan_datastore':
-        col3.caption(f"Wholesale: {fuel_raw.get('wholesale_per_l', '?')} ₪/L + Excise: {fuel_raw.get('excise_per_l', '?')} ₪/L + Margin: {fuel_raw.get('retail_margin_ils', '?')} ₪/L × (1+VAT)")
-    elif adapter_name == 'pdf_notice':
-        col3.caption(f"Parsed from: {fuel_raw.get('notice_pdf_url', 'PDF')}")
-    elif adapter_name == 'env_override':
-        col3.caption("⚠ Manual env override (FUEL_PRICE_ILS)")
-    if ':cached' in fuel_sid:
-        col3.warning("Using stale cached fuel price")
+    if fuel_data:
+        fuel_sid = fuel_data.get('source_id', 'gov-or-env')
+        col3.metric(_t("fuel_price_source", lang), fuel_sid)
+        col3.write(f"{_t('price_ils_per_l', lang)}: {fuel_data.get('price_ils_per_l', 'n/a')}")
+        # Show adapter provenance detail (from collector-written data)
+        fuel_raw = fuel_data.get('raw') or {}
+        adapter_name = fuel_raw.get('adapter', '')
+        if adapter_name == 'ckan_datastore':
+            col3.caption(f"Wholesale: {fuel_raw.get('wholesale_per_l', '?')} ₪/L + Excise: {fuel_raw.get('excise_per_l', '?')} ₪/L + Margin: {fuel_raw.get('retail_margin_ils', '?')} ₪/L × (1+VAT)")
+        elif adapter_name == 'pdf_notice':
+            col3.caption(f"Parsed from: {fuel_raw.get('notice_pdf_url', 'PDF')}")
+        elif adapter_name == 'env_override':
+            col3.caption("⚠ Manual env override (FUEL_PRICE_ILS)")
+        if ':cached' in str(fuel_sid):
+            col3.warning("Using stale cached fuel price")
+    else:
+        col3.metric(_t("fuel_price_source", lang), "n/a")
 
     st.subheader(_t("system_header", lang))
     st.info(f"{_t('system_health', lang)}: {get_quick_status()}")
@@ -739,35 +862,7 @@ banner = normalization_banner_text(vehicle_count_mode, lang=lang)
 if banner:
     st.warning(banner)
 
-# Build canonical segments from tomtom_data
-segments = tomtom_data.get('segments', [])
-if not segments:
-    if tomtom_data.get("errors"):
-        with tab_dashboard:
-            st.error(tomtom_data["errors"][0])
-    else:
-        with tab_dashboard:
-            st.error(_t("no_segments", lang))
-
-# Run model when data present
-results = None
-if segments and fuel_data.get('price_ils_per_l') is not None:
-    src_ids = {
-        'traffic': tomtom_data.get('source_id'),
-        'air': aq_data.get('source_id'),
-        'fuel': fuel_data.get('source_id'),
-    }
-    data_ts = tomtom_data.get('fetched_at')
-    p_fuel = float(fuel_data['price_ils_per_l'])
-    results = model.run_model(segments, data_timestamp_utc=data_ts, source_ids=src_ids, p_fuel_ils_per_l=p_fuel, vehicle_count_mode=vehicle_count_mode)
-
-    # Persist history (for charts/tables)
-    try:
-        history.record_run(results=results, tomtom_data=tomtom_data, aq_data=aq_data, fuel_data=fuel_data, tomtom_age_s=tomtom_age)
-    except Exception:
-        # Never break UI on history persistence.
-        pass
-
+if results is not None:
     with tab_dashboard:
         st.header(_t("losses_explained", lang))
         delta_T = float(results['delta_T_total_h'])
@@ -827,7 +922,10 @@ if segments and fuel_data.get('price_ils_per_l') is not None:
         st.write(f"{_t('data_timestamp', lang)}: {results['data_timestamp_utc']}")
         st.write(f"{_t('pipeline_run_id', lang)}: {results['pipeline_run_id']}")
 
-        stale = tomtom_age > 600
+        stale = False
+        if tomtom_data and tomtom_data.get('fetched_at'):
+            _tt_age = time.time() - _parse_iso_to_ts(tomtom_data.get('fetched_at'))
+            stale = _tt_age > 600
         if stale:
             st.warning(_t("stale_warning", lang))
             record_stale_data()
@@ -888,20 +986,49 @@ with tab_history:
 
         st.caption(f"delay={window_delay_h:,.1f} vehicle-hours, CO₂={window_co2:,.0f} kg")
 
-        st.subheader(_t("official_header", lang))
-        official = fetch_official_congestion_benchmark(cache_ttl_s=24 * 3600)
-        hours_off = official.get("hours_lost_per_person_per_year")
-        if hours_off is None:
-            st.info(_t("official_unconfigured", lang))
+        st.subheader(_t("official_card_title", lang))
+        st.caption(_t("official_card_subtitle_context_only", lang))
+
+        official = fetch_official_reference_card(cache_ttl_s=24 * 3600)
+        if not bool(official.get("configured")):
+            st.info(_t("official_not_configured", lang))
             if official.get("error"):
                 st.caption(str(official.get("error"))[:200])
         else:
-            st.metric(_t("official_metric", lang), f"{float(hours_off):,.0f} h")
-            src_label = official.get("source_label")
-            src_url = official.get("source_url")
-            if src_label or src_url:
-                st.caption(f"{src_label or ''} {src_url or ''}".strip())
-        st.caption(_t("official_note", lang))
+            src_label = str(official.get("source_label") or "")
+            report_year = official.get("report_year")
+            report_url = str(official.get("report_url") or "")
+            metric_label_raw = str(official.get("metric_label") or "")
+            metric_label = _maybe_translate(metric_label_raw, lang)
+            unit = str(official.get("unit") or "")
+            value = float(official.get("value") or 0.0)
+            value_year = official.get("value_year")
+
+            if unit == "ILS_per_year":
+                formatted_value = _format_ils_amount(value, lang)
+                unit_label = _t("official_unit_ils_per_year", lang)
+                formatted_value = f"{formatted_value} / {unit_label}"
+            else:
+                formatted_value = f"{value:,.0f} {unit}".strip()
+
+            left, right = st.columns([2, 1])
+            with left:
+                if src_label:
+                    st.caption(f"{_t('official_source_label', lang)}: {src_label}")
+                if report_year is not None:
+                    st.caption(f"{_t('official_report_year', lang)}: {report_year}")
+                if value_year is not None and str(value_year) != str(report_year):
+                    st.caption(f"{_t('official_value_year', lang)}: {value_year}")
+                if report_url:
+                    st.markdown(f"[{report_url}]({report_url})")
+                if metric_label:
+                    st.caption(f"{_t('official_metric_label', lang)}: {metric_label}")
+
+            with right:
+                st.metric(_t("official_value_label", lang), formatted_value)
+
+        st.markdown(_t("official_disclaimer_not_comparable", lang))
+        st.markdown(_t("official_disclaimer_planning_basis", lang))
 
         # Trend chart (bucketed by selected loss display)
         st.subheader(_t("trend", lang))

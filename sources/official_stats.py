@@ -156,3 +156,88 @@ def fetch_official_congestion_benchmark(
 
     # -- Nothing configured --
     return _unconfigured_stub()
+
+
+# -- Streamlit secret / env helper --------------------------------------------
+
+def _get_secret_or_env(key: str):
+    """Read from Streamlit secrets with env fallback (safe even outside Streamlit)."""
+    try:
+        import streamlit as st  # type: ignore
+        v = st.secrets.get(key)
+        if v is not None and str(v).strip():
+            return str(v).strip()
+    except Exception:
+        pass
+    return _env(key)
+
+
+# -- Official reference card (used by the read-only UI) -----------------------
+
+def fetch_official_reference_card(cache_ttl_s=24 * 3600):
+    """Return an official reference card (context-only) if configured.
+
+    Configuration (Streamlit secrets or env):
+      OFFICIAL_SOURCE_LABEL, OFFICIAL_REPORT_YEAR, OFFICIAL_REPORT_URL,
+      OFFICIAL_METRIC_LABEL, OFFICIAL_VALUE, OFFICIAL_UNIT,
+      OFFICIAL_VALUE_YEAR (optional).
+    """
+    cached = cache_read("official_reference_card_v1", max_age_s=cache_ttl_s)
+    if cached:
+        return cached
+
+    source_label = _get_secret_or_env("OFFICIAL_SOURCE_LABEL")
+    report_year_s = _get_secret_or_env("OFFICIAL_REPORT_YEAR")
+    report_url = _get_secret_or_env("OFFICIAL_REPORT_URL")
+    metric_label = _get_secret_or_env("OFFICIAL_METRIC_LABEL")
+    value_s = _get_secret_or_env("OFFICIAL_VALUE")
+    unit = _get_secret_or_env("OFFICIAL_UNIT")
+
+    required = [source_label, report_year_s, report_url, metric_label, value_s, unit]
+    if any(v is None for v in required):
+        return {
+            "configured": False,
+            "fetched_at": None,
+            "source_label": source_label,
+            "report_year": None,
+            "report_url": report_url,
+            "metric_label": metric_label,
+            "value": None,
+            "unit": unit,
+            "value_year": None,
+            "error": "OFFICIAL_* reference not configured",
+        }
+
+    try:
+        report_year = int(str(report_year_s))
+        value = float(str(value_s))
+        value_year_s = _get_secret_or_env("OFFICIAL_VALUE_YEAR")
+        value_year = int(value_year_s) if value_year_s is not None else None
+
+        out = {
+            "configured": True,
+            "fetched_at": _utc_now_iso(),
+            "source_label": str(source_label),
+            "report_year": report_year,
+            "report_url": str(report_url),
+            "metric_label": str(metric_label),
+            "value": value,
+            "unit": str(unit),
+            "value_year": value_year,
+            "error": None,
+        }
+        cache_write("official_reference_card_v1", out)
+        return out
+    except Exception as e:
+        return {
+            "configured": False,
+            "fetched_at": None,
+            "source_label": source_label,
+            "report_year": None,
+            "report_url": report_url,
+            "metric_label": metric_label,
+            "value": None,
+            "unit": unit,
+            "value_year": None,
+            "error": str(e),
+        }
