@@ -78,6 +78,28 @@ sudo systemctl enable --now ayalon-collector.timer
 
 Notes
 - The model requires live traffic (TomTom) and fuel price (gov or env var). If TomTom key is not set, the app returns sample segments.
+
+Data Sources
+
+**Fuel price** uses a 3-adapter chain (first success wins):
+
+1. **data.gov.il CKAN datastore** (primary) — machine-readable wholesale benzine-95 price
+   + excise tax, converted to consumer price via:
+   `consumer = (wholesale/1000 + excise/1000 + retail_margin) × (1 + VAT)`
+   - Wholesale resource: `orl-prices` (`aaa40832-ac82-4c86-bac6-0d05c83f576f`)
+   - Excise resource: `excise` (`bdce45e7-9fe9-473e-bd51-cef1d787a951`)
+   - Default VAT 18%, retail margin 0.66 NIS/L (configurable via `FUEL_VAT_RATE`, `FUEL_RETAIL_MARGIN_ILS`)
+
+2. **Gov.il monthly notice PDF** (fallback) — direct consumer price extraction via regex
+
+3. **`FUEL_PRICE_ILS` env var** (emergency override)
+
+**Official congestion benchmark** (optional):
+- `OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR` env var, or
+- `OFFICIAL_STATS_JSON_URL` pointing to a JSON endpoint
+- Mode: `OFFICIAL_STATS_SOURCE_MODE` = `auto` | `url` | `static` | `disabled`
+
+No API keys required for fuel price — the data.gov.il CKAN API is public.
 - Data is cached in `sources/_cache` (file-based). Cache TTLs: traffic 300s, air 600s, fuel daily.
 - Use `python run_reproduce.py` to export latest raw JSON for reproducibility.
 - If `vehicle_count_mode = normalized_per_probe`, all totals are normalized per probe; absolute totals require flow-based vehicle counts.

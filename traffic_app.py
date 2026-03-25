@@ -102,7 +102,7 @@ _I18N = {
 
         "official_header": "השוואה לנתונים רשמיים (Gov.il)",
         "official_metric": "שעות אבודות לאדם לשנה (רשמי)",
-        "official_unconfigured": "לא הוגדר מקור רשמי. אפשר להוסיף OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR או OFFICIAL_STATS_JSON_URL ב-secrets.",
+        "official_unconfigured": "לא הוגדר מקור רשמי. אפשר להוסיף OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR או OFFICIAL_STATS_JSON_URL בהגדרות סביבה.",
         "official_note": "הערה: הנתון הרשמי הוא בדרך כלל ממוצע שנתי לאדם/נהג; המודל כאן מציג מונים ברמת מערכת (vehicle-hours) עבור המדידה הנוכחית/החלון הנבחר.",
     },
     "en": {
@@ -182,7 +182,7 @@ _I18N = {
 
         "official_header": "Official benchmark (Gov.il)",
         "official_metric": "Hours lost per person per year (official)",
-        "official_unconfigured": "Official benchmark not configured. Set OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR or OFFICIAL_STATS_JSON_URL in secrets.",
+        "official_unconfigured": "Official benchmark not configured. Set OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR or OFFICIAL_STATS_JSON_URL in env.",
         "official_note": "Note: the official number is typically an annual per-person/driver average; this model shows system-level counters (vehicle-hours) for the current measurement / selected window.",
     },
     "ar": {
@@ -262,7 +262,7 @@ _I18N = {
 
         "official_header": "مقارنة ببيانات رسمية (Gov.il)",
         "official_metric": "ساعات مفقودة للفرد في السنة (رسمي)",
-        "official_unconfigured": "لم يتم إعداد المرجع الرسمي. اضبط OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR أو OFFICIAL_STATS_JSON_URL في secrets.",
+        "official_unconfigured": "لم يتم إعداد المرجع الرسمي. اضبط OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR أو OFFICIAL_STATS_JSON_URL في env.",
         "official_note": "ملاحظة: الرقم الرسمي عادةً متوسط سنوي للفرد/السائق؛ هذا النموذج يعرض عدّادات على مستوى النظام (ساعات-مركبة) للقياس الحالي/النافذة المختارة.",
     },
     "ru": {
@@ -342,7 +342,7 @@ _I18N = {
 
         "official_header": "Официальные данные (Gov.il)",
         "official_metric": "Потерянные часы на человека в год (официально)",
-        "official_unconfigured": "Официальный бенчмарк не настроен. Задай OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR или OFFICIAL_STATS_JSON_URL в secrets.",
+        "official_unconfigured": "Официальный бенчмарк не настроен. Задай OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR или OFFICIAL_STATS_JSON_URL в env.",
         "official_note": "Примечание: официальный показатель обычно годовой средний на человека/водителя; эта модель показывает системные счётчики (машино‑часы) для текущего измерения/выбранного окна.",
     },
 }
@@ -717,8 +717,20 @@ with tab_sources:
     if aq_data.get('error'):
         col2.warning(str(aq_data.get('error'))[:200])
 
-    col3.metric(_t("fuel_price_source", lang), fuel_data.get('source_id', 'gov-or-env'))
+    fuel_sid = fuel_data.get('source_id', 'gov-or-env')
+    col3.metric(_t("fuel_price_source", lang), fuel_sid)
     col3.write(f"{_t('price_ils_per_l', lang)}: {fuel_data.get('price_ils_per_l', 'n/a')}")
+    # Show adapter provenance detail
+    fuel_raw = fuel_data.get('raw') or {}
+    adapter_name = fuel_raw.get('adapter', '')
+    if adapter_name == 'ckan_datastore':
+        col3.caption(f"Wholesale: {fuel_raw.get('wholesale_per_l', '?')} ₪/L + Excise: {fuel_raw.get('excise_per_l', '?')} ₪/L + Margin: {fuel_raw.get('retail_margin_ils', '?')} ₪/L × (1+VAT)")
+    elif adapter_name == 'pdf_notice':
+        col3.caption(f"Parsed from: {fuel_raw.get('notice_pdf_url', 'PDF')}")
+    elif adapter_name == 'env_override':
+        col3.caption("⚠ Manual env override (FUEL_PRICE_ILS)")
+    if ':cached' in fuel_sid:
+        col3.warning("Using stale cached fuel price")
 
     st.subheader(_t("system_header", lang))
     st.info(f"{_t('system_health', lang)}: {get_quick_status()}")
