@@ -161,3 +161,44 @@ def get_quick_status() -> str:
     """Get one-word status: ok, warning, degraded, down."""
     status = get_health_status()
     return status.get('status', 'unknown')
+
+
+# ── Readonly-aware health check ────────────────────────────────────────
+def get_quick_status_readonly(db_path: str = None) -> str:
+    """
+    Lightweight status for readonly UI mode.
+    Checks only SQLite data recency — no TomTom API ping, no cache check.
+    Returns: ok | stale | empty | error
+    """
+    import sqlite3
+    from datetime import datetime, timezone
+
+    if db_path is None:
+        db_path = os.environ.get("HISTORY_DB_PATH", "data/monitor.sqlite3")
+
+    try:
+        con = sqlite3.connect(db_path)
+        row = con.execute(
+            "SELECT recorded_at_utc FROM runs ORDER BY id DESC LIMIT 1"
+        ).fetchone()
+        con.close()
+    except Exception:
+        return "error"
+
+    if row is None:
+        return "empty"
+
+    try:
+        ts_str = row[0]
+        rec_dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+        age_s = (datetime.now(timezone.utc) - rec_dt).total_seconds()
+    except Exception:
+        return "unknown"
+
+    # Collector runs every 10 min; allow up to 30 min before "stale"
+    if age_s < 1800:
+        return "ok"
+    elif age_s < 7200:
+        return "stale"          # warn: collector may have stopped
+    else:
+        return "stale"          # definitely stale

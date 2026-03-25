@@ -6,7 +6,7 @@ from sources import tomtom
 from sources.air_quality import get_air_quality_for_ayalon, get_cached_air_quality
 from sources.fuel_govil import fetch_current_fuel_price_ils_per_l as fetch_current_fuel_price, get_cached_fuel_price
 from sources.secure_config import SecureConfig
-from sources.health import get_quick_status
+from sources.health import get_quick_status, get_quick_status_readonly
 from sources.analytics import get_dashboard_summary, record_request, record_stale_data
 from sources.error_handler import ErrorHandler
 from ui_messages import normalization_banner_text
@@ -676,7 +676,8 @@ history_window_label = st.sidebar.selectbox(
 history_window_choice = dict(((_t(k, lang)), code) for k, code in _window_opts).get(history_window_label, "24h")
 
 # Public-friendly system status (no secrets)
-st.sidebar.info(f"{_t('system_health', lang)}: {get_quick_status()}")
+_sys_status = get_quick_status() if _UI_MODE == "live" else get_quick_status_readonly()
+st.sidebar.info(f"{_t('system_health', lang)}: {_sys_status}")
 
 # Lightweight analytics summary
 summary = get_dashboard_summary()
@@ -856,11 +857,12 @@ with tab_sources:
         col3.metric(_t("fuel_price_source", lang), "n/a")
 
     st.subheader(_t("system_header", lang))
-    st.info(f"{_t('system_health', lang)}: {get_quick_status()}")
+    _src_status = get_quick_status() if _UI_MODE == "live" else get_quick_status_readonly()
+    st.info(f"{_t('system_health', lang)}: {_src_status}")
 
 banner = normalization_banner_text(vehicle_count_mode, lang=lang)
 if banner:
-    st.warning(banner)
+    st.info(banner)
 
 if results is not None:
     with tab_dashboard:
@@ -923,9 +925,20 @@ if results is not None:
         st.write(f"{_t('pipeline_run_id', lang)}: {results['pipeline_run_id']}")
 
         stale = False
-        if tomtom_data and tomtom_data.get('fetched_at'):
-            _tt_age = time.time() - _parse_iso_to_ts(tomtom_data.get('fetched_at'))
-            stale = _tt_age > 600
+        if _UI_MODE == "live":
+            # Live mode: check TomTom data age directly
+            if tomtom_data and tomtom_data.get('fetched_at'):
+                _tt_age = time.time() - _parse_iso_to_ts(tomtom_data.get('fetched_at'))
+                stale = _tt_age > 600
+        else:
+            # Readonly mode: check last collector run recency from DB
+            _last_rec = results.get('data_timestamp_utc') or ''
+            if _last_rec:
+                try:
+                    _rec_age = time.time() - _parse_iso_to_ts(_last_rec)
+                    stale = _rec_age > 1800  # 30 min: collector runs every ~10 min
+                except Exception:
+                    pass
         if stale:
             st.warning(_t("stale_warning", lang))
             record_stale_data()
