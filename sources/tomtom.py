@@ -10,7 +10,8 @@ from .logger import log_api_call, log_error, log_quota_alert
 # TomTom Flow API v4 (absolute, zoom 10)
 BASE = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json"
 
-TOMTOM_QUOTA_PER_HOUR = int(os.getenv("TOMTOM_QUOTA_PER_HOUR", "2500"))
+# Daily quota: prefer TOMTOM_QUOTA_PER_DAY, fall back to legacy TOMTOM_QUOTA_PER_HOUR
+TOMTOM_QUOTA_PER_DAY = int(os.getenv("TOMTOM_QUOTA_PER_DAY", os.getenv("TOMTOM_QUOTA_PER_HOUR", "2500")))
 
 # Estimation/config constants (override via env for reproducibility/calibration)
 DEFAULT_DENSITY_VEH_PER_KM = float(os.getenv("TT_DEFAULT_DENSITY_VEH_PER_KM", "25"))
@@ -119,10 +120,10 @@ def _call_tomtom(api_key: str, lat: float, lon: float, unit: str = "KMPH") -> Tu
         log_error("tomtom", f"http_{status}", f"endpoint={url_wo_key}")
         raise RuntimeError(f"TomTom v4 fetch failed: status={status} endpoint={url_wo_key}")
 
-    record_api_call("tomtom", quota_per_hour=TOMTOM_QUOTA_PER_HOUR)
-    quota = get_quota_status("tomtom", quota_per_hour=TOMTOM_QUOTA_PER_HOUR)
+    record_api_call("tomtom", quota_per_day=TOMTOM_QUOTA_PER_DAY)
+    quota = get_quota_status("tomtom", quota_per_day=TOMTOM_QUOTA_PER_DAY)
     if quota.get("percent_used", 0) >= 90:
-        log_quota_alert("tomtom", quota.get("calls_this_hour", 0), quota.get("quota_per_hour", TOMTOM_QUOTA_PER_HOUR))
+        log_quota_alert("tomtom", quota.get("calls_today", 0), quota.get("quota_per_day", TOMTOM_QUOTA_PER_DAY))
 
     js = r.json()
     return js, dict(r.headers), url_wo_key, status
