@@ -167,6 +167,25 @@ class HistoryStore:
             ).fetchone()
         return dict(row) if row else None
 
+    def fetch_latest_traffic_run(self) -> Optional[Dict[str, Any]]:
+        """Return the most recent run with a valid traffic source.
+
+        Filters out error/fuel-only rows to ensure the UI always gets a
+        genuine traffic snapshot — never confused by fuel updates.
+        """
+        with self._connect() as con:
+            row = con.execute(
+                """
+                SELECT * FROM runs
+                WHERE traffic_source_id IS NOT NULL
+                  AND traffic_source_id NOT LIKE '%:error%'
+                  AND tomtom_fetched_at IS NOT NULL
+                ORDER BY recorded_at_utc DESC
+                LIMIT 1
+                """
+            ).fetchone()
+        return dict(row) if row else None
+
     def fetch_latest_n_runs(self, n: int = 300) -> List[Dict[str, Any]]:
         """Return the *n* most recent runs (newest first)."""
         with self._connect() as con:

@@ -6,7 +6,7 @@ from sources import tomtom
 from sources.air_quality import get_air_quality_for_ayalon, get_cached_air_quality
 from sources.fuel_govil import fetch_current_fuel_price_ils_per_l as fetch_current_fuel_price, get_cached_fuel_price
 from sources.secure_config import SecureConfig
-from sources.health import get_quick_status, get_quick_status_readonly
+from sources.health import get_quick_status, get_quick_status_readonly, compute_traffic_health
 from sources.analytics import get_dashboard_summary, record_request, record_stale_data
 from sources.error_handler import ErrorHandler
 from ui_messages import normalization_banner_text
@@ -675,8 +675,8 @@ history_window_label = st.sidebar.selectbox(
 )
 history_window_choice = dict(((_t(k, lang)), code) for k, code in _window_opts).get(history_window_label, "24h")
 
-# Public-friendly system status (no secrets)
-_sys_status = get_quick_status() if _UI_MODE == "live" else get_quick_status_readonly()
+# Public-friendly system status (no secrets, no external API calls)
+_sys_status = get_quick_status()
 st.sidebar.info(f"{_t('system_health', lang)}: {_sys_status}")
 
 # Lightweight analytics summary
@@ -760,8 +760,15 @@ def _acquire_live():
 
 
 def _acquire_readonly():
-    """Read latest collector run from SQLite — zero API calls."""
-    latest = history.fetch_latest_run()
+    """Read latest collector run from SQLite — zero API calls.
+
+    Uses fetch_latest_traffic_run() which filters for rows with a valid
+    traffic_source_id, ensuring fuel-only rows cannot confuse the display.
+    """
+    latest = history.fetch_latest_traffic_run()
+    if latest is None:
+        # Fall back to any run at all (covers first-use / sample-only DBs)
+        latest = history.fetch_latest_run()
     if latest is None:
         return None, None, None, None, None
 
@@ -857,7 +864,7 @@ with tab_sources:
         col3.metric(_t("fuel_price_source", lang), "n/a")
 
     st.subheader(_t("system_header", lang))
-    _src_status = get_quick_status() if _UI_MODE == "live" else get_quick_status_readonly()
+    _src_status = get_quick_status()
     st.info(f"{_t('system_health', lang)}: {_src_status}")
 
 banner = normalization_banner_text(vehicle_count_mode, lang=lang)
@@ -925,22 +932,18 @@ if results is not None:
         st.write(f"{_t('pipeline_run_id', lang)}: {results['pipeline_run_id']}")
 
         stale = False
-        if _UI_MODE == "live":
-            # Live mode: check TomTom data age directly
-            if tomtom_data and tomtom_data.get('fetched_at'):
-                _tt_age = time.time() - _parse_iso_to_ts(tomtom_data.get('fetched_at'))
-                stale = _tt_age > 600
-        else:
-            # Readonly mode: check last collector run recency from DB
-            _last_rec = results.get('data_timestamp_utc') or ''
-            if _last_rec:
-                try:
-                    _rec_age = time.time() - _parse_iso_to_ts(_last_rec)
-                    stale = _rec_age > 1800  # 30 min: collector runs every ~10 min
-                except Exception:
-                    pass
+        _health = compute_traffic_health()
+        _health_status = _health.get("status", "unknown")
+        if _health_status in ("stale", "collector_down"):
+            stale = True
         if stale:
-            st.warning(_t("stale_warning", lang))
+            _stale_msg = _t("stale_warning", lang)
+            _age = _health.get("age_s")
+            if _age is not None:
+                _stale_msg += f"  ({int(_age)}s)"
+            if _health_status == "collector_down":
+                _stale_msg += "  [collector may be down]"
+            st.warning(_stale_msg)
             record_stale_data()
 
         # Mini trend chart (last N runs)
