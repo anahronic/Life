@@ -139,11 +139,27 @@ def get_analytics() -> Dict[str, Any]:
 
 
 def get_dashboard_summary() -> Dict[str, Any]:
-    """Get summary for UI dashboard."""
+    """Get summary for UI dashboard.
+
+    Status is derived from persisted collector health data (SQLite),
+    NOT from in-memory request counters.  In readonly UI mode the
+    request counters are always zero and must not influence status.
+    """
+    from sources.health import compute_traffic_health
+    health = compute_traffic_health()
+    health_status = health.get('status', 'unknown')
+    if health_status == 'healthy':
+        dashboard_status = 'operational'
+    elif health_status in ('degraded', 'stale'):
+        dashboard_status = 'degraded'
+    elif health_status in ('collector_down', 'empty', 'error'):
+        dashboard_status = 'down'
+    else:
+        dashboard_status = 'unknown'
     stats = get_analytics()
-    
     return {
-        'status': 'operational' if stats['requests']['success_rate'] > 95 else 'degraded',
+        'status': dashboard_status,
+        'health_detail': health,
         'uptime': f"{stats['uptime_minutes']} minutes",
         'requests_total': stats['requests']['total'],
         'success_rate': f"{stats['requests']['success_rate']:.1f}%",

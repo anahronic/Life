@@ -2,22 +2,12 @@ import os
 import time
 import streamlit as st
 from methodology import AyalonModel
-from sources import tomtom
-from sources.air_quality import get_air_quality_for_ayalon, get_cached_air_quality
-from sources.fuel_govil import fetch_current_fuel_price_ils_per_l as fetch_current_fuel_price, get_cached_fuel_price
-from sources.secure_config import SecureConfig
 from sources.health import get_quick_status, get_quick_status_readonly, compute_traffic_health
-from sources.analytics import get_dashboard_summary, record_request, record_stale_data
-from sources.error_handler import ErrorHandler
+from sources.analytics import record_stale_data  # only stale-data recording kept
 from ui_messages import normalization_banner_text
 from datetime import datetime
 from sources.history_store import HistoryStore
 from sources.official_stats import fetch_official_reference_card
-
-# ── UI operation mode ──────────────────────────────────────────────────
-# Default: "readonly" — dashboard reads only from SQLite (no TomTom API calls).
-# Set AYALON_UI_MODE=live to restore the old behaviour (debug / manual testing).
-_UI_MODE = os.getenv("AYALON_UI_MODE", "readonly").strip().lower()
 
 st.set_page_config(page_title="Ayalon Real-Time Physical Impact Model", layout="wide")
 
@@ -574,22 +564,6 @@ def _parse_iso_to_ts(s: str | None) -> float:
         return 0.0
 
 
-def _fetch_with_retries(label: str, fn, retries: int = 2, base_delay_s: float = 0.8):
-    last_exc = None
-    for attempt in range(retries + 1):
-        try:
-            return fn(), None
-        except Exception as e:
-            last_exc = e
-            msg = str(e)
-            # If rate-limited, don't hammer.
-            if "rate-limited" in msg.lower() or "retry_after" in msg.lower():
-                break
-            if attempt < retries:
-                time.sleep(base_delay_s * (2 ** attempt))
-    return None, last_exc
-
-
 def _history_window_seconds(choice: str) -> int | None:
     mapping = {
         "1h": 3600,
@@ -679,85 +653,18 @@ history_window_choice = dict(((_t(k, lang)), code) for k, code in _window_opts).
 _sys_status = get_quick_status()
 st.sidebar.info(f"{_t('system_health', lang)}: {_sys_status}")
 
-# Lightweight analytics summary
-summary = get_dashboard_summary()
-st.sidebar.metric(_t("success_rate", lang), summary.get("success_rate", "n/a"))
-st.sidebar.metric(_t("cache_hit_ratio", lang), summary.get("cache_hit_ratio", "n/a"))
-st.sidebar.write(f"{_t('errors_session', lang)}: {summary.get('errors_this_session', 0)}")
+# Health-based sidebar — derived from SQLite, never from in-memory session counters
+_health_detail = compute_traffic_health()
+_last_ts = _health_detail.get('last_traffic_ts', 'n/a')
+_age_val = _health_detail.get('age_s')
+_age_str = f"{int(_age_val)}s" if _age_val is not None else 'n/a'
+_src_id = _health_detail.get('traffic_source_id', 'n/a')
+st.sidebar.metric(_t('traffic_age', lang), _age_str)
+st.sidebar.caption(f"Source: {_src_id}")
+st.sidebar.caption(f"Last fetch: {_last_ts}")
 
 # ── Data acquisition ───────────────────────────────────────────────────
-# readonly (default): read latest run from SQLite only — zero API calls.
-# live (AYALON_UI_MODE=live): old behaviour — fetch TomTom, run model, persist.
-
-def _acquire_live():
-    """Legacy live-fetch path (used only when AYALON_UI_MODE=live)."""
-    api_key = SecureConfig.get_tomtom_api_key()
-    default_sample = api_key is None and SecureConfig.get_enable_sample_mode()
-    traffic_mode = "sample" if default_sample else "flow"
-
-    tomtom_data, tomtom_exc = _fetch_with_retries(
-        "tomtom",
-        lambda: tomtom.get_ayalon_segments(api_key, cache_ttl_s=SecureConfig.get_cache_ttl(), mode=traffic_mode),
-        retries=2,
-    )
-    if tomtom_data is None:
-        cached = tomtom.get_cached_ayalon_segments(mode=traffic_mode, max_age_s=24 * 3600)
-        if cached:
-            cached = dict(cached)
-            cached["errors"] = ["Using cached traffic due to live fetch failure"]
-            tomtom_data = cached
-        else:
-            api_err = ErrorHandler.handle_api_call_error(tomtom_exc, service="tomtom") if tomtom_exc else ErrorHandler.handle_api_call_error(RuntimeError("TomTom fetch failed"), service="tomtom")
-            tomtom_data = {"source_id": "tomtom:error", "segments": [], "errors": [api_err.message], "fetched_at": datetime.utcnow().isoformat() + "Z"}
-        record_request(success=False, error_code="tomtom_fallback")
-    else:
-        if tomtom_data.get("errors"):
-            record_request(success=False, error_code=str(tomtom_data["errors"][0])[:60])
-        else:
-            record_request(success=True)
-
-    aq_data, aq_exc = _fetch_with_retries("air_quality", lambda: get_air_quality_for_ayalon(cache_ttl_s=600), retries=1)
-    if aq_data is None or aq_data.get("error"):
-        cached_aq = get_cached_air_quality(max_age_s=24 * 3600)
-        if cached_aq:
-            aq_data = dict(cached_aq)
-            aq_data["error"] = aq_data.get("error") or "Using cached air quality due to live fetch failure"
-        elif aq_data is None:
-            aq_data = {"source_id": "air-quality:error", "fetched_at": None, "metrics": {}, "error": str(aq_exc) if aq_exc else "Air quality fetch failed"}
-
-    fuel_data, fuel_exc = _fetch_with_retries("fuel", lambda: fetch_current_fuel_price(), retries=1, base_delay_s=1.2)
-    if fuel_data is None:
-        cached_fuel = get_cached_fuel_price(max_age_s=14 * 86400)
-        if cached_fuel:
-            fuel_data = dict(cached_fuel)
-            fuel_data["source_id"] = str(fuel_data.get("source_id", "fuel")) + ":cached"
-        else:
-            fuel_data = {"source_id": "fuel:error", "price_ils_per_l": None}
-
-    vehicle_count_mode = tomtom_data.get('vehicle_count_mode')
-    segments = tomtom_data.get('segments', [])
-
-    results = None
-    if segments and fuel_data.get('price_ils_per_l') is not None:
-        _model = AyalonModel()
-        src_ids = {
-            'traffic': tomtom_data.get('source_id'),
-            'air': aq_data.get('source_id'),
-            'fuel': fuel_data.get('source_id'),
-        }
-        data_ts = tomtom_data.get('fetched_at')
-        p_fuel = float(fuel_data['price_ils_per_l'])
-        results = _model.run_model(segments, data_timestamp_utc=data_ts, source_ids=src_ids, p_fuel_ils_per_l=p_fuel, vehicle_count_mode=vehicle_count_mode)
-        now_ts = time.time()
-        tomtom_ts = _parse_iso_to_ts(tomtom_data.get('fetched_at', '1970-01-01T00:00:00Z'))
-        tomtom_age = now_ts - tomtom_ts
-        try:
-            history.record_run(results=results, tomtom_data=tomtom_data, aq_data=aq_data, fuel_data=fuel_data, tomtom_age_s=tomtom_age)
-        except Exception:
-            pass
-
-    return results, vehicle_count_mode, tomtom_data, aq_data, fuel_data
-
+# UI reads only from SQLite — zero API calls.
 
 def _acquire_readonly():
     """Read latest collector run from SQLite — zero API calls.
@@ -809,11 +716,7 @@ def _acquire_readonly():
     return results, vehicle_count_mode, tomtom_data, aq_data, fuel_data
 
 
-if _UI_MODE == "live":
-    st.sidebar.warning("⚠ UI mode: **live** (TomTom API calls enabled)")
-    results, vehicle_count_mode, tomtom_data, aq_data, fuel_data = _acquire_live()
-else:
-    results, vehicle_count_mode, tomtom_data, aq_data, fuel_data = _acquire_readonly()
+results, vehicle_count_mode, tomtom_data, aq_data, fuel_data = _acquire_readonly()
 
 tab_dashboard, tab_history, tab_sources = st.tabs([
     _t("tab_dashboard", lang),
