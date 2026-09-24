@@ -81,18 +81,23 @@ Notes
 
 Data Sources
 
-**Fuel price** uses a 3-adapter chain (first success wins):
+**Fuel price** uses a 4-adapter chain (first success wins):
 
-1. **data.gov.il CKAN datastore** (primary) — machine-readable wholesale benzine-95 price
-   + excise tax, converted to consumer price via:
-   `consumer = (wholesale/1000 + excise/1000 + retail_margin) × (1 + VAT)`
+1. **Derived margin** (primary) — CKAN wholesale + excise + official consumer price from
+   gov.il monthly PDF → retail margin is *derived* as:
+   `margin = (official_price / (1 + VAT)) - wholesale_per_l - excise_per_l`
+   Then: `consumer = (wholesale + excise + derived_margin) × (1 + VAT)`
+   See `DERIVED_MARGIN_DESIGN.md` for the full design.
+
+2. **CKAN + fallback margin** — same CKAN data, but with hardcoded fallback margin 0.66 NIS/L
+   (used when the official PDF is unavailable). See `RETAIL_MARGIN_SOURCE_AUDIT.md`.
    - Wholesale resource: `orl-prices` (`aaa40832-ac82-4c86-bac6-0d05c83f576f`)
    - Excise resource: `excise` (`bdce45e7-9fe9-473e-bd51-cef1d787a951`)
-   - Default VAT 18%, retail margin 0.66 NIS/L (configurable via `FUEL_VAT_RATE`, `FUEL_RETAIL_MARGIN_ILS`)
+   - Default VAT 18%, fallback margin 0.66 NIS/L (configurable via `FUEL_VAT_RATE`, `FUEL_RETAIL_MARGIN_ILS`)
 
-2. **Gov.il monthly notice PDF** (fallback) — direct consumer price extraction via regex
+3. **Gov.il monthly notice PDF** (fallback) — direct consumer price extraction via regex
 
-3. **`FUEL_PRICE_ILS` env var** (emergency override)
+4. **`FUEL_PRICE_ILS` env var** (emergency override)
 
 **Official congestion benchmark** (optional):
 - `OFFICIAL_HOURS_LOST_PER_PERSON_PER_YEAR` env var, or

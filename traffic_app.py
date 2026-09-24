@@ -1,3 +1,12 @@
+"""
+traffic_app.py \u2014 Ayalon monitoring dashboard (Streamlit UI).
+
+ARCHITECTURAL INVARIANT:
+  This UI is STRICTLY READ-ONLY.  It must NEVER call TomTom or any
+  external traffic/weather/fuel API directly.  All data is read from
+  SQLite records written by the collector (ayalon-collector.service).
+  See collector.py for the sole authorised external-fetch path.
+"""
 import os
 import time
 import streamlit as st
@@ -8,6 +17,7 @@ from ui_messages import normalization_banner_text
 from datetime import datetime
 from sources.history_store import HistoryStore
 from sources.official_stats import fetch_official_reference_card
+
 
 st.set_page_config(page_title="Ayalon Real-Time Physical Impact Model", layout="wide")
 
@@ -564,6 +574,7 @@ def _parse_iso_to_ts(s: str | None) -> float:
         return 0.0
 
 
+
 def _history_window_seconds(choice: str) -> int | None:
     mapping = {
         "1h": 3600,
@@ -653,7 +664,7 @@ history_window_choice = dict(((_t(k, lang)), code) for k, code in _window_opts).
 _sys_status = get_quick_status()
 st.sidebar.info(f"{_t('system_health', lang)}: {_sys_status}")
 
-# Health-based sidebar — derived from SQLite, never from in-memory session counters
+# Collector health details (persisted data, not in-memory counters)
 _health_detail = compute_traffic_health()
 _last_ts = _health_detail.get('last_traffic_ts', 'n/a')
 _age_val = _health_detail.get('age_s')
@@ -663,8 +674,10 @@ st.sidebar.metric(_t('traffic_age', lang), _age_str)
 st.sidebar.caption(f"Source: {_src_id}")
 st.sidebar.caption(f"Last fetch: {_last_ts}")
 
-# ── Data acquisition ───────────────────────────────────────────────────
-# UI reads only from SQLite — zero API calls.
+# ── Data acquisition (readonly only) ──────────────────────────────
+# ARCHITECTURAL INVARIANT: UI never calls TomTom or any external
+# traffic API.  All data comes from SQLite, written by the collector.
+# See collector.py for the sole authorised TomTom fetch path.
 
 def _acquire_readonly():
     """Read latest collector run from SQLite — zero API calls.

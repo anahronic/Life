@@ -145,9 +145,12 @@ def get_dashboard_summary() -> Dict[str, Any]:
     NOT from in-memory request counters.  In readonly UI mode the
     request counters are always zero and must not influence status.
     """
+    # Import here to avoid circular dependency
     from sources.health import compute_traffic_health
     health = compute_traffic_health()
     health_status = health.get('status', 'unknown')
+
+    # Map health status to dashboard status
     if health_status == 'healthy':
         dashboard_status = 'operational'
     elif health_status in ('degraded', 'stale'):
@@ -156,6 +159,7 @@ def get_dashboard_summary() -> Dict[str, Any]:
         dashboard_status = 'down'
     else:
         dashboard_status = 'unknown'
+
     stats = get_analytics()
     return {
         'status': dashboard_status,

@@ -2,9 +2,10 @@
 Fuel price source: fetch consumer self-service gasoline 95 price (ILS/L) from official Gov.il data.
 
 Adapter chain (tried in order, first success wins):
-  1. data.gov.il CKAN datastore -- machine-readable wholesale price + excise -> consumer formula
-  2. Gov.il monthly notice PDF -- direct consumer price extraction (legacy, more fragile)
-  3. FUEL_PRICE_ILS environment variable -- emergency manual override
+  1. Derived margin — CKAN wholesale + excise + official PDF consumer price → derived margin
+  2. CKAN + fallback margin — wholesale + excise + hardcoded 0.66 margin → consumer estimate
+  3. Gov.il monthly notice PDF — direct consumer price extraction (legacy, more fragile)
+  4. FUEL_PRICE_ILS environment variable — emergency manual override
 
 All adapters return the same stable output schema (see ``_build_output``).
 """
@@ -29,9 +30,23 @@ PRICE_MAX = 12.0  # ILS/L -- sanity ceiling
 
 # Consumer-price formula components (configurable via env)
 VAT_RATE = float(os.getenv("FUEL_VAT_RATE", "0.18"))
+
 # Distribution + retail self-service margin (NIS/L, before VAT).
-# Default 0.66 derived from March 2026: (7.02/1.18) - (1683.87+3604.33)/1000
+# ── FALLBACK VALUE ──
+# No official machine-readable source for retailer/distribution margin exists
+# on data.gov.il.  Israeli fuel prices at the pump have been deregulated since
+# January 2007; the Energy Ministry publishes wholesale & excise data but NOT
+# the retail component.  The default 0.66 was back-calculated from the March
+# 2026 official consumer price alignment:
+#   (7.02 / 1.18) - (1683.87 + 3604.33) / 1000 ≈ 0.66
+# See RETAIL_MARGIN_SOURCE_AUDIT.md for the full audit trail.
+# Override via env when a better source is identified.
 RETAIL_MARGIN_ILS = float(os.getenv("FUEL_RETAIL_MARGIN_ILS", "0.66"))
+_RETAIL_MARGIN_IS_FALLBACK = os.getenv("FUEL_RETAIL_MARGIN_ILS") is None
+
+# Derived-margin validation bounds (NIS/L, before VAT)
+DERIVED_MARGIN_MIN = 0.30
+DERIVED_MARGIN_MAX = 1.50
 
 # PDF template for legacy fallback
 NOTICE_PDF_TEMPLATE = (
@@ -69,12 +84,135 @@ def _build_output(
     }
 
 
-# -- Adapter 1: data.gov.il CKAN datastore -----------------------------------
+# -- Adapter 1: CKAN + derived margin from official PDF ---------------------
+
+def _derive_margin(
+    official_consumer_price: float,
+    wholesale_per_l: float,
+    excise_per_l: float,
+    vat_rate: float,
+) -> float:
+    """Compute retail margin from official consumer price and CKAN components.
+
+    margin = (official_price / (1 + VAT)) - wholesale - excise
+    """
+    net_price = official_consumer_price / (1 + vat_rate)
+    return net_price - wholesale_per_l - excise_per_l
+
+
+def _months_match(ym_a: str, ym_b: str, tolerance: int = 1) -> bool:
+    """Check if two 'YYYY-MM' strings are within *tolerance* months."""
+    try:
+        ya, ma = int(ym_a[:4]), int(ym_a[5:7])
+        yb, mb = int(ym_b[:4]), int(ym_b[5:7])
+        diff = abs((ya * 12 + ma) - (yb * 12 + mb))
+        return diff <= tolerance
+    except (ValueError, IndexError):
+        return False
+
+
+def _fetch_derived_margin() -> dict:
+    """Primary adapter: CKAN wholesale + excise + official PDF consumer price → derived margin.
+
+    Computes the retail margin from:
+      margin = (official_consumer / (1 + VAT)) - wholesale_per_l - excise_per_l
+
+    Validates:
+      - margin within [DERIVED_MARGIN_MIN, DERIVED_MARGIN_MAX]
+      - CKAN month aligns with official price month (±1 month tolerance)
+      - result passes consumer price sanity bounds
+    """
+    from .gov_catalog import (
+        fetch_latest_benzine95_wholesale,
+        fetch_latest_benzine_excise,
+    )
+    from .fuel_official_price import fetch_official_benzine95_self_service_price
+
+    wholesale = fetch_latest_benzine95_wholesale()
+    excise = fetch_latest_benzine_excise()
+    official = fetch_official_benzine95_self_service_price()
+
+    wholesale_per_l = wholesale["price_per_kl"] / 1000.0
+    excise_per_l = excise["excise_per_kl"] / 1000.0
+    official_price = official["price_ils_per_l"]
+    official_ym = official["effective_year_month"]
+
+    # Derive effective year-month from the wholesale record date
+    date_str = wholesale.get("date", "")
+    ckan_ym = date_str[:7] if date_str and len(date_str) >= 7 else ""
+
+    # Month alignment check
+    month_aligned = True
+    if ckan_ym and official_ym:
+        if not _months_match(ckan_ym, official_ym, tolerance=1):
+            raise RuntimeError(
+                f"Month mismatch: CKAN={ckan_ym}, official={official_ym} "
+                f"(>1 month apart)"
+            )
+        if ckan_ym != official_ym:
+            month_aligned = False
+            logger.warning(
+                "Derived margin: CKAN month %s ≠ official month %s "
+                "(within tolerance, proceeding with warning)",
+                ckan_ym, official_ym,
+            )
+
+    # Derive margin
+    derived_margin = _derive_margin(official_price, wholesale_per_l, excise_per_l, VAT_RATE)
+    derived_margin_rounded = round(derived_margin, 4)
+
+    # Validate margin range
+    if not (DERIVED_MARGIN_MIN <= derived_margin <= DERIVED_MARGIN_MAX):
+        raise RuntimeError(
+            f"Derived margin {derived_margin_rounded} outside valid range "
+            f"[{DERIVED_MARGIN_MIN}, {DERIVED_MARGIN_MAX}]"
+        )
+
+    # Compute consumer price using the derived margin (should match official)
+    consumer_price = (wholesale_per_l + excise_per_l + derived_margin) * (1 + VAT_RATE)
+    consumer_price = round(consumer_price, 2)
+
+    if not (PRICE_MIN <= consumer_price <= PRICE_MAX):
+        raise RuntimeError(
+            f"Derived consumer price {consumer_price} outside "
+            f"[{PRICE_MIN}, {PRICE_MAX}] range"
+        )
+
+    effective_ym = ckan_ym if ckan_ym else official_ym
+
+    return _build_output(
+        price=consumer_price,
+        source_id=f"ckan+official:{effective_ym}",
+        effective_ym=effective_ym,
+        raw={
+            "adapter": "ckan_derived_margin",
+            "wholesale_per_kl": wholesale["price_per_kl"],
+            "wholesale_per_l": round(wholesale_per_l, 4),
+            "excise_per_kl": excise["excise_per_kl"],
+            "excise_per_l": round(excise_per_l, 4),
+            "retail_margin_ils": round(derived_margin, 4),
+            "retail_margin_source": "derived",
+            "official_consumer_price_ils_per_l": official_price,
+            "official_source_id": official["source_id"],
+            "official_source_type": official.get("source_type", "unknown"),
+            "month_aligned": month_aligned,
+            "vat_rate": VAT_RATE,
+            "consumer_formula": "official_price verified via (wholesale_l + excise_l + derived_margin) * (1+VAT)",
+            "wholesale_resource_id": wholesale["resource_id"],
+            "excise_resource_id": excise["resource_id"],
+            "wholesale_date": wholesale["date"],
+            "excise_date": excise["date"],
+        },
+    )
+
+
+# -- Adapter 2: CKAN + fallback margin --------------------------------------
 
 def _fetch_from_ckan() -> dict:
-    """Query data.gov.il for wholesale benzine-95 price + excise, compute consumer price.
+    """Fallback: CKAN wholesale + excise + hardcoded margin → consumer price.
 
     Uses the ``gov_catalog`` module which pins known resource IDs.
+    Falls back to RETAIL_MARGIN_ILS (0.66 default or env override).
     """
     from .gov_catalog import (
         fetch_latest_benzine95_wholesale,
@@ -118,6 +256,11 @@ def _fetch_from_ckan() -> dict:
             "excise_per_kl": excise["excise_per_kl"],
             "excise_per_l": round(excise_per_l, 4),
             "retail_margin_ils": RETAIL_MARGIN_ILS,
+            "retail_margin_source": (
+                "fallback (no official machine-readable source)"
+                if _RETAIL_MARGIN_IS_FALLBACK
+                else "env:FUEL_RETAIL_MARGIN_ILS"
+            ),
             "vat_rate": VAT_RATE,
             "consumer_formula": "(wholesale_l + excise_l + margin) * (1+VAT)",
             "wholesale_resource_id": wholesale["resource_id"],
@@ -128,7 +271,7 @@ def _fetch_from_ckan() -> dict:
     )
 
 
-# -- Adapter 2: Gov.il notice PDF (legacy fallback) --------------------------
+# -- Adapter 3: Gov.il notice PDF (legacy full-price fallback) ---------------
 
 def _extract_price_from_text(text: str) -> float:
     """Extract consumer self-service 95 price from Hebrew PDF notice text."""
@@ -202,7 +345,7 @@ def _fetch_from_pdf() -> dict:
     raise RuntimeError(last_error or "Gov.il notice PDF not found")
 
 
-# -- Adapter 3: environment override -----------------------------------------
+# -- Adapter 4: environment override -----------------------------------------
 
 def _fetch_from_env() -> Optional[dict]:
     """Read consumer price from FUEL_PRICE_ILS env var (emergency override)."""
@@ -228,9 +371,10 @@ def fetch_current_fuel_price_ils_per_l(cache_ttl_s: int = 86400) -> dict:
     """Fetch consumer self-service gasoline 95 price (ILS/L) including VAT.
 
     Adapter chain:
-      1. data.gov.il CKAN datastore (wholesale + excise -> formula)
-      2. Gov.il monthly notice PDF (direct consumer price)
-      3. FUEL_PRICE_ILS env var (emergency override)
+      1. Derived margin (CKAN wholesale + excise + official PDF → derived margin)
+      2. CKAN + fallback margin (wholesale + excise + 0.66 hardcoded)
+      3. Gov.il monthly notice PDF (direct consumer price)
+      4. FUEL_PRICE_ILS env var (emergency override)
 
     Returns stable dict: source_id, fetched_at_utc, effective_year_month,
     price_ils_per_l, raw.
@@ -242,17 +386,30 @@ def fetch_current_fuel_price_ils_per_l(cache_ttl_s: int = 86400) -> dict:
 
     errors: list[str] = []
 
-    # 1. Primary: CKAN datastore
+    # 1. Primary: derived margin (CKAN + official consumer price)
+    try:
+        result = _fetch_derived_margin()
+        logger.info(
+            "Fuel price from derived margin: %.2f ILS/L (margin=%.4f)",
+            result["price_ils_per_l"], result["raw"]["retail_margin_ils"],
+        )
+        cache_write(CACHE_KEY, result)
+        return result
+    except Exception as e:
+        errors.append(f"derived: {e}")
+        logger.warning("Derived margin adapter failed: %s", e)
+
+    # 2. Secondary: CKAN + fallback margin
     try:
         result = _fetch_from_ckan()
-        logger.info("Fuel price from CKAN: %.2f ILS/L", result["price_ils_per_l"])
+        logger.info("Fuel price from CKAN+fallback: %.2f ILS/L", result["price_ils_per_l"])
         cache_write(CACHE_KEY, result)
         return result
     except Exception as e:
         errors.append(f"ckan: {e}")
         logger.warning("CKAN fuel adapter failed: %s", e)
 
-    # 2. Secondary: PDF notice
+    # 3. Tertiary: PDF notice (direct consumer price)
     try:
         result = _fetch_from_pdf()
         logger.info("Fuel price from PDF: %.2f ILS/L", result["price_ils_per_l"])
@@ -262,7 +419,7 @@ def fetch_current_fuel_price_ils_per_l(cache_ttl_s: int = 86400) -> dict:
         errors.append(f"pdf: {e}")
         logger.warning("PDF fuel adapter failed: %s", e)
 
-    # 3. Tertiary: env override
+    # 4. Quaternary: env override
     env_result = _fetch_from_env()
     if env_result:
         logger.info("Fuel price from env: %.2f ILS/L", env_result["price_ils_per_l"])

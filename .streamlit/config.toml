@@ -1,8 +1,8 @@
 [theme]
-primaryColor = "#1f77b4"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f0f2f6"
-textColor = "#262730"
+primaryColor = "#D4AF37"
+backgroundColor = "#0B0B0B"
+secondaryBackgroundColor = "#141416"
+textColor = "#dddddd"
 font = "sans serif"
 
 [client]
@@ -12,13 +12,15 @@ toolbarMode = "minimal"
 [server]
 port = 8501
 headless = true
-runOnSave = true
+runOnSave = false
 maxUploadSize = 200
 enableXsrfProtection = true
+baseUrlPath = "ayalon"
 
 [logger]
 level = "info"
 
 [browser]
 gatherUsageStats = false
-serverAddress = "localhost"
+serverAddress = "dikenocracy.com"
+serverPort = 443
