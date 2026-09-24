@@ -40,7 +40,7 @@ from sources.traffic_providers import PROVIDERS, ProviderResult, configured_prov
 
 RAW_RETENTION_DAYS = int(os.getenv("RAW_RETENTION_DAYS", "30"))
 DAILY_QUOTA = {
-    "here": int(os.getenv("HERE_QUOTA_PER_DAY", "1000")),
+    "here": int(os.getenv("HERE_QUOTA_PER_DAY", "320")),  # 288 cycles/day + retries: < 10k requests/month
     "tomtom": int(os.getenv("TOMTOM_QUOTA_PER_DAY", os.getenv("TOMTOM_QUOTA_PER_HOUR", "2500"))),
 }
 LOCK_PATH = Path(os.getenv("COLLECTOR_LOCK_PATH", str(Path(__file__).resolve().parent / "data" / "collector.lock")))
