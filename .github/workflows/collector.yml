@@ -1,58 +1,32 @@
-name: Collect traffic history
+name: Collect traffic history (disabled)
+
+# The scheduled GitHub Actions collector is retired (2026-09-24):
+#  * production collection runs on the VPS (ayalon-collector.timer) with
+#    methodology v2 and its own database; a second collector would consume
+#    the same provider quota and produce a divergent, unaudited history;
+#  * history/monitor.sqlite3 is kept only as a frozen v1 archive.
+# Manual runs remain possible for diagnostics and do NOT commit anything.
 
 on:
-  schedule:
-    # Every 10 minutes (GitHub cron is best-effort; can drift)
-    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 permissions:
-  contents: write
-
-concurrency:
-  group: collector
-  cancel-in-progress: true
+  contents: read
 
 jobs:
   collect:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
+          python-version: "3.12"
           cache: pip
-
-      - name: Install deps
-        run: python -m pip install -r requirements.txt
-
-      - name: Collect once
+      - run: python -m pip install -r requirements.txt
+      - name: Collect once (scratch database, not committed)
         env:
+          HERE_API_KEY: ${{ secrets.HERE_API_KEY }}
           TOMTOM_API_KEY: ${{ secrets.TOMTOM_API_KEY }}
-          HISTORY_DB_PATH: history/monitor.sqlite3
-          # Optional overrides
-          TRAFFIC_MODE: flow
-          TT_ALLOW_SAMPLE: "0"
-          CACHE_TTL_SECONDS: "300"
-          RATE_LIMIT_SECONDS: "60"
-        run: python collector.py --once
-
-      - name: Commit and push if changed
-        run: |
-          set -euo pipefail
-          if git status --porcelain=v1 | grep -qE '^(\?\?| M|A )\s+history/'; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add history/
-            git commit -m "collector: update history" || exit 0
-            git push
-          else
-            echo "No history changes to commit."
-          fi
+          HISTORY_DB_PATH: /tmp/scratch.sqlite3
+        run: python collector.py --once || true

@@ -153,9 +153,9 @@ def get_dashboard_summary() -> Dict[str, Any]:
     # Map health status to dashboard status
     if health_status == 'healthy':
         dashboard_status = 'operational'
-    elif health_status in ('degraded', 'stale'):
+    elif health_status in ('partial', 'stale'):
         dashboard_status = 'degraded'
-    elif health_status in ('collector_down', 'empty', 'error'):
+    elif health_status in ('no_data', 'collector_down', 'empty', 'error'):
         dashboard_status = 'down'
     else:
         dashboard_status = 'unknown'

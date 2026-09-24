@@ -1,0 +1,4172 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-24T14:14:48Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 4708266,
+  "bounds": {
+    "minlat": 32.0974327,
+    "minlon": 34.8018888,
+    "maxlat": 32.0988449,
+    "maxlon": 34.8022056
+  },
+  "nodes": [
+    2993022177,
+    34132778,
+    345399922
+  ],
+  "geometry": [
+    { "lat": 32.0988449, "lon": 34.8022056 },
+    { "lat": 32.0986951, "lon": 34.8021696 },
+    { "lat": 32.0974327, "lon": 34.8018888 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 22788894,
+  "bounds": {
+    "minlat": 32.0987704,
+    "minlon": 34.8026973,
+    "maxlat": 32.1032259,
+    "maxlon": 34.8046282
+  },
+  "nodes": [
+    2993022176,
+    34132808,
+    2992984602,
+    2992984606,
+    2992984598,
+    2992984601,
+    2992984596,
+    2992984605,
+    2992984592,
+    2992984603,
+    2992984594,
+    2992984593,
+    2992984604,
+    2992984590,
+    2992984599,
+    2992984595,
+    2992984591,
+    2992984597,
+    2992984600,
+    34132804
+  ],
+  "geometry": [
+    { "lat": 32.0987704, "lon": 34.8026973 },
+    { "lat": 32.0988504, "lon": 34.8027127 },
+    { "lat": 32.1000969, "lon": 34.8030056 },
+    { "lat": 32.1003650, "lon": 34.8030780 },
+    { "lat": 32.1005542, "lon": 34.8031357 },
+    { "lat": 32.1007021, "lon": 34.8031857 },
+    { "lat": 32.1008194, "lon": 34.8032257 },
+    { "lat": 32.1009285, "lon": 34.8032658 },
+    { "lat": 32.1010046, "lon": 34.8032942 },
+    { "lat": 32.1010839, "lon": 34.8033267 },
+    { "lat": 32.1012761, "lon": 34.8034133 },
+    { "lat": 32.1014193, "lon": 34.8034884 },
+    { "lat": 32.1015630, "lon": 34.8035649 },
+    { "lat": 32.1016774, "lon": 34.8036300 },
+    { "lat": 32.1018555, "lon": 34.8037325 },
+    { "lat": 32.1021107, "lon": 34.8038882 },
+    { "lat": 32.1022409, "lon": 34.8039695 },
+    { "lat": 32.1024194, "lon": 34.8040809 },
+    { "lat": 32.1025423, "lon": 34.8041618 },
+    { "lat": 32.1032259, "lon": 34.8046282 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "layer": "1",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 24893729,
+  "bounds": {
+    "minlat": 32.0819117,
+    "minlon": 34.7983751,
+    "maxlat": 32.0923329,
+    "maxlon": 34.8015072
+  },
+  "nodes": [
+    1532471273,
+    2989908470,
+    2989908474,
+    34132816,
+    2989908471,
+    320115303,
+    9917964181,
+    320115302,
+    1532471275,
+    2992930700,
+    2992930698,
+    2992930695,
+    2992930686
+  ],
+  "geometry": [
+    { "lat": 32.0819117, "lon": 34.7983751 },
+    { "lat": 32.0822141, "lon": 34.7984344 },
+    { "lat": 32.0838389, "lon": 34.7988812 },
+    { "lat": 32.0843112, "lon": 34.7990250 },
+    { "lat": 32.0846475, "lon": 34.7991398 },
+    { "lat": 32.0856003, "lon": 34.7994842 },
+    { "lat": 32.0872442, "lon": 34.8000578 },
+    { "lat": 32.0879673, "lon": 34.8003304 },
+    { "lat": 32.0891441, "lon": 34.8006739 },
+    { "lat": 32.0899493, "lon": 34.8009032 },
+    { "lat": 32.0913571, "lon": 34.8012775 },
+    { "lat": 32.0920352, "lon": 34.8014430 },
+    { "lat": 32.0923329, "lon": 34.8015072 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "maxheight": "5.1",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 26188070,
+  "bounds": {
+    "minlat": 32.0442092,
+    "minlon": 34.7829798,
+    "maxlat": 32.0466754,
+    "maxlon": 34.7835451
+  },
+  "nodes": [
+    3994468998,
+    286763474,
+    3994468996,
+    33960999,
+    544561044
+  ],
+  "geometry": [
+    { "lat": 32.0466754, "lon": 34.7835451 },
+    { "lat": 32.0463760, "lon": 34.7834629 },
+    { "lat": 32.0451619, "lon": 34.7832289 },
+    { "lat": 32.0447835, "lon": 34.7831544 },
+    { "lat": 32.0442092, "lon": 34.7829798 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 28665934,
+  "bounds": {
+    "minlat": 32.1032259,
+    "minlon": 34.8046282,
+    "maxlat": 32.1065044,
+    "maxlon": 34.8068082
+  },
+  "nodes": [
+    34132804,
+    346189881
+  ],
+  "geometry": [
+    { "lat": 32.1032259, "lon": 34.8046282 },
+    { "lat": 32.1065044, "lon": 34.8068082 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 28988165,
+  "bounds": {
+    "minlat": 32.0377208,
+    "minlon": 34.7771562,
+    "maxlat": 32.0378396,
+    "maxlon": 34.7773446
+  },
+  "nodes": [
+    4218853085,
+    4237127092
+  ],
+  "geometry": [
+    { "lat": 32.0378396, "lon": 34.7773446 },
+    { "lat": 32.0377208, "lon": 34.7771562 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "80",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 28988167,
+  "bounds": {
+    "minlat": 32.0378396,
+    "minlon": 34.7773446,
+    "maxlat": 32.0386724,
+    "maxlon": 34.7785454
+  },
+  "nodes": [
+    2196477291,
+    4218853085
+  ],
+  "geometry": [
+    { "lat": 32.0386724, "lon": 34.7785454 },
+    { "lat": 32.0378396, "lon": 34.7773446 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "80",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 28988175,
+  "bounds": {
+    "minlat": 32.0373226,
+    "minlon": 34.7772597,
+    "maxlat": 32.0384773,
+    "maxlon": 34.7788920
+  },
+  "nodes": [
+    2196477155,
+    4218853086,
+    3700419496
+  ],
+  "geometry": [
+    { "lat": 32.0373226, "lon": 34.7772597 },
+    { "lat": 32.0381584, "lon": 34.7784467 },
+    { "lat": 32.0384773, "lon": 34.7788920 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 28988339,
+  "bounds": {
+    "minlat": 32.0384773,
+    "minlon": 34.7788920,
+    "maxlat": 32.0408947,
+    "maxlon": 34.7816443
+  },
+  "nodes": [
+    3700419496,
+    3700419497,
+    2196477457,
+    2196477115,
+    2196477277,
+    2196477453,
+    2196477170,
+    13174049711,
+    318754434
+  ],
+  "geometry": [
+    { "lat": 32.0384773, "lon": 34.7788920 },
+    { "lat": 32.0388332, "lon": 34.7793561 },
+    { "lat": 32.0388855, "lon": 34.7794253 },
+    { "lat": 32.0391592, "lon": 34.7797917 },
+    { "lat": 32.0394893, "lon": 34.7802086 },
+    { "lat": 32.0397708, "lon": 34.7805326 },
+    { "lat": 32.0401387, "lon": 34.7809255 },
+    { "lat": 32.0405357, "lon": 34.7813029 },
+    { "lat": 32.0408947, "lon": 34.7816443 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "2",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 30797726,
+  "bounds": {
+    "minlat": 32.0899160,
+    "minlon": 34.8000936,
+    "maxlat": 32.0901844,
+    "maxlon": 34.8001723
+  },
+  "nodes": [
+    270480916,
+    1531420218
+  ],
+  "geometry": [
+    { "lat": 32.0901844, "lon": 34.8001723 },
+    { "lat": 32.0899160, "lon": 34.8000936 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "5.00",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 31133847,
+  "bounds": {
+    "minlat": 32.1065044,
+    "minlon": 34.8068082,
+    "maxlat": 32.1075494,
+    "maxlon": 34.8074873
+  },
+  "nodes": [
+    346189881,
+    346189882
+  ],
+  "geometry": [
+    { "lat": 32.1065044, "lon": 34.8068082 },
+    { "lat": 32.1075494, "lon": 34.8074873 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "layer": "1",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 31133849,
+  "bounds": {
+    "minlat": 32.1075494,
+    "minlon": 34.8074873,
+    "maxlat": 32.1104491,
+    "maxlon": 34.8095399
+  },
+  "nodes": [
+    346189882,
+    315034864,
+    2993052356
+  ],
+  "geometry": [
+    { "lat": 32.1075494, "lon": 34.8074873 },
+    { "lat": 32.1099389, "lon": 34.8091815 },
+    { "lat": 32.1104491, "lon": 34.8095399 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 33900494,
+  "bounds": {
+    "minlat": 32.0466715,
+    "minlon": 34.7838378,
+    "maxlat": 32.0473717,
+    "maxlon": 34.7840210
+  },
+  "nodes": [
+    3994468989,
+    3994468992
+  ],
+  "geometry": [
+    { "lat": 32.0466715, "lon": 34.7838378 },
+    { "lat": 32.0473717, "lon": 34.7840210 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 43648631,
+  "bounds": {
+    "minlat": 32.0382876,
+    "minlon": 34.7656940,
+    "maxlat": 32.0382977,
+    "maxlon": 34.7657390
+  },
+  "nodes": [
+    552031601,
+    318753098
+  ],
+  "geometry": [
+    { "lat": 32.0382876, "lon": 34.7657390 },
+    { "lat": 32.0382977, "lon": 34.7656940 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 43648632,
+  "bounds": {
+    "minlat": 32.0375715,
+    "minlon": 34.7657390,
+    "maxlat": 32.0382876,
+    "maxlon": 34.7680123
+  },
+  "nodes": [
+    552031672,
+    2196477179,
+    2196477152,
+    2196477186,
+    552031601
+  ],
+  "geometry": [
+    { "lat": 32.0375715, "lon": 34.7680123 },
+    { "lat": 32.0378630, "lon": 34.7672468 },
+    { "lat": 32.0379903, "lon": 34.7668337 },
+    { "lat": 32.0381072, "lon": 34.7664673 },
+    { "lat": 32.0382876, "lon": 34.7657390 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxheight": "5.50",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "tunnel": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 95421335,
+  "bounds": {
+    "minlat": 32.0515809,
+    "minlon": 34.7850868,
+    "maxlat": 32.0541344,
+    "maxlon": 34.7853235
+  },
+  "nodes": [
+    3994468990,
+    3994468991,
+    1227174,
+    1227172,
+    1532471258
+  ],
+  "geometry": [
+    { "lat": 32.0515809, "lon": 34.7850868 },
+    { "lat": 32.0518348, "lon": 34.7851322 },
+    { "lat": 32.0529105, "lon": 34.7852148 },
+    { "lat": 32.0537014, "lon": 34.7852859 },
+    { "lat": 32.0541344, "lon": 34.7853235 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "2",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 96864575,
+  "bounds": {
+    "minlat": 32.0546857,
+    "minlon": 34.7845646,
+    "maxlat": 32.0567161,
+    "maxlon": 34.7850871
+  },
+  "nodes": [
+    1627607,
+    314454538,
+    1531420175
+  ],
+  "geometry": [
+    { "lat": 32.0567161, "lon": 34.7850871 },
+    { "lat": 32.0551661, "lon": 34.7846625 },
+    { "lat": 32.0546857, "lon": 34.7845646 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744077,
+  "bounds": {
+    "minlat": 32.0729343,
+    "minlon": 34.7929611,
+    "maxlat": 32.0757764,
+    "maxlon": 34.7935561
+  },
+  "nodes": [
+    2989950169,
+    2989950157,
+    10032115259,
+    2989950162,
+    2989950172,
+    2989950150,
+    2989950212,
+    2989950211,
+    2989950136
+  ],
+  "geometry": [
+    { "lat": 32.0757764, "lon": 34.7935561 },
+    { "lat": 32.0754669, "lon": 34.7934317 },
+    { "lat": 32.0751666, "lon": 34.7933126 },
+    { "lat": 32.0749499, "lon": 34.7932277 },
+    { "lat": 32.0745774, "lon": 34.7931255 },
+    { "lat": 32.0742128, "lon": 34.7930488 },
+    { "lat": 32.0737305, "lon": 34.7929979 },
+    { "lat": 32.0732889, "lon": 34.7929716 },
+    { "lat": 32.0729343, "lon": 34.7929611 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744081,
+  "bounds": {
+    "minlat": 32.0757764,
+    "minlon": 34.7935561,
+    "maxlat": 32.0760909,
+    "maxlon": 34.7936926
+  },
+  "nodes": [
+    2989950182,
+    1627569,
+    2989950169
+  ],
+  "geometry": [
+    { "lat": 32.0760909, "lon": 34.7936926 },
+    { "lat": 32.0758367, "lon": 34.7935846 },
+    { "lat": 32.0757764, "lon": 34.7935561 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "5.70",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744084,
+  "bounds": {
+    "minlat": 32.0646449,
+    "minlon": 34.7894745,
+    "maxlat": 32.0648629,
+    "maxlon": 34.7897543
+  },
+  "nodes": [
+    2989372352,
+    9926392440,
+    2989372426
+  ],
+  "geometry": [
+    { "lat": 32.0648629, "lon": 34.7897543 },
+    { "lat": 32.0647879, "lon": 34.7896582 },
+    { "lat": 32.0646449, "lon": 34.7894745 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "maxheight": "5.15",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744088,
+  "bounds": {
+    "minlat": 32.0850734,
+    "minlon": 34.7980777,
+    "maxlat": 32.0853600,
+    "maxlon": 34.7981835
+  },
+  "nodes": [
+    1531420214,
+    2989959777
+  ],
+  "geometry": [
+    { "lat": 32.0853600, "lon": 34.7981835 },
+    { "lat": 32.0850734, "lon": 34.7980777 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "6.50",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744091,
+  "bounds": {
+    "minlat": 32.0567161,
+    "minlon": 34.7850871,
+    "maxlat": 32.0590256,
+    "maxlon": 34.7858053
+  },
+  "nodes": [
+    2989372410,
+    2989372398,
+    2989372363,
+    2989372362,
+    1627607
+  ],
+  "geometry": [
+    { "lat": 32.0590256, "lon": 34.7858053 },
+    { "lat": 32.0588084, "lon": 34.7857399 },
+    { "lat": 32.0576997, "lon": 34.7853969 },
+    { "lat": 32.0571889, "lon": 34.7852503 },
+    { "lat": 32.0567161, "lon": 34.7850871 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744093,
+  "bounds": {
+    "minlat": 32.0862903,
+    "minlon": 34.7985670,
+    "maxlat": 32.0899160,
+    "maxlon": 34.8000936
+  },
+  "nodes": [
+    1531420218,
+    2992927423,
+    2992927432,
+    343631835,
+    2992927429,
+    343631839,
+    1252167833
+  ],
+  "geometry": [
+    { "lat": 32.0899160, "lon": 34.8000936 },
+    { "lat": 32.0895651, "lon": 34.7999821 },
+    { "lat": 32.0892287, "lon": 34.7998740 },
+    { "lat": 32.0889152, "lon": 34.7997698 },
+    { "lat": 32.0886099, "lon": 34.7996615 },
+    { "lat": 32.0875545, "lon": 34.7991974 },
+    { "lat": 32.0862903, "lon": 34.7985670 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744094,
+  "bounds": {
+    "minlat": 32.0790916,
+    "minlon": 34.7962599,
+    "maxlat": 32.0850734,
+    "maxlon": 34.7980777
+  },
+  "nodes": [
+    2989959777,
+    2989959782,
+    2989959784,
+    2989959780,
+    2989959785,
+    343631849,
+    2989959783,
+    343631852,
+    2989959778,
+    2989959786,
+    1627558,
+    1627557,
+    343631855,
+    1531420201,
+    2989950198,
+    2989950149,
+    2989950171,
+    2989950159,
+    2989950209,
+    2989950197,
+    3232926534,
+    3232926535,
+    2989950141
+  ],
+  "geometry": [
+    { "lat": 32.0850734, "lon": 34.7980777 },
+    { "lat": 32.0847763, "lon": 34.7979768 },
+    { "lat": 32.0845561, "lon": 34.7979201 },
+    { "lat": 32.0843301, "lon": 34.7978648 },
+    { "lat": 32.0841789, "lon": 34.7978366 },
+    { "lat": 32.0839989, "lon": 34.7978036 },
+    { "lat": 32.0838412, "lon": 34.7977829 },
+    { "lat": 32.0829618, "lon": 34.7977257 },
+    { "lat": 32.0827367, "lon": 34.7977140 },
+    { "lat": 32.0825255, "lon": 34.7977010 },
+    { "lat": 32.0823024, "lon": 34.7976926 },
+    { "lat": 32.0820304, "lon": 34.7976764 },
+    { "lat": 32.0817708, "lon": 34.7976381 },
+    { "lat": 32.0815488, "lon": 34.7975807 },
+    { "lat": 32.0809884, "lon": 34.7974509 },
+    { "lat": 32.0808319, "lon": 34.7974026 },
+    { "lat": 32.0806965, "lon": 34.7973463 },
+    { "lat": 32.0805481, "lon": 34.7972812 },
+    { "lat": 32.0803291, "lon": 34.7971724 },
+    { "lat": 32.0800449, "lon": 34.7970112 },
+    { "lat": 32.0797505, "lon": 34.7968347 },
+    { "lat": 32.0795204, "lon": 34.7966641 },
+    { "lat": 32.0790916, "lon": 34.7962599 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "5.4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744096,
+  "bounds": {
+    "minlat": 32.0634993,
+    "minlon": 34.7880584,
+    "maxlat": 32.0646449,
+    "maxlon": 34.7894745
+  },
+  "nodes": [
+    2989372426,
+    2989372397,
+    2989372373,
+    2989372390,
+    2989376755
+  ],
+  "geometry": [
+    { "lat": 32.0646449, "lon": 34.7894745 },
+    { "lat": 32.0637942, "lon": 34.7883835 },
+    { "lat": 32.0636708, "lon": 34.7882409 },
+    { "lat": 32.0635891, "lon": 34.7881500 },
+    { "lat": 32.0634993, "lon": 34.7880584 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744099,
+  "bounds": {
+    "minlat": 32.0514142,
+    "minlon": 34.7843701,
+    "maxlat": 32.0544741,
+    "maxlon": 34.7845214
+  },
+  "nodes": [
+    1531420156,
+    314454541,
+    2315188144,
+    4108458909,
+    3994469002,
+    314454549,
+    3994469001
+  ],
+  "geometry": [
+    { "lat": 32.0544741, "lon": 34.7845214 },
+    { "lat": 32.0541826, "lon": 34.7844767 },
+    { "lat": 32.0537346, "lon": 34.7844157 },
+    { "lat": 32.0532114, "lon": 34.7843935 },
+    { "lat": 32.0529173, "lon": 34.7843729 },
+    { "lat": 32.0523409, "lon": 34.7843701 },
+    { "lat": 32.0514142, "lon": 34.7843951 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139744100,
+  "bounds": {
+    "minlat": 32.0544741,
+    "minlon": 34.7845214,
+    "maxlat": 32.0546857,
+    "maxlon": 34.7845646
+  },
+  "nodes": [
+    1531420175,
+    12287814424,
+    1531420156
+  ],
+  "geometry": [
+    { "lat": 32.0546857, "lon": 34.7845646 },
+    { "lat": 32.0544955, "lon": 34.7845258 },
+    { "lat": 32.0544741, "lon": 34.7845214 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "maxheight": "5.00",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139822691,
+  "bounds": {
+    "minlat": 32.0543820,
+    "minlon": 34.7853450,
+    "maxlat": 32.0572356,
+    "maxlon": 34.7859164
+  },
+  "nodes": [
+    1532471260,
+    1227166,
+    5970209382,
+    1571763785,
+    1227163,
+    4252486778,
+    4252486780,
+    2989396034
+  ],
+  "geometry": [
+    { "lat": 32.0543820, "lon": 34.7853450 },
+    { "lat": 32.0552082, "lon": 34.7854168 },
+    { "lat": 32.0557514, "lon": 34.7855007 },
+    { "lat": 32.0560631, "lon": 34.7855488 },
+    { "lat": 32.0564563, "lon": 34.7856393 },
+    { "lat": 32.0568205, "lon": 34.7857337 },
+    { "lat": 32.0570207, "lon": 34.7858187 },
+    { "lat": 32.0572356, "lon": 34.7859164 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "2",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139822695,
+  "bounds": {
+    "minlat": 32.0645174,
+    "minlon": 34.7902043,
+    "maxlat": 32.0647364,
+    "maxlon": 34.7904859
+  },
+  "nodes": [
+    2989396060,
+    2989392826
+  ],
+  "geometry": [
+    { "lat": 32.0645174, "lon": 34.7902043 },
+    { "lat": 32.0647364, "lon": 34.7904859 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "maxheight": "5.30",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139822696,
+  "bounds": {
+    "minlat": 32.0813906,
+    "minlon": 34.7982249,
+    "maxlat": 32.0819117,
+    "maxlon": 34.7983751
+  },
+  "nodes": [
+    1532471271,
+    1532471273
+  ],
+  "geometry": [
+    { "lat": 32.0813906, "lon": 34.7982249 },
+    { "lat": 32.0819117, "lon": 34.7983751 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "maxheight": "5.40",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139822697,
+  "bounds": {
+    "minlat": 32.0541344,
+    "minlon": 34.7853235,
+    "maxlat": 32.0543820,
+    "maxlon": 34.7853450
+  },
+  "nodes": [
+    1532471258,
+    1532471260
+  ],
+  "geometry": [
+    { "lat": 32.0541344, "lon": 34.7853235 },
+    { "lat": 32.0543820, "lon": 34.7853450 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "2",
+    "lit": "yes",
+    "maxheight": "5.40",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139822698,
+  "bounds": {
+    "minlat": 32.0756823,
+    "minlon": 34.7942496,
+    "maxlat": 32.0758754,
+    "maxlon": 34.7943519
+  },
+  "nodes": [
+    2989906777,
+    2989906759
+  ],
+  "geometry": [
+    { "lat": 32.0756823, "lon": 34.7942496 },
+    { "lat": 32.0758754, "lon": 34.7943519 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "5.15",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 139822701,
+  "bounds": {
+    "minlat": 32.0355842,
+    "minlon": 34.7599717,
+    "maxlat": 32.0357666,
+    "maxlon": 34.7600164
+  },
+  "nodes": [
+    1532471242,
+    1532471243
+  ],
+  "geometry": [
+    { "lat": 32.0355842, "lon": 34.7599717 },
+    { "lat": 32.0357666, "lon": 34.7600164 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv:conditional": "1 @ (06:30-10:00)",
+    "maxheight": "5.70",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 158249704,
+  "bounds": {
+    "minlat": 32.0591532,
+    "minlon": 34.7864740,
+    "maxlat": 32.0595407,
+    "maxlon": 34.7865925
+  },
+  "nodes": [
+    2989396065,
+    2989396078
+  ],
+  "geometry": [
+    { "lat": 32.0591532, "lon": 34.7864740 },
+    { "lat": 32.0595407, "lon": 34.7865925 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "5",
+    "lit": "yes",
+    "maxheight": "5.30",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 158249706,
+  "bounds": {
+    "minlat": 32.0572356,
+    "minlon": 34.7859164,
+    "maxlat": 32.0591532,
+    "maxlon": 34.7864740
+  },
+  "nodes": [
+    2989396034,
+    2989396080,
+    2989396065
+  ],
+  "geometry": [
+    { "lat": 32.0572356, "lon": 34.7859164 },
+    { "lat": 32.0586784, "lon": 34.7863325 },
+    { "lat": 32.0591532, "lon": 34.7864740 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "5",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 192075494,
+  "bounds": {
+    "minlat": 32.0202194,
+    "minlon": 34.7603082,
+    "maxlat": 32.0264176,
+    "maxlon": 34.7612957
+  },
+  "nodes": [
+    2129044303,
+    318185506,
+    388401687,
+    2196481123,
+    33961396,
+    598620188,
+    388400517
+  ],
+  "geometry": [
+    { "lat": 32.0264176, "lon": 34.7603082 },
+    { "lat": 32.0258288, "lon": 34.7603476 },
+    { "lat": 32.0245549, "lon": 34.7604266 },
+    { "lat": 32.0242502, "lon": 34.7604632 },
+    { "lat": 32.0238866, "lon": 34.7605187 },
+    { "lat": 32.0231121, "lon": 34.7606719 },
+    { "lat": 32.0202194, "lon": 34.7612957 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 192075495,
+  "bounds": {
+    "minlat": 32.0382977,
+    "minlon": 34.7639088,
+    "maxlat": 32.0384993,
+    "maxlon": 34.7656940
+  },
+  "nodes": [
+    318753098,
+    1531420150,
+    2196477464,
+    1257585936,
+    1257585937,
+    1259916941
+  ],
+  "geometry": [
+    { "lat": 32.0382977, "lon": 34.7656940 },
+    { "lat": 32.0383928, "lon": 34.7651992 },
+    { "lat": 32.0384371, "lon": 34.7648642 },
+    { "lat": 32.0384712, "lon": 34.7645080 },
+    { "lat": 32.0384885, "lon": 34.7641993 },
+    { "lat": 32.0384993, "lon": 34.7639088 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 192075497,
+  "bounds": {
+    "minlat": 32.0386724,
+    "minlon": 34.7785454,
+    "maxlat": 32.0406670,
+    "maxlon": 34.7808746
+  },
+  "nodes": [
+    33961000,
+    4218853087,
+    2196477226,
+    277651763,
+    4218853081,
+    4218853082,
+    4218853083,
+    2196477291
+  ],
+  "geometry": [
+    { "lat": 32.0406670, "lon": 34.7808746 },
+    { "lat": 32.0404090, "lon": 34.7806550 },
+    { "lat": 32.0401701, "lon": 34.7804377 },
+    { "lat": 32.0399482, "lon": 34.7802006 },
+    { "lat": 32.0396940, "lon": 34.7798926 },
+    { "lat": 32.0393522, "lon": 34.7794546 },
+    { "lat": 32.0390712, "lon": 34.7790944 },
+    { "lat": 32.0386724, "lon": 34.7785454 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "80",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 192075499,
+  "bounds": {
+    "minlat": 32.0435851,
+    "minlon": 34.7827993,
+    "maxlat": 32.0442092,
+    "maxlon": 34.7829798
+  },
+  "nodes": [
+    544561044,
+    4218853088,
+    4237124188
+  ],
+  "geometry": [
+    { "lat": 32.0442092, "lon": 34.7829798 },
+    { "lat": 32.0439041, "lon": 34.7829035 },
+    { "lat": 32.0435851, "lon": 34.7827993 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lanes:psv": "2",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 192075500,
+  "bounds": {
+    "minlat": 32.0361129,
+    "minlon": 34.7694424,
+    "maxlat": 32.0368894,
+    "maxlon": 34.7729419
+  },
+  "nodes": [
+    388514335,
+    2196477444,
+    1225577108,
+    552031763,
+    1225577113,
+    2196477405,
+    1225577114,
+    1225577115,
+    2196477173,
+    552031787,
+    2123107467
+  ],
+  "geometry": [
+    { "lat": 32.0361129, "lon": 34.7729419 },
+    { "lat": 32.0361149, "lon": 34.7725511 },
+    { "lat": 32.0361338, "lon": 34.7721115 },
+    { "lat": 32.0361600, "lon": 34.7718098 },
+    { "lat": 32.0362059, "lon": 34.7714973 },
+    { "lat": 32.0362702, "lon": 34.7711891 },
+    { "lat": 32.0363505, "lon": 34.7708986 },
+    { "lat": 32.0364817, "lon": 34.7704937 },
+    { "lat": 32.0366327, "lon": 34.7700770 },
+    { "lat": 32.0367732, "lon": 34.7697013 },
+    { "lat": 32.0368894, "lon": 34.7694424 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 195998885,
+  "bounds": {
+    "minlat": 32.0433256,
+    "minlon": 34.7831244,
+    "maxlat": 32.0466715,
+    "maxlon": 34.7838378
+  },
+  "nodes": [
+    1382676550,
+    3994468969,
+    33961014,
+    286763469,
+    3994468989
+  ],
+  "geometry": [
+    { "lat": 32.0433256, "lon": 34.7831244 },
+    { "lat": 32.0438488, "lon": 34.7832552 },
+    { "lat": 32.0443519, "lon": 34.7833650 },
+    { "lat": 32.0463087, "lon": 34.7837431 },
+    { "lat": 32.0466715, "lon": 34.7838378 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 195998889,
+  "bounds": {
+    "minlat": 32.0408947,
+    "minlon": 34.7816443,
+    "maxlat": 32.0433256,
+    "maxlon": 34.7831244
+  },
+  "nodes": [
+    318754434,
+    1532471245,
+    2196477328,
+    305257620,
+    2196477509,
+    366305002,
+    1532471248,
+    1382676550
+  ],
+  "geometry": [
+    { "lat": 32.0408947, "lon": 34.7816443 },
+    { "lat": 32.0413239, "lon": 34.7819965 },
+    { "lat": 32.0416154, "lon": 34.7822108 },
+    { "lat": 32.0420226, "lon": 34.7824828 },
+    { "lat": 32.0423618, "lon": 34.7826853 },
+    { "lat": 32.0426927, "lon": 34.7828607 },
+    { "lat": 32.0432407, "lon": 34.7830862 },
+    { "lat": 32.0433256, "lon": 34.7831244 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "5",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 202344036,
+  "bounds": {
+    "minlat": 32.0371504,
+    "minlon": 34.7680123,
+    "maxlat": 32.0375715,
+    "maxlon": 34.7688945
+  },
+  "nodes": [
+    2123107468,
+    552031672
+  ],
+  "geometry": [
+    { "lat": 32.0371504, "lon": 34.7688945 },
+    { "lat": 32.0375715, "lon": 34.7680123 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 202344038,
+  "bounds": {
+    "minlat": 32.0368894,
+    "minlon": 34.7688945,
+    "maxlat": 32.0371504,
+    "maxlon": 34.7694424
+  },
+  "nodes": [
+    2123107467,
+    2123107468
+  ],
+  "geometry": [
+    { "lat": 32.0368894, "lon": 34.7694424 },
+    { "lat": 32.0371504, "lon": 34.7688945 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxheight": "6.40",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 202344040,
+  "bounds": {
+    "minlat": 32.0153849,
+    "minlon": 34.7597663,
+    "maxlat": 32.0355842,
+    "maxlon": 34.7622033
+  },
+  "nodes": [
+    2123107465,
+    33961350,
+    2340664101,
+    2340664112,
+    1170572184,
+    2340664103,
+    33961349,
+    2340664102,
+    553058359,
+    33961348,
+    1135792345,
+    1135792396,
+    33961347,
+    2340664117,
+    388401143,
+    2340664119,
+    553058312,
+    33961345,
+    1259916920,
+    1259916938,
+    33961344,
+    1532471240,
+    33961343,
+    1259916923,
+    318410043,
+    1257585941,
+    1257585888,
+    1257585946,
+    1257585895,
+    1257585896,
+    1257585942,
+    1532471242
+  ],
+  "geometry": [
+    { "lat": 32.0153849, "lon": 34.7621910 },
+    { "lat": 32.0163744, "lon": 34.7622033 },
+    { "lat": 32.0173227, "lon": 34.7621371 },
+    { "lat": 32.0177587, "lon": 34.7621266 },
+    { "lat": 32.0183641, "lon": 34.7620596 },
+    { "lat": 32.0185599, "lon": 34.7620309 },
+    { "lat": 32.0187546, "lon": 34.7620121 },
+    { "lat": 32.0192415, "lon": 34.7619394 },
+    { "lat": 32.0199241, "lon": 34.7618268 },
+    { "lat": 32.0202856, "lon": 34.7617412 },
+    { "lat": 32.0215434, "lon": 34.7613590 },
+    { "lat": 32.0227118, "lon": 34.7610639 },
+    { "lat": 32.0235439, "lon": 34.7609011 },
+    { "lat": 32.0237906, "lon": 34.7608510 },
+    { "lat": 32.0242945, "lon": 34.7607853 },
+    { "lat": 32.0249592, "lon": 34.7607423 },
+    { "lat": 32.0267380, "lon": 34.7606686 },
+    { "lat": 32.0290465, "lon": 34.7606568 },
+    { "lat": 32.0295940, "lon": 34.7606104 },
+    { "lat": 32.0299206, "lon": 34.7605661 },
+    { "lat": 32.0302169, "lon": 34.7605071 },
+    { "lat": 32.0318856, "lon": 34.7600503 },
+    { "lat": 32.0320741, "lon": 34.7600029 },
+    { "lat": 32.0323359, "lon": 34.7599337 },
+    { "lat": 32.0329952, "lon": 34.7598369 },
+    { "lat": 32.0337307, "lon": 34.7597770 },
+    { "lat": 32.0341037, "lon": 34.7597663 },
+    { "lat": 32.0343583, "lon": 34.7597663 },
+    { "lat": 32.0346676, "lon": 34.7597985 },
+    { "lat": 32.0349859, "lon": 34.7598414 },
+    { "lat": 32.0352860, "lon": 34.7599058 },
+    { "lat": 32.0355842, "lon": 34.7599717 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv:conditional": "1 @ (06:30-10:00)",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 209428540,
+  "bounds": {
+    "minlat": 32.0357666,
+    "minlon": 34.7600164,
+    "maxlat": 32.0381938,
+    "maxlon": 34.7691322
+  },
+  "nodes": [
+    1532471243,
+    2315010412,
+    2196477243,
+    2196477262,
+    2196477448,
+    2196477171,
+    2196477279,
+    2196477207,
+    2196477133,
+    2196477199,
+    2196477249,
+    2196477163,
+    2196477349,
+    2196477377,
+    2196477454,
+    2196477292,
+    2196477198,
+    2196477478,
+    2196477504,
+    2196477450,
+    2196477310,
+    2196477315,
+    2196477398,
+    2196477267,
+    2196477156,
+    2196477241,
+    2196477501,
+    1257585938,
+    12626122703,
+    318184878,
+    33961317
+  ],
+  "geometry": [
+    { "lat": 32.0357666, "lon": 34.7600164 },
+    { "lat": 32.0359793, "lon": 34.7600908 },
+    { "lat": 32.0362232, "lon": 34.7602140 },
+    { "lat": 32.0365279, "lon": 34.7603696 },
+    { "lat": 32.0367325, "lon": 34.7604876 },
+    { "lat": 32.0369933, "lon": 34.7606727 },
+    { "lat": 32.0371463, "lon": 34.7608095 },
+    { "lat": 32.0373116, "lon": 34.7609838 },
+    { "lat": 32.0374981, "lon": 34.7612145 },
+    { "lat": 32.0376117, "lon": 34.7613754 },
+    { "lat": 32.0377436, "lon": 34.7616061 },
+    { "lat": 32.0378346, "lon": 34.7617885 },
+    { "lat": 32.0379194, "lon": 34.7619896 },
+    { "lat": 32.0379801, "lon": 34.7621425 },
+    { "lat": 32.0380528, "lon": 34.7623786 },
+    { "lat": 32.0381074, "lon": 34.7625878 },
+    { "lat": 32.0381483, "lon": 34.7628185 },
+    { "lat": 32.0381802, "lon": 34.7630545 },
+    { "lat": 32.0381938, "lon": 34.7633012 },
+    { "lat": 32.0381938, "lon": 34.7634622 },
+    { "lat": 32.0381847, "lon": 34.7636446 },
+    { "lat": 32.0381574, "lon": 34.7639074 },
+    { "lat": 32.0381165, "lon": 34.7641756 },
+    { "lat": 32.0380920, "lon": 34.7642755 },
+    { "lat": 32.0380624, "lon": 34.7643964 },
+    { "lat": 32.0380040, "lon": 34.7646069 },
+    { "lat": 32.0379624, "lon": 34.7647318 },
+    { "lat": 32.0378089, "lon": 34.7651927 },
+    { "lat": 32.0377712, "lon": 34.7653091 },
+    { "lat": 32.0375234, "lon": 34.7660738 },
+    { "lat": 32.0364891, "lon": 34.7691322 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 221931557,
+  "bounds": {
+    "minlat": 32.1104491,
+    "minlon": 34.8095399,
+    "maxlat": 32.1126223,
+    "maxlon": 34.8107590
+  },
+  "nodes": [
+    2993052356,
+    2993052180,
+    2993052336,
+    2993052207,
+    2993052344,
+    2993052250,
+    2993052159,
+    34132801
+  ],
+  "geometry": [
+    { "lat": 32.1104491, "lon": 34.8095399 },
+    { "lat": 32.1106681, "lon": 34.8096865 },
+    { "lat": 32.1108882, "lon": 34.8098225 },
+    { "lat": 32.1117110, "lon": 34.8102969 },
+    { "lat": 32.1119112, "lon": 34.8104139 },
+    { "lat": 32.1121724, "lon": 34.8105469 },
+    { "lat": 32.1123542, "lon": 34.8106408 },
+    { "lat": 32.1126223, "lon": 34.8107590 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 221931569,
+  "bounds": {
+    "minlat": 32.0940772,
+    "minlon": 34.8018358,
+    "maxlat": 32.0987704,
+    "maxlon": 34.8026973
+  },
+  "nodes": [
+    34132812,
+    2992930691,
+    2993022176
+  ],
+  "geometry": [
+    { "lat": 32.0940772, "lon": 34.8018358 },
+    { "lat": 32.0966118, "lon": 34.8022814 },
+    { "lat": 32.0987704, "lon": 34.8026973 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564355,
+  "bounds": {
+    "minlat": 32.0264176,
+    "minlon": 34.7593872,
+    "maxlat": 32.0331051,
+    "maxlon": 34.7603082
+  },
+  "nodes": [
+    1257585889,
+    2128976184,
+    1257585912,
+    2128976187,
+    33961387,
+    2129033735,
+    33961393,
+    2340664122,
+    2129035453,
+    1259916965,
+    2129035449,
+    767801584,
+    2129044303
+  ],
+  "geometry": [
+    { "lat": 32.0331051, "lon": 34.7593872 },
+    { "lat": 32.0329533, "lon": 34.7594054 },
+    { "lat": 32.0325939, "lon": 34.7594720 },
+    { "lat": 32.0322594, "lon": 34.7595479 },
+    { "lat": 32.0319252, "lon": 34.7596537 },
+    { "lat": 32.0313894, "lon": 34.7598487 },
+    { "lat": 32.0306866, "lon": 34.7600611 },
+    { "lat": 32.0303537, "lon": 34.7601410 },
+    { "lat": 32.0299651, "lon": 34.7602057 },
+    { "lat": 32.0294102, "lon": 34.7602557 },
+    { "lat": 32.0290043, "lon": 34.7602746 },
+    { "lat": 32.0280820, "lon": 34.7602843 },
+    { "lat": 32.0264176, "lon": 34.7603082 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564356,
+  "bounds": {
+    "minlat": 32.1189892,
+    "minlon": 34.8101386,
+    "maxlat": 32.1194912,
+    "maxlon": 34.8101533
+  },
+  "nodes": [
+    2315188149,
+    2315188148
+  ],
+  "geometry": [
+    { "lat": 32.1194912, "lon": 34.8101386 },
+    { "lat": 32.1189892, "lon": 34.8101533 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight:lanes": "6.95|7.00|7.05",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "source:maxspeed": "sign",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564357,
+  "bounds": {
+    "minlat": 32.0853600,
+    "minlon": 34.7981835,
+    "maxlat": 32.0858025,
+    "maxlon": 34.7983690
+  },
+  "nodes": [
+    343631842,
+    1531420214
+  ],
+  "geometry": [
+    { "lat": 32.0858025, "lon": 34.7983690 },
+    { "lat": 32.0853600, "lon": 34.7981835 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564358,
+  "bounds": {
+    "minlat": 32.0858025,
+    "minlon": 34.7983690,
+    "maxlat": 32.0862903,
+    "maxlon": 34.7985670
+  },
+  "nodes": [
+    1252167833,
+    343631842
+  ],
+  "geometry": [
+    { "lat": 32.0862903, "lon": 34.7985670 },
+    { "lat": 32.0858025, "lon": 34.7983690 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564359,
+  "bounds": {
+    "minlat": 32.0963435,
+    "minlon": 34.8016202,
+    "maxlat": 32.0974327,
+    "maxlon": 34.8018888
+  },
+  "nodes": [
+    345399922,
+    2315188145
+  ],
+  "geometry": [
+    { "lat": 32.0974327, "lon": 34.8018888 },
+    { "lat": 32.0963435, "lon": 34.8016202 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "6",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564360,
+  "bounds": {
+    "minlat": 32.0901844,
+    "minlon": 34.8001723,
+    "maxlat": 32.0925531,
+    "maxlon": 34.8007258
+  },
+  "nodes": [
+    315034711,
+    270480916
+  ],
+  "geometry": [
+    { "lat": 32.0925531, "lon": 34.8007258 },
+    { "lat": 32.0901844, "lon": 34.8001723 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564361,
+  "bounds": {
+    "minlat": 32.1194912,
+    "minlon": 34.8099905,
+    "maxlat": 32.1237587,
+    "maxlon": 34.8101386
+  },
+  "nodes": [
+    1141733757,
+    271878348,
+    2315188149
+  ],
+  "geometry": [
+    { "lat": 32.1237587, "lon": 34.8099905 },
+    { "lat": 32.1213992, "lon": 34.8100868 },
+    { "lat": 32.1194912, "lon": 34.8101386 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "source:maxspeed": "sign",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564362,
+  "bounds": {
+    "minlat": 32.0925531,
+    "minlon": 34.8007258,
+    "maxlat": 32.0963435,
+    "maxlon": 34.8016202
+  },
+  "nodes": [
+    2315188145,
+    17703786,
+    315034711
+  ],
+  "geometry": [
+    { "lat": 32.0963435, "lon": 34.8016202 },
+    { "lat": 32.0949217, "lon": 34.8012933 },
+    { "lat": 32.0925531, "lon": 34.8007258 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564363,
+  "bounds": {
+    "minlat": 32.1034370,
+    "minlon": 34.8041205,
+    "maxlat": 32.1090192,
+    "maxlon": 34.8079133
+  },
+  "nodes": [
+    342271522,
+    2993052257,
+    2993052286,
+    34132781
+  ],
+  "geometry": [
+    { "lat": 32.1090192, "lon": 34.8079133 },
+    { "lat": 32.1065562, "lon": 34.8062351 },
+    { "lat": 32.1061760, "lon": 34.8059828 },
+    { "lat": 32.1034370, "lon": 34.8041205 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "source:maxspeed": "sign",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564366,
+  "bounds": {
+    "minlat": 32.1147946,
+    "minlon": 34.8101533,
+    "maxlat": 32.1189892,
+    "maxlon": 34.8102474
+  },
+  "nodes": [
+    2315188148,
+    34132787,
+    3060914135,
+    1141733777,
+    3060914143
+  ],
+  "geometry": [
+    { "lat": 32.1189892, "lon": 34.8101533 },
+    { "lat": 32.1172597, "lon": 34.8101833 },
+    { "lat": 32.1162756, "lon": 34.8102010 },
+    { "lat": 32.1152465, "lon": 34.8102247 },
+    { "lat": 32.1147946, "lon": 34.8102474 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "source:maxspeed": "sign",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564367,
+  "bounds": {
+    "minlat": 32.0595175,
+    "minlon": 34.7859550,
+    "maxlat": 32.0615113,
+    "maxlon": 34.7866365
+  },
+  "nodes": [
+    2989376743,
+    2989372424,
+    2989376733,
+    2989376750,
+    2989372374,
+    2989372369,
+    2989372355,
+    2989372379,
+    4017282117
+  ],
+  "geometry": [
+    { "lat": 32.0615113, "lon": 34.7866365 },
+    { "lat": 32.0613657, "lon": 34.7865663 },
+    { "lat": 32.0612336, "lon": 34.7865088 },
+    { "lat": 32.0611319, "lon": 34.7864642 },
+    { "lat": 32.0610104, "lon": 34.7864193 },
+    { "lat": 32.0608844, "lon": 34.7863754 },
+    { "lat": 32.0607431, "lon": 34.7863314 },
+    { "lat": 32.0601177, "lon": 34.7861357 },
+    { "lat": 32.0595175, "lon": 34.7859550 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 222564372,
+  "bounds": {
+    "minlat": 32.1090192,
+    "minlon": 34.8079133,
+    "maxlat": 32.1147946,
+    "maxlon": 34.8102474
+  },
+  "nodes": [
+    3060914143,
+    3060912301,
+    320115307,
+    3060914158,
+    34132785,
+    2993052291,
+    2993052184,
+    2993052305,
+    2993052164,
+    2993052339,
+    2993052215,
+    320115306,
+    2993052175,
+    320115305,
+    2993052318,
+    2315188147,
+    34132783,
+    342271522
+  ],
+  "geometry": [
+    { "lat": 32.1147946, "lon": 34.8102474 },
+    { "lat": 32.1145870, "lon": 34.8102440 },
+    { "lat": 32.1143412, "lon": 34.8102327 },
+    { "lat": 32.1140863, "lon": 34.8102102 },
+    { "lat": 32.1136865, "lon": 34.8101576 },
+    { "lat": 32.1133434, "lon": 34.8100990 },
+    { "lat": 32.1131906, "lon": 34.8100653 },
+    { "lat": 32.1129528, "lon": 34.8100093 },
+    { "lat": 32.1127679, "lon": 34.8099634 },
+    { "lat": 32.1126105, "lon": 34.8099185 },
+    { "lat": 32.1124146, "lon": 34.8098564 },
+    { "lat": 32.1121610, "lon": 34.8097699 },
+    { "lat": 32.1118250, "lon": 34.8096428 },
+    { "lat": 32.1115102, "lon": 34.8095056 },
+    { "lat": 32.1113016, "lon": 34.8094022 },
+    { "lat": 32.1108547, "lon": 34.8091452 },
+    { "lat": 32.1102934, "lon": 34.8087892 },
+    { "lat": 32.1090192, "lon": 34.8079133 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "source:maxspeed": "sign",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 231949478,
+  "bounds": {
+    "minlat": 32.1126223,
+    "minlon": 34.8107590,
+    "maxlat": 32.1127057,
+    "maxlon": 34.8107918
+  },
+  "nodes": [
+    34132801,
+    2402707112
+  ],
+  "geometry": [
+    { "lat": 32.1126223, "lon": 34.8107590 },
+    { "lat": 32.1127057, "lon": 34.8107918 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight:lanes": "5.30|5.15|4.9|4.7",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 231949479,
+  "bounds": {
+    "minlat": 32.1188964,
+    "minlon": 34.8107064,
+    "maxlat": 32.1192956,
+    "maxlon": 34.8107162
+  },
+  "nodes": [
+    2402707113,
+    332227000
+  ],
+  "geometry": [
+    { "lat": 32.1188964, "lon": 34.8107162 },
+    { "lat": 32.1192956, "lon": 34.8107064 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight:lanes": "6.95|6.95|7.05|7.05",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 231949484,
+  "bounds": {
+    "minlat": 32.1127057,
+    "minlon": 34.8107918,
+    "maxlat": 32.1147765,
+    "maxlon": 34.8111280
+  },
+  "nodes": [
+    2402707112,
+    3060914210,
+    3060914138,
+    3060914148,
+    3060912322,
+    3060914191,
+    3060914186,
+    3060914152,
+    4708890367,
+    4708890368,
+    303888356
+  ],
+  "geometry": [
+    { "lat": 32.1127057, "lon": 34.8107918 },
+    { "lat": 32.1129538, "lon": 34.8108665 },
+    { "lat": 32.1131405, "lon": 34.8109263 },
+    { "lat": 32.1133218, "lon": 34.8109792 },
+    { "lat": 32.1135131, "lon": 34.8110282 },
+    { "lat": 32.1136676, "lon": 34.8110658 },
+    { "lat": 32.1138221, "lon": 34.8110926 },
+    { "lat": 32.1139677, "lon": 34.8111066 },
+    { "lat": 32.1141574, "lon": 34.8111241 },
+    { "lat": 32.1144669, "lon": 34.8111280 },
+    { "lat": 32.1147765, "lon": 34.8111266 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "5",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 231949485,
+  "bounds": {
+    "minlat": 32.1147765,
+    "minlon": 34.8107162,
+    "maxlat": 32.1188964,
+    "maxlon": 34.8111266
+  },
+  "nodes": [
+    303888356,
+    3060914137,
+    3060912324,
+    3060912305,
+    411816242,
+    3060914190,
+    3060912317,
+    303888355,
+    3060914136,
+    3060914149,
+    3060912314,
+    2402707113
+  ],
+  "geometry": [
+    { "lat": 32.1147765, "lon": 34.8111266 },
+    { "lat": 32.1152088, "lon": 34.8110551 },
+    { "lat": 32.1156054, "lon": 34.8110132 },
+    { "lat": 32.1158785, "lon": 34.8109727 },
+    { "lat": 32.1163299, "lon": 34.8109134 },
+    { "lat": 32.1167084, "lon": 34.8108689 },
+    { "lat": 32.1171564, "lon": 34.8108166 },
+    { "lat": 32.1175085, "lon": 34.8107812 },
+    { "lat": 32.1178127, "lon": 34.8107514 },
+    { "lat": 32.1180214, "lon": 34.8107410 },
+    { "lat": 32.1182386, "lon": 34.8107332 },
+    { "lat": 32.1188964, "lon": 34.8107162 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 231949486,
+  "bounds": {
+    "minlat": 32.1192956,
+    "minlon": 34.8105847,
+    "maxlat": 32.1248291,
+    "maxlon": 34.8107064
+  },
+  "nodes": [
+    332227000,
+    3060914160,
+    9929037031,
+    1378785124,
+    2481218730
+  ],
+  "geometry": [
+    { "lat": 32.1192956, "lon": 34.8107064 },
+    { "lat": 32.1228995, "lon": 34.8106269 },
+    { "lat": 32.1234559, "lon": 34.8106188 },
+    { "lat": 32.1236587, "lon": 34.8106101 },
+    { "lat": 32.1248291, "lon": 34.8105847 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295231671,
+  "bounds": {
+    "minlat": 32.0648629,
+    "minlon": 34.7897543,
+    "maxlat": 32.0686098,
+    "maxlon": 34.7923854
+  },
+  "nodes": [
+    2989957376,
+    2989372419,
+    2989372411,
+    2989372422,
+    2989372394,
+    2989372432,
+    2989372405,
+    2989372423,
+    2989372421,
+    2989376749,
+    2989376734,
+    2989372385,
+    2989376748,
+    2989372382,
+    2989376751,
+    2989372417,
+    2989372414,
+    2989372406,
+    2989372408,
+    2989372415,
+    2989372351,
+    2989372429,
+    2989372352
+  ],
+  "geometry": [
+    { "lat": 32.0686098, "lon": 34.7923854 },
+    { "lat": 32.0680544, "lon": 34.7921825 },
+    { "lat": 32.0679331, "lon": 34.7921331 },
+    { "lat": 32.0675216, "lon": 34.7919580 },
+    { "lat": 32.0674497, "lon": 34.7919204 },
+    { "lat": 32.0673259, "lon": 34.7918523 },
+    { "lat": 32.0672090, "lon": 34.7917849 },
+    { "lat": 32.0664031, "lon": 34.7912508 },
+    { "lat": 32.0662633, "lon": 34.7911459 },
+    { "lat": 32.0661669, "lon": 34.7910745 },
+    { "lat": 32.0660914, "lon": 34.7910154 },
+    { "lat": 32.0660098, "lon": 34.7909457 },
+    { "lat": 32.0658627, "lon": 34.7908229 },
+    { "lat": 32.0657342, "lon": 34.7907104 },
+    { "lat": 32.0656095, "lon": 34.7905948 },
+    { "lat": 32.0655431, "lon": 34.7905316 },
+    { "lat": 32.0654367, "lon": 34.7904192 },
+    { "lat": 32.0653586, "lon": 34.7903379 },
+    { "lat": 32.0652694, "lon": 34.7902459 },
+    { "lat": 32.0651946, "lon": 34.7901626 },
+    { "lat": 32.0651197, "lon": 34.7900792 },
+    { "lat": 32.0650466, "lon": 34.7899897 },
+    { "lat": 32.0648629, "lon": 34.7897543 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295231672,
+  "bounds": {
+    "minlat": 32.0623866,
+    "minlon": 34.7871361,
+    "maxlat": 32.0634993,
+    "maxlon": 34.7880584
+  },
+  "nodes": [
+    2989376755,
+    2989376739,
+    2989372428,
+    2989372427,
+    336295207,
+    2989372376,
+    2989376737,
+    2989372418,
+    2989372361,
+    2989376742,
+    2989372416
+  ],
+  "geometry": [
+    { "lat": 32.0634993, "lon": 34.7880584 },
+    { "lat": 32.0633899, "lon": 34.7879486 },
+    { "lat": 32.0632789, "lon": 34.7878472 },
+    { "lat": 32.0631709, "lon": 34.7877472 },
+    { "lat": 32.0631102, "lon": 34.7876963 },
+    { "lat": 32.0630369, "lon": 34.7876300 },
+    { "lat": 32.0628974, "lon": 34.7875094 },
+    { "lat": 32.0627604, "lon": 34.7874007 },
+    { "lat": 32.0626550, "lon": 34.7873233 },
+    { "lat": 32.0625182, "lon": 34.7872248 },
+    { "lat": 32.0623866, "lon": 34.7871361 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "6",
+    "lanes:psv": "1",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295231673,
+  "bounds": {
+    "minlat": 32.0615113,
+    "minlon": 34.7866365,
+    "maxlat": 32.0623866,
+    "maxlon": 34.7871361
+  },
+  "nodes": [
+    2989372416,
+    2989372383,
+    2989376747,
+    2989372364,
+    2989376753,
+    2989376754,
+    2989372420,
+    2989376743
+  ],
+  "geometry": [
+    { "lat": 32.0623866, "lon": 34.7871361 },
+    { "lat": 32.0622712, "lon": 34.7870604 },
+    { "lat": 32.0621577, "lon": 34.7869866 },
+    { "lat": 32.0620008, "lon": 34.7868954 },
+    { "lat": 32.0618582, "lon": 34.7868146 },
+    { "lat": 32.0617544, "lon": 34.7867589 },
+    { "lat": 32.0616127, "lon": 34.7866863 },
+    { "lat": 32.0615113, "lon": 34.7866365 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lanes:psv": "1",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295233261,
+  "bounds": {
+    "minlat": 32.0595407,
+    "minlon": 34.7865925,
+    "maxlat": 32.0628589,
+    "maxlon": 34.7882299
+  },
+  "nodes": [
+    2989396078,
+    2989396047,
+    2989396063,
+    2989396058,
+    2989396042,
+    2989396046,
+    2989392825,
+    2989396076,
+    2989396074,
+    2989396085,
+    2989396033,
+    2989396040,
+    2989396075,
+    2989396052,
+    2989396051,
+    2989396066,
+    2989396041,
+    2989396072,
+    2989396087,
+    2989396067,
+    2989396088,
+    2989392827
+  ],
+  "geometry": [
+    { "lat": 32.0595407, "lon": 34.7865925 },
+    { "lat": 32.0599873, "lon": 34.7867270 },
+    { "lat": 32.0606108, "lon": 34.7869221 },
+    { "lat": 32.0607450, "lon": 34.7869639 },
+    { "lat": 32.0608597, "lon": 34.7870038 },
+    { "lat": 32.0609641, "lon": 34.7870424 },
+    { "lat": 32.0610538, "lon": 34.7870818 },
+    { "lat": 32.0611781, "lon": 34.7871359 },
+    { "lat": 32.0613152, "lon": 34.7872020 },
+    { "lat": 32.0614118, "lon": 34.7872487 },
+    { "lat": 32.0615445, "lon": 34.7873166 },
+    { "lat": 32.0616392, "lon": 34.7873674 },
+    { "lat": 32.0617746, "lon": 34.7874441 },
+    { "lat": 32.0619185, "lon": 34.7875278 },
+    { "lat": 32.0620255, "lon": 34.7875974 },
+    { "lat": 32.0621386, "lon": 34.7876680 },
+    { "lat": 32.0622566, "lon": 34.7877476 },
+    { "lat": 32.0623851, "lon": 34.7878400 },
+    { "lat": 32.0624809, "lon": 34.7879104 },
+    { "lat": 32.0626017, "lon": 34.7880062 },
+    { "lat": 32.0627316, "lon": 34.7881186 },
+    { "lat": 32.0628589, "lon": 34.7882299 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "5",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295233262,
+  "bounds": {
+    "minlat": 32.0694590,
+    "minlon": 34.7932550,
+    "maxlat": 32.0756823,
+    "maxlon": 34.7942496
+  },
+  "nodes": [
+    2989906750,
+    2989922180,
+    2989906809,
+    2989906807,
+    2989906751,
+    2989906803,
+    2989906808,
+    2989906801,
+    2989906798,
+    2989906776,
+    10584763861,
+    2989922215,
+    2989906758,
+    2989906800,
+    2989906802,
+    2989906796,
+    2989906778,
+    2989906754,
+    2989906799,
+    2989906752,
+    2989906810,
+    2989906761,
+    2989906756,
+    2989906797,
+    2989906777
+  ],
+  "geometry": [
+    { "lat": 32.0694590, "lon": 34.7932550 },
+    { "lat": 32.0695415, "lon": 34.7932715 },
+    { "lat": 32.0696913, "lon": 34.7933014 },
+    { "lat": 32.0700152, "lon": 34.7933588 },
+    { "lat": 32.0701598, "lon": 34.7933768 },
+    { "lat": 32.0703923, "lon": 34.7934052 },
+    { "lat": 32.0708121, "lon": 34.7934347 },
+    { "lat": 32.0711467, "lon": 34.7934610 },
+    { "lat": 32.0716342, "lon": 34.7934849 },
+    { "lat": 32.0720506, "lon": 34.7935168 },
+    { "lat": 32.0724136, "lon": 34.7935395 },
+    { "lat": 32.0726044, "lon": 34.7935514 },
+    { "lat": 32.0738491, "lon": 34.7936442 },
+    { "lat": 32.0741157, "lon": 34.7936852 },
+    { "lat": 32.0743318, "lon": 34.7937279 },
+    { "lat": 32.0744736, "lon": 34.7937630 },
+    { "lat": 32.0746122, "lon": 34.7937971 },
+    { "lat": 32.0747080, "lon": 34.7938276 },
+    { "lat": 32.0748093, "lon": 34.7938579 },
+    { "lat": 32.0749023, "lon": 34.7938909 },
+    { "lat": 32.0749959, "lon": 34.7939302 },
+    { "lat": 32.0750957, "lon": 34.7939728 },
+    { "lat": 32.0753487, "lon": 34.7940896 },
+    { "lat": 32.0755727, "lon": 34.7941930 },
+    { "lat": 32.0756823, "lon": 34.7942496 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxheight": "5.1",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295286486,
+  "bounds": {
+    "minlat": 32.0758754,
+    "minlon": 34.7943519,
+    "maxlat": 32.0786427,
+    "maxlon": 34.7966040
+  },
+  "nodes": [
+    2989906759,
+    2989906760,
+    2989906762,
+    2989906763,
+    2989906764,
+    14092339680,
+    2989906765,
+    2989906766,
+    2989906767,
+    2989906768,
+    2989906769,
+    2989906770,
+    2989906771,
+    2989906772,
+    2989906773,
+    1226874,
+    2989906755,
+    1226869
+  ],
+  "geometry": [
+    { "lat": 32.0758754, "lon": 34.7943519 },
+    { "lat": 32.0760013, "lon": 34.7944257 },
+    { "lat": 32.0761669, "lon": 34.7945234 },
+    { "lat": 32.0762769, "lon": 34.7945908 },
+    { "lat": 32.0763647, "lon": 34.7946503 },
+    { "lat": 32.0766290, "lon": 34.7948225 },
+    { "lat": 32.0769013, "lon": 34.7950280 },
+    { "lat": 32.0771098, "lon": 34.7951923 },
+    { "lat": 32.0772322, "lon": 34.7952869 },
+    { "lat": 32.0773669, "lon": 34.7953946 },
+    { "lat": 32.0774927, "lon": 34.7955021 },
+    { "lat": 32.0775950, "lon": 34.7955923 },
+    { "lat": 32.0777410, "lon": 34.7957274 },
+    { "lat": 32.0778321, "lon": 34.7958164 },
+    { "lat": 32.0779415, "lon": 34.7959214 },
+    { "lat": 32.0784550, "lon": 34.7964231 },
+    { "lat": 32.0785850, "lon": 34.7965481 },
+    { "lat": 32.0786427, "lon": 34.7966040 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "4.9",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295290751,
+  "bounds": {
+    "minlat": 32.0760909,
+    "minlon": 34.7936926,
+    "maxlat": 32.0778092,
+    "maxlon": 34.7949941
+  },
+  "nodes": [
+    2989950188,
+    2989950167,
+    2989950161,
+    2989950168,
+    2989950152,
+    2989950182
+  ],
+  "geometry": [
+    { "lat": 32.0778092, "lon": 34.7949941 },
+    { "lat": 32.0775285, "lon": 34.7947622 },
+    { "lat": 32.0770411, "lon": 34.7943257 },
+    { "lat": 32.0766691, "lon": 34.7940416 },
+    { "lat": 32.0764348, "lon": 34.7938833 },
+    { "lat": 32.0760909, "lon": 34.7936926 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295564099,
+  "bounds": {
+    "minlat": 32.0931664,
+    "minlon": 34.8016730,
+    "maxlat": 32.0940772,
+    "maxlon": 34.8018358
+  },
+  "nodes": [
+    2992930693,
+    34132812
+  ],
+  "geometry": [
+    { "lat": 32.0931664, "lon": 34.8016730 },
+    { "lat": 32.0940772, "lon": 34.8018358 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295564101,
+  "bounds": {
+    "minlat": 32.0923329,
+    "minlon": 34.8015072,
+    "maxlat": 32.0931664,
+    "maxlon": 34.8016730
+  },
+  "nodes": [
+    2992930686,
+    2992930694,
+    2992930693
+  ],
+  "geometry": [
+    { "lat": 32.0923329, "lon": 34.8015072 },
+    { "lat": 32.0924804, "lon": 34.8015390 },
+    { "lat": 32.0931664, "lon": 34.8016730 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "layer": "1",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 295569086,
+  "bounds": {
+    "minlat": 32.0988449,
+    "minlon": 34.8022056,
+    "maxlat": 32.1034370,
+    "maxlon": 34.8041205
+  },
+  "nodes": [
+    34132781,
+    2315188146,
+    2993002963,
+    2993002965,
+    2993002976,
+    2993002964,
+    2993002961,
+    2993002969,
+    2993002966,
+    2993002972,
+    2993002973,
+    2993002959,
+    2993002971,
+    2993002967,
+    2993002962,
+    2993002975,
+    2993002960,
+    2993002974,
+    2993002968,
+    2993002970,
+    2993022177
+  ],
+  "geometry": [
+    { "lat": 32.1034370, "lon": 34.8041205 },
+    { "lat": 32.1032430, "lon": 34.8039919 },
+    { "lat": 32.1028098, "lon": 34.8037047 },
+    { "lat": 32.1026471, "lon": 34.8035973 },
+    { "lat": 32.1023140, "lon": 34.8033841 },
+    { "lat": 32.1021743, "lon": 34.8032995 },
+    { "lat": 32.1020324, "lon": 34.8032147 },
+    { "lat": 32.1019085, "lon": 34.8031513 },
+    { "lat": 32.1017887, "lon": 34.8030888 },
+    { "lat": 32.1016473, "lon": 34.8030215 },
+    { "lat": 32.1015112, "lon": 34.8029573 },
+    { "lat": 32.1013880, "lon": 34.8029026 },
+    { "lat": 32.1012610, "lon": 34.8028490 },
+    { "lat": 32.1011306, "lon": 34.8027968 },
+    { "lat": 32.1010436, "lon": 34.8027657 },
+    { "lat": 32.1009318, "lon": 34.8027294 },
+    { "lat": 32.1006668, "lon": 34.8026475 },
+    { "lat": 32.1004664, "lon": 34.8025864 },
+    { "lat": 32.1001866, "lon": 34.8025108 },
+    { "lat": 32.0989341, "lon": 34.8022270 },
+    { "lat": 32.0988449, "lon": 34.8022056 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "4",
+    "layer": "2",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 396627324,
+  "bounds": {
+    "minlat": 32.0473717,
+    "minlon": 34.7840210,
+    "maxlat": 32.0494017,
+    "maxlon": 34.7845581
+  },
+  "nodes": [
+    3994468992,
+    33960995,
+    33960997,
+    3994468993
+  ],
+  "geometry": [
+    { "lat": 32.0473717, "lon": 34.7840210 },
+    { "lat": 32.0475460, "lon": 34.7840668 },
+    { "lat": 32.0485498, "lon": 34.7843396 },
+    { "lat": 32.0494017, "lon": 34.7845581 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 396627326,
+  "bounds": {
+    "minlat": 32.0494017,
+    "minlon": 34.7845581,
+    "maxlat": 32.0499843,
+    "maxlon": 34.7847077
+  },
+  "nodes": [
+    3994468993,
+    5970209689,
+    4511079059
+  ],
+  "geometry": [
+    { "lat": 32.0494017, "lon": 34.7845581 },
+    { "lat": 32.0498435, "lon": 34.7846718 },
+    { "lat": 32.0499843, "lon": 34.7847077 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 396627328,
+  "bounds": {
+    "minlat": 32.0506764,
+    "minlon": 34.7848854,
+    "maxlat": 32.0515809,
+    "maxlon": 34.7850868
+  },
+  "nodes": [
+    3994468995,
+    33960998,
+    388402057,
+    3994468990
+  ],
+  "geometry": [
+    { "lat": 32.0506764, "lon": 34.7848854 },
+    { "lat": 32.0507967, "lon": 34.7849163 },
+    { "lat": 32.0513341, "lon": 34.7850431 },
+    { "lat": 32.0515809, "lon": 34.7850868 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 396627330,
+  "bounds": {
+    "minlat": 32.0466754,
+    "minlon": 34.7835451,
+    "maxlat": 32.0473780,
+    "maxlon": 34.7837381
+  },
+  "nodes": [
+    3994468999,
+    3994468998
+  ],
+  "geometry": [
+    { "lat": 32.0473780, "lon": 34.7837381 },
+    { "lat": 32.0466754, "lon": 34.7835451 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 396627331,
+  "bounds": {
+    "minlat": 32.0473780,
+    "minlon": 34.7837381,
+    "maxlat": 32.0494361,
+    "maxlon": 34.7842552
+  },
+  "nodes": [
+    3994469000,
+    314454559,
+    33960996,
+    2995641100,
+    314454575,
+    3994468999
+  ],
+  "geometry": [
+    { "lat": 32.0494361, "lon": 34.7842552 },
+    { "lat": 32.0492482, "lon": 34.7842186 },
+    { "lat": 32.0487478, "lon": 34.7841043 },
+    { "lat": 32.0476547, "lon": 34.7838179 },
+    { "lat": 32.0475326, "lon": 34.7837806 },
+    { "lat": 32.0473780, "lon": 34.7837381 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 396627332,
+  "bounds": {
+    "minlat": 32.0494361,
+    "minlon": 34.7842552,
+    "maxlat": 32.0514142,
+    "maxlon": 34.7844105
+  },
+  "nodes": [
+    3994469001,
+    314454556,
+    1568022600,
+    5970209688,
+    1568022588,
+    2995640328,
+    1568022578,
+    3994469000
+  ],
+  "geometry": [
+    { "lat": 32.0514142, "lon": 34.7843951 },
+    { "lat": 32.0509597, "lon": 34.7844105 },
+    { "lat": 32.0505866, "lon": 34.7844006 },
+    { "lat": 32.0504098, "lon": 34.7843909 },
+    { "lat": 32.0503446, "lon": 34.7843873 },
+    { "lat": 32.0498906, "lon": 34.7843347 },
+    { "lat": 32.0496233, "lon": 34.7842918 },
+    { "lat": 32.0494361, "lon": 34.7842552 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 398991153,
+  "bounds": {
+    "minlat": 32.0590256,
+    "minlon": 34.7858053,
+    "maxlat": 32.0595175,
+    "maxlon": 34.7859550
+  },
+  "nodes": [
+    4017282117,
+    2989372356,
+    2989372410
+  ],
+  "geometry": [
+    { "lat": 32.0595175, "lon": 34.7859550 },
+    { "lat": 32.0591513, "lon": 34.7858447 },
+    { "lat": 32.0590256, "lon": 34.7858053 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "maxheight": "5.25",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 409108523,
+  "bounds": {
+    "minlat": 32.0153536,
+    "minlon": 34.7612957,
+    "maxlat": 32.0202194,
+    "maxlon": 34.7618142
+  },
+  "nodes": [
+    388400517,
+    2340664116,
+    4218854091,
+    4218854092,
+    1170572244,
+    2129078726,
+    33961399,
+    2123107466
+  ],
+  "geometry": [
+    { "lat": 32.0202194, "lon": 34.7612957 },
+    { "lat": 32.0198834, "lon": 34.7613774 },
+    { "lat": 32.0191072, "lon": 34.7615319 },
+    { "lat": 32.0186744, "lon": 34.7616010 },
+    { "lat": 32.0183449, "lon": 34.7616457 },
+    { "lat": 32.0175154, "lon": 34.7617484 },
+    { "lat": 32.0163394, "lon": 34.7618005 },
+    { "lat": 32.0153536, "lon": 34.7618142 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 424248083,
+  "bounds": {
+    "minlat": 32.0406670,
+    "minlon": 34.7808746,
+    "maxlat": 32.0435851,
+    "maxlon": 34.7827993
+  },
+  "nodes": [
+    4237124188,
+    318757170,
+    1225577131,
+    4237127091,
+    4237127089,
+    4237127090,
+    305257619,
+    2086197258,
+    33961000
+  ],
+  "geometry": [
+    { "lat": 32.0435851, "lon": 34.7827993 },
+    { "lat": 32.0434086, "lon": 34.7827325 },
+    { "lat": 32.0427664, "lon": 34.7824404 },
+    { "lat": 32.0425128, "lon": 34.7822950 },
+    { "lat": 32.0422632, "lon": 34.7821450 },
+    { "lat": 32.0420175, "lon": 34.7819786 },
+    { "lat": 32.0417797, "lon": 34.7818076 },
+    { "lat": 32.0412390, "lon": 34.7813785 },
+    { "lat": 32.0406670, "lon": 34.7808746 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "4",
+    "lanes:psv": "2",
+    "lit": "yes",
+    "maxspeed": "80",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 424248084,
+  "bounds": {
+    "minlat": 32.0361129,
+    "minlon": 34.7729419,
+    "maxlat": 32.0377208,
+    "maxlon": 34.7771562
+  },
+  "nodes": [
+    4237127092,
+    318754718,
+    1225577216,
+    2196477224,
+    2196477417,
+    33961005,
+    1225577217,
+    1225577223,
+    318754568,
+    1225577101,
+    1225577103,
+    388514335
+  ],
+  "geometry": [
+    { "lat": 32.0377208, "lon": 34.7771562 },
+    { "lat": 32.0374080, "lon": 34.7766295 },
+    { "lat": 32.0371914, "lon": 34.7762606 },
+    { "lat": 32.0370615, "lon": 34.7760219 },
+    { "lat": 32.0368928, "lon": 34.7756872 },
+    { "lat": 32.0367486, "lon": 34.7753959 },
+    { "lat": 32.0365639, "lon": 34.7749839 },
+    { "lat": 32.0364456, "lon": 34.7746405 },
+    { "lat": 32.0363357, "lon": 34.7742709 },
+    { "lat": 32.0362273, "lon": 34.7737822 },
+    { "lat": 32.0361552, "lon": 34.7733660 },
+    { "lat": 32.0361129, "lon": 34.7729419 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 424248085,
+  "bounds": {
+    "minlat": 32.0355275,
+    "minlon": 34.7595196,
+    "maxlat": 32.0385060,
+    "maxlon": 34.7639088
+  },
+  "nodes": [
+    1259916941,
+    1257585906,
+    1257585894,
+    1257585947,
+    1257585907,
+    1257585920,
+    1257585921,
+    1257585940,
+    1257585884,
+    1257585893,
+    1257585887,
+    1259916935,
+    1257585899,
+    1259916969,
+    1257585905,
+    1257585901,
+    1257585898,
+    1257585885,
+    1257585903,
+    1257585925,
+    1257585927,
+    1257585924
+  ],
+  "geometry": [
+    { "lat": 32.0384993, "lon": 34.7639088 },
+    { "lat": 32.0385060, "lon": 34.7635464 },
+    { "lat": 32.0385042, "lon": 34.7632221 },
+    { "lat": 32.0384903, "lon": 34.7629078 },
+    { "lat": 32.0384578, "lon": 34.7626779 },
+    { "lat": 32.0384025, "lon": 34.7623885 },
+    { "lat": 32.0383302, "lon": 34.7621149 },
+    { "lat": 32.0382486, "lon": 34.7618569 },
+    { "lat": 32.0381383, "lon": 34.7615980 },
+    { "lat": 32.0380078, "lon": 34.7613481 },
+    { "lat": 32.0378930, "lon": 34.7611606 },
+    { "lat": 32.0377520, "lon": 34.7609481 },
+    { "lat": 32.0375788, "lon": 34.7607424 },
+    { "lat": 32.0373882, "lon": 34.7605375 },
+    { "lat": 32.0372366, "lon": 34.7603921 },
+    { "lat": 32.0370299, "lon": 34.7602081 },
+    { "lat": 32.0367980, "lon": 34.7600547 },
+    { "lat": 32.0365740, "lon": 34.7599273 },
+    { "lat": 32.0363150, "lon": 34.7597991 },
+    { "lat": 32.0361056, "lon": 34.7597071 },
+    { "lat": 32.0358532, "lon": 34.7596044 },
+    { "lat": 32.0355275, "lon": 34.7595196 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "3",
+    "maxspeed": "80",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 454560345,
+  "bounds": {
+    "minlat": 32.0499843,
+    "minlon": 34.7847077,
+    "maxlat": 32.0506764,
+    "maxlon": 34.7848854
+  },
+  "nodes": [
+    4511079059,
+    3994468995
+  ],
+  "geometry": [
+    { "lat": 32.0499843, "lon": 34.7847077 },
+    { "lat": 32.0506764, "lon": 34.7848854 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "layer": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20"
+  }
+},
+{
+  "type": "way",
+  "id": 1095454930,
+  "bounds": {
+    "minlat": 32.0778092,
+    "minlon": 34.7949941,
+    "maxlat": 32.0790916,
+    "maxlon": 34.7962599
+  },
+  "nodes": [
+    2989950141,
+    2989950170,
+    2989950160,
+    2989950188
+  ],
+  "geometry": [
+    { "lat": 32.0790916, "lon": 34.7962599 },
+    { "lat": 32.0781067, "lon": 34.7952713 },
+    { "lat": 32.0779196, "lon": 34.7950915 },
+    { "lat": 32.0778092, "lon": 34.7949941 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1368446246,
+  "bounds": {
+    "minlat": 32.0357630,
+    "minlon": 34.7691322,
+    "maxlat": 32.0364891,
+    "maxlon": 34.7719012
+  },
+  "nodes": [
+    33961317,
+    318184253,
+    1225577228,
+    1225577230,
+    1225576947,
+    1225577241
+  ],
+  "geometry": [
+    { "lat": 32.0364891, "lon": 34.7691322 },
+    { "lat": 32.0364246, "lon": 34.7693142 },
+    { "lat": 32.0359909, "lon": 34.7707352 },
+    { "lat": 32.0359090, "lon": 34.7710893 },
+    { "lat": 32.0357999, "lon": 34.7716472 },
+    { "lat": 32.0357630, "lon": 34.7719012 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1368446247,
+  "bounds": {
+    "minlat": 32.0357226,
+    "minlon": 34.7719012,
+    "maxlat": 32.0373226,
+    "maxlon": 34.7772597
+  },
+  "nodes": [
+    1225577241,
+    2196477166,
+    2196477505,
+    2196477483,
+    1225577242,
+    2196477188,
+    2196477172,
+    2196477138,
+    2196477502,
+    2196477383,
+    2196477230,
+    3700419494,
+    2196477266,
+    2196477492,
+    2196477396,
+    3700419495,
+    2196477155
+  ],
+  "geometry": [
+    { "lat": 32.0357630, "lon": 34.7719012 },
+    { "lat": 32.0357364, "lon": 34.7721896 },
+    { "lat": 32.0357226, "lon": 34.7725985 },
+    { "lat": 32.0357330, "lon": 34.7729529 },
+    { "lat": 32.0357737, "lon": 34.7734309 },
+    { "lat": 32.0358482, "lon": 34.7738938 },
+    { "lat": 32.0360140, "lon": 34.7745585 },
+    { "lat": 32.0361054, "lon": 34.7748398 },
+    { "lat": 32.0362323, "lon": 34.7751915 },
+    { "lat": 32.0363551, "lon": 34.7755294 },
+    { "lat": 32.0364687, "lon": 34.7757816 },
+    { "lat": 32.0365127, "lon": 34.7758799 },
+    { "lat": 32.0365642, "lon": 34.7759961 },
+    { "lat": 32.0366613, "lon": 34.7761812 },
+    { "lat": 32.0368143, "lon": 34.7764575 },
+    { "lat": 32.0371784, "lon": 34.7770575 },
+    { "lat": 32.0373226, "lon": 34.7772597 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "3",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "70",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "nat_ref": "20",
+    "oneway": "yes",
+    "parking:both": "no",
+    "parking_zone": "2",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1381717308,
+  "bounds": {
+    "minlat": 32.0786427,
+    "minlon": 34.7966040,
+    "maxlat": 32.0813906,
+    "maxlon": 34.7982249
+  },
+  "nodes": [
+    1226869,
+    2989906774,
+    2989906779,
+    2989906781,
+    2989906785,
+    2989906780,
+    2989906782,
+    2989906783,
+    2989906784,
+    2989906786,
+    2989906787,
+    2989906788,
+    2989906789,
+    2989906790,
+    2989906791,
+    2989906792,
+    2989906793,
+    2989906794,
+    2989906795,
+    1532471271
+  ],
+  "geometry": [
+    { "lat": 32.0786427, "lon": 34.7966040 },
+    { "lat": 32.0788488, "lon": 34.7968049 },
+    { "lat": 32.0789488, "lon": 34.7968954 },
+    { "lat": 32.0790498, "lon": 34.7969815 },
+    { "lat": 32.0791422, "lon": 34.7970570 },
+    { "lat": 32.0792592, "lon": 34.7971507 },
+    { "lat": 32.0793704, "lon": 34.7972411 },
+    { "lat": 32.0794908, "lon": 34.7973299 },
+    { "lat": 32.0796461, "lon": 34.7974349 },
+    { "lat": 32.0797706, "lon": 34.7975139 },
+    { "lat": 32.0799072, "lon": 34.7976036 },
+    { "lat": 32.0800234, "lon": 34.7976722 },
+    { "lat": 32.0801119, "lon": 34.7977216 },
+    { "lat": 32.0803093, "lon": 34.7978211 },
+    { "lat": 32.0804355, "lon": 34.7978835 },
+    { "lat": 32.0806375, "lon": 34.7979797 },
+    { "lat": 32.0807480, "lon": 34.7980203 },
+    { "lat": 32.0808790, "lon": 34.7980714 },
+    { "lat": 32.0810575, "lon": 34.7981330 },
+    { "lat": 32.0813906, "lon": 34.7982249 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxheight": "4.9",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1487196166,
+  "bounds": {
+    "minlat": 32.0628589,
+    "minlon": 34.7882299,
+    "maxlat": 32.0645174,
+    "maxlon": 34.7902043
+  },
+  "nodes": [
+    2989392827,
+    2989396086,
+    2989396045,
+    2989396069,
+    2989396073,
+    2989396039,
+    2989396077,
+    2989396060
+  ],
+  "geometry": [
+    { "lat": 32.0628589, "lon": 34.7882299 },
+    { "lat": 32.0629627, "lon": 34.7883260 },
+    { "lat": 32.0630683, "lon": 34.7884224 },
+    { "lat": 32.0631680, "lon": 34.7885200 },
+    { "lat": 32.0632453, "lon": 34.7885989 },
+    { "lat": 32.0633155, "lon": 34.7886771 },
+    { "lat": 32.0634260, "lon": 34.7888048 },
+    { "lat": 32.0645174, "lon": 34.7902043 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "5",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1487196167,
+  "bounds": {
+    "minlat": 32.0647364,
+    "minlon": 34.7904859,
+    "maxlat": 32.0694590,
+    "maxlon": 34.7932550
+  },
+  "nodes": [
+    2989392826,
+    2989396057,
+    2989396050,
+    2989396036,
+    2989396056,
+    2989396054,
+    2989396038,
+    2989392832,
+    2989396048,
+    2989396061,
+    2989396064,
+    2989396035,
+    2989396044,
+    2989396037,
+    2989396068,
+    2989392828,
+    2989396062,
+    2989396070,
+    2989396071,
+    2989396055,
+    2989396084,
+    2989396049,
+    2989396082,
+    2989392829,
+    2989396083,
+    2989906750
+  ],
+  "geometry": [
+    { "lat": 32.0647364, "lon": 34.7904859 },
+    { "lat": 32.0648410, "lon": 34.7906070 },
+    { "lat": 32.0649221, "lon": 34.7906973 },
+    { "lat": 32.0650178, "lon": 34.7907959 },
+    { "lat": 32.0650934, "lon": 34.7908748 },
+    { "lat": 32.0652084, "lon": 34.7909962 },
+    { "lat": 32.0652878, "lon": 34.7910718 },
+    { "lat": 32.0654207, "lon": 34.7911950 },
+    { "lat": 32.0655596, "lon": 34.7913165 },
+    { "lat": 32.0657091, "lon": 34.7914413 },
+    { "lat": 32.0657970, "lon": 34.7915165 },
+    { "lat": 32.0658868, "lon": 34.7915868 },
+    { "lat": 32.0659875, "lon": 34.7916613 },
+    { "lat": 32.0661379, "lon": 34.7917741 },
+    { "lat": 32.0669689, "lon": 34.7923249 },
+    { "lat": 32.0670969, "lon": 34.7923987 },
+    { "lat": 32.0672114, "lon": 34.7924663 },
+    { "lat": 32.0673353, "lon": 34.7925267 },
+    { "lat": 32.0677611, "lon": 34.7927079 },
+    { "lat": 32.0678937, "lon": 34.7927619 },
+    { "lat": 32.0687684, "lon": 34.7930814 },
+    { "lat": 32.0689074, "lon": 34.7931217 },
+    { "lat": 32.0690331, "lon": 34.7931588 },
+    { "lat": 32.0691677, "lon": 34.7931906 },
+    { "lat": 32.0692732, "lon": 34.7932144 },
+    { "lat": 32.0694590, "lon": 34.7932550 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Zafon",
+    "highway": "motorway",
+    "lanes": "4",
+    "lit": "yes",
+    "maxheight": "5.1",
+    "maxspeed": "90",
+    "name": "איילון צפון",
+    "name:ar": "أيالون شمال",
+    "name:en": "Ayalon North",
+    "name:he": "איילון צפון",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1488359156,
+  "bounds": {
+    "minlat": 32.0686098,
+    "minlon": 34.7923854,
+    "maxlat": 32.0729343,
+    "maxlon": 34.7929611
+  },
+  "nodes": [
+    2989950136,
+    13664157472,
+    2989950207,
+    2989950176,
+    2989950145,
+    2989950173,
+    2989950178,
+    1627591,
+    2989376756,
+    2989372392,
+    2989372396,
+    2989372409,
+    2989372377,
+    2989372375,
+    2989372413,
+    2989957376
+  ],
+  "geometry": [
+    { "lat": 32.0729343, "lon": 34.7929611 },
+    { "lat": 32.0729095, "lon": 34.7929596 },
+    { "lat": 32.0720747, "lon": 34.7929088 },
+    { "lat": 32.0713388, "lon": 34.7928688 },
+    { "lat": 32.0710833, "lon": 34.7928538 },
+    { "lat": 32.0707896, "lon": 34.7928262 },
+    { "lat": 32.0703695, "lon": 34.7927832 },
+    { "lat": 32.0702288, "lon": 34.7927684 },
+    { "lat": 32.0698960, "lon": 34.7927260 },
+    { "lat": 32.0696815, "lon": 34.7926815 },
+    { "lat": 32.0695701, "lon": 34.7926570 },
+    { "lat": 32.0692683, "lon": 34.7925927 },
+    { "lat": 32.0691465, "lon": 34.7925639 },
+    { "lat": 32.0690316, "lon": 34.7925301 },
+    { "lat": 32.0689064, "lon": 34.7924938 },
+    { "lat": 32.0686098, "lon": 34.7923854 }
+  ],
+  "tags": {
+    "alt_name:en": "Ayalon Darom",
+    "highway": "motorway",
+    "lanes": "5",
+    "lanes:psv": "1",
+    "lit": "yes",
+    "maxspeed": "90",
+    "name": "איילון דרום",
+    "name:ar": "أيالون جنوب",
+    "name:en": "Ayalon South",
+    "name:he": "איילון דרום",
+    "oneway": "yes",
+    "ref": "20",
+    "surface": "asphalt"
+  }
+}
+
+  ]
+}

@@ -1,10 +1,18 @@
-"""Ayalon headless collector — the ONLY authorised path that calls TomTom.
+"""Ayalon headless collector (methodology v2) — the ONLY path that calls traffic APIs.
 
 Invariants:
-  1. TomTom is called exclusively from _fetch_traffic() in this module.
-  2. A failed or empty fetch never overwrites the last-known-good snapshot.
-  3. Each cycle writes a structured diagnostic summary to stdout/journald.
-  4. Rate-limit / quota exhaustion is detected early and logged — no retry storm.
+  1. Traffic providers are called only from _fetch_traffic() in this module.
+  2. Only fresh provider responses become observations.  A cached or failed
+     fetch is never written as a measurement (v1 re-recorded a 24 h cache).
+  3. Every reference segment gets its own status; a cycle is 'ok' only when
+     all segments were measured, 'partial' when some were, 'failed' otherwise.
+  4. The same provider snapshot can be stored only once per segment
+     (UNIQUE(segment_id, segment_version, provider, provider_snapshot)).
+  5. Fetch time, provider data time, processing time and DB write time are
+     stored separately.
+  6. One structured JSON summary per cycle on stdout (journald); API keys are
+     never logged.
+  7. At most one collector instance runs at a time (file lock).
 """
 
 import argparse
@@ -12,120 +20,97 @@ import json
 import os
 import time
 import traceback
-from datetime import datetime, timezone
+import uuid
+from contextlib import contextmanager
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any, Dict, Optional
 
-from methodology import AyalonModel
-from sources import tomtom
+from methodology_v2 import METHODOLOGY_VERSION, delay_per_vehicle_s
 from sources.air_quality import get_air_quality_for_ayalon, get_cached_air_quality
 from sources.fuel_govil import (
     fetch_current_fuel_price_ils_per_l as fetch_current_fuel_price,
     get_cached_fuel_price,
 )
 from sources.history_store import HistoryStore
-from sources.rate_limiter import get_quota_status
+from sources.rate_limiter import get_quota_status, record_api_call
 from sources.secure_config import SecureConfig
+from sources.segment_matcher import load_reference_segments, match_all
+from sources.traffic_providers import PROVIDERS, ProviderResult, configured_provider_order
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def _parse_iso_to_ts(s: str | None) -> float:
-    if not s:
-        return 0.0
-    try:
-        return datetime.fromisoformat(str(s).replace("Z", "+00:00")).timestamp()
-    except Exception:
-        return 0.0
+RAW_RETENTION_DAYS = int(os.getenv("RAW_RETENTION_DAYS", "30"))
+DAILY_QUOTA = {
+    "here": int(os.getenv("HERE_QUOTA_PER_DAY", "1000")),
+    "tomtom": int(os.getenv("TOMTOM_QUOTA_PER_DAY", os.getenv("TOMTOM_QUOTA_PER_HOUR", "2500"))),
+}
+LOCK_PATH = Path(os.getenv("COLLECTOR_LOCK_PATH", str(Path(__file__).resolve().parent / "data" / "collector.lock")))
 
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def _env_int(name: str, default: int) -> int:
-    try:
-        return int(os.getenv(name, str(default)))
-    except Exception:
-        return default
-
-
 def _log(level: str, event: str, **kw: Any) -> None:
     """Emit a structured JSON log line (collected by journald)."""
-    entry = {
-        "ts": _utc_now_iso(),
-        "level": level,
-        "event": event,
-        **{k: v for k, v in kw.items() if v is not None},
-    }
-    print(json.dumps(entry, default=str), flush=True)
+    entry = {"ts": _utc_now_iso(), "level": level, "event": event, **{k: v for k, v in kw.items() if v is not None}}
+    print(json.dumps(entry, default=str, ensure_ascii=False), flush=True)
 
 
-# ---------------------------------------------------------------------------
-# Data fetchers (each handles its own fallback)
-# ---------------------------------------------------------------------------
+@contextmanager
+def _single_instance(path: Path):
+    """Non-blocking exclusive lock; yields False if another collector holds it."""
+    try:
+        import fcntl
+    except ImportError:  # Windows development machines
+        yield True
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w") as fh:
+        try:
+            fcntl.flock(fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            yield False
+            return
+        try:
+            yield True
+        finally:
+            fcntl.flock(fh, fcntl.LOCK_UN)
 
-def _fetch_traffic(api_key: Optional[str], traffic_mode: str) -> Dict[str, Any]:
-    """Fetch traffic from TomTom (or cache fallback).
 
-    Returns the payload dict.  On failure falls back to the most recent
-    *validated* cached aggregate; if even that is absent, raises.
-    """
-    cache_ttl_s = _env_int("CACHE_TTL_SECONDS", 300)
+def _provider_key(name: str) -> Optional[str]:
+    if name == "here":
+        return SecureConfig.get_here_api_key()
+    if name == "tomtom":
+        return SecureConfig.get_tomtom_api_key()
+    return None
 
-    # Early check: skip TomTom call if daily quota is exhausted
-    if api_key and traffic_mode == "flow":
-        quota = get_quota_status("tomtom")
+
+def _fetch_traffic(refs) -> tuple[Optional[ProviderResult], list]:
+    """Try providers in configured order; return (first ok result or last result, attempt summaries)."""
+    tried = []
+    last = None
+    for name in configured_provider_order():
+        key = _provider_key(name)
+        if not key:
+            tried.append({"provider": name, "status": "not_configured"})
+            continue
+        quota = get_quota_status(name, quota_per_day=DAILY_QUOTA[name])
         if quota.get("remaining", 1) <= 0:
-            _log("WARN", "quota_exhausted", service="tomtom",
-                 calls_today=quota.get("calls_today"),
-                 quota_per_day=quota.get("quota_per_day"))
-            cached = tomtom.get_cached_ayalon_segments(mode=traffic_mode, max_age_s=24 * 3600)
-            if cached:
-                out = dict(cached)
-                out["errors"] = ["Daily TomTom quota exhausted — serving cached data"]
-                out["_fetch_status"] = "quota_exhausted"
-                return out
-            raise RuntimeError("TomTom quota exhausted and no cached data available")
-
-    try:
-        result = tomtom.get_ayalon_segments(api_key, cache_ttl_s=cache_ttl_s, mode=traffic_mode)
-        result["_fetch_status"] = "ok"
-        return result
-    except Exception as exc:
-        exc_msg = str(exc)
-        _log("WARN", "traffic_fetch_failed", error=exc_msg[:200])
-
-        # Classify the failure
-        fetch_status = "fetch_error"
-        if "rate-limited" in exc_msg.lower() or "429" in exc_msg:
-            fetch_status = "rate_limited"
-        elif "403" in exc_msg or "401" in exc_msg or "forbidden" in exc_msg.lower():
-            fetch_status = "auth_error"
-
-        cached = tomtom.get_cached_ayalon_segments(mode=traffic_mode, max_age_s=24 * 3600)
-        if cached:
-            out = dict(cached)
-            out["errors"] = [f"Using cached traffic due to: {exc_msg[:120]}"]
-            out["_fetch_status"] = fetch_status
-            return out
-        raise
+            tried.append({"provider": name, "status": "quota_exhausted", "calls_today": quota.get("calls_today")})
+            continue
+        fetch = PROVIDERS[name][1]
+        res = fetch(key, refs)
+        for a in res.attempts:
+            if a.status is not None:
+                record_api_call(name, quota_per_day=DAILY_QUOTA[name])
+        tried.append(res.summary())
+        last = res
+        if res.status == "ok":
+            return res, tried
+    return last, tried
 
 
-def _fetch_air_quality() -> Dict[str, Any]:
-    try:
-        return get_air_quality_for_ayalon(cache_ttl_s=600)
-    except Exception as exc:
-        _log("WARN", "air_quality_fetch_failed", error=str(exc)[:200])
-        cached = get_cached_air_quality(max_age_s=24 * 3600)
-        if cached:
-            out = dict(cached)
-            out["error"] = out.get("error") or "Using cached air quality due to live fetch failure"
-            return out
-        raise
-
-
-def _fetch_fuel_price() -> Dict[str, Any]:
+def _fetch_fuel() -> Dict[str, Any]:
     try:
         return fetch_current_fuel_price()
     except Exception as exc:
@@ -135,116 +120,143 @@ def _fetch_fuel_price() -> Dict[str, Any]:
             out = dict(cached)
             out["source_id"] = str(out.get("source_id", "fuel")) + ":cached"
             return out
-        raise
+        return {}
 
 
-# ---------------------------------------------------------------------------
-# Main collection cycle
-# ---------------------------------------------------------------------------
+def _fetch_air() -> Dict[str, Any]:
+    try:
+        return get_air_quality_for_ayalon(cache_ttl_s=600)
+    except Exception as exc:
+        _log("WARN", "air_quality_fetch_failed", error=str(exc)[:200])
+        return get_cached_air_quality(max_age_s=24 * 3600) or {}
 
-def collect_once() -> Dict[str, Any]:
-    """Run one full collection cycle.
 
-    Returns a diagnostic summary dict.
-    """
-    cycle_start = _utc_now_iso()
-    _log("INFO", "cycle_start")
+def collect_once(store: Optional[HistoryStore] = None, refs=None, fetcher=None) -> Dict[str, Any]:
+    """Run one collection cycle and return its summary (also written to collection_cycles)."""
+    started = _utc_now_iso()
+    cycle_id = str(uuid.uuid4())
+    store = store or HistoryStore()
+    refs = refs if refs is not None else load_reference_segments()
+    result, tried = (fetcher or _fetch_traffic)(refs)
 
-    history = HistoryStore()
-    model = AyalonModel()
+    statuses: Dict[str, str] = {}
+    segments_ok = segments_new = 0
+    provider = result.provider if result else None
+    if result is not None and result.status == "ok":
+        store.store_raw(result.raw_sha256, result.provider, result.fetched_at, result.raw_gz)
+        processed = _utc_now_iso()
+        observed_at = result.source_updated or result.fetched_at
+        snapshot = result.source_updated or result.response_id or result.raw_sha256
+        for m in match_all(refs, result.pieces):
+            statuses[m.segment_id] = m.status
+            if m.status == "ok":
+                segments_ok += 1
+            inserted = store.insert_observation({
+                "cycle_id": cycle_id,
+                "segment_id": m.segment_id,
+                "segment_version": m.segment_version,
+                "methodology_version": METHODOLOGY_VERSION,
+                "provider": result.provider,
+                "provider_snapshot": snapshot,
+                "observed_at_utc": observed_at,
+                "source_updated_utc": result.source_updated,
+                "fetched_at_utc": result.fetched_at,
+                "processed_at_utc": processed,
+                "status": m.status,
+                "coverage": m.coverage,
+                "length_m": m.length_m,
+                "travel_time_s": m.travel_time_s,
+                "freeflow_time_s": m.freeflow_time_s,
+                "delay_s": delay_per_vehicle_s(m.travel_time_s, m.freeflow_time_s),
+                "speed_kmh": m.speed_kmh,
+                "freeflow_kmh": m.freeflow_kmh,
+                "confidence": m.confidence,
+                "jam_factor": m.jam_factor,
+                "mean_offset_m": m.mean_offset_m,
+                "max_offset_m": m.max_offset_m,
+                "piece_ids": json.dumps(m.piece_ids),
+                "raw_sha256": result.raw_sha256,
+            })
+            if inserted and m.status == "ok":
+                segments_new += 1
+            elif not inserted:
+                statuses[m.segment_id] = m.status + ":snapshot_already_recorded"
+    else:
+        for r in refs:
+            statuses[r.segment_id] = "provider_" + (result.status if result else "unavailable")
 
-    api_key = SecureConfig.get_tomtom_api_key()
+    total = len(refs)
+    status = "ok" if segments_ok == total else ("partial" if segments_ok > 0 else "failed")
 
-    traffic_mode = os.getenv("TRAFFIC_MODE")
-    if not traffic_mode:
-        traffic_mode = "flow" if api_key else "sample"
-    if traffic_mode == "flow" and not api_key:
-        _log("WARN", "no_api_key_fallback_sample")
-        traffic_mode = "sample"
+    fuel = _fetch_fuel()
+    air = _fetch_air()
+    error = None
+    if result is None:
+        error = "no traffic provider configured: " + ", ".join(t["provider"] + "=" + t["status"] for t in tried)
+    elif result.status != "ok":
+        error = f"{result.provider}: {result.status}: {result.error or ''}"[:500]
 
-    # ── Fetch all three sources ──
-    tomtom_data = _fetch_traffic(api_key, traffic_mode)
-    aq_data = _fetch_air_quality()
-    fuel_data = _fetch_fuel_price()
-
-    fetch_status = tomtom_data.pop("_fetch_status", "ok")
-
-    now_ts = time.time()
-    tomtom_ts = _parse_iso_to_ts(tomtom_data.get("fetched_at"))
-    tomtom_age_s = (now_ts - tomtom_ts) if tomtom_ts else None
-
-    segments = tomtom_data.get("segments") or []
-    price = fuel_data.get("price_ils_per_l")
-
-    if not segments or price is None:
-        _log("ERROR", "insufficient_inputs",
-             segments_count=len(segments),
-             fuel_price=price)
-        raise RuntimeError("collector: insufficient inputs (traffic segments or fuel price missing)")
-
-    src_ids = {
-        "traffic": tomtom_data.get("source_id"),
-        "air": aq_data.get("source_id"),
-        "fuel": fuel_data.get("source_id"),
+    cycle = {
+        "cycle_id": cycle_id,
+        "methodology_version": METHODOLOGY_VERSION,
+        "started_at_utc": started,
+        "finished_at_utc": _utc_now_iso(),
+        "provider": provider,
+        "provider_status": result.status if result else "not_configured",
+        "status": status,
+        "segments_total": total,
+        "segments_ok": segments_ok,
+        "segments_new": segments_new,
+        "source_updated_utc": result.source_updated if result else None,
+        "fetched_at_utc": result.fetched_at if result else None,
+        "response_id": result.response_id if result else None,
+        "raw_sha256": result.raw_sha256 if result else None,
+        "error": error,
+        "diagnostics_json": json.dumps({"providers": tried, "segments": statuses}, default=str)[:20000],
+        "fuel_price_ils_per_l": fuel.get("price_ils_per_l"),
+        "fuel_source_id": fuel.get("source_id"),
+        "fuel_fetched_at_utc": fuel.get("fetched_at_utc") or fuel.get("fetched_at"),
+        "air_source_id": air.get("source_id"),
+        "air_fetched_at_utc": air.get("fetched_at"),
     }
+    store.record_cycle(cycle)
 
-    results = model.run_model(
-        segments,
-        data_timestamp_utc=tomtom_data.get("fetched_at"),
-        source_ids=src_ids,
-        p_fuel_ils_per_l=float(price),
-        vehicle_count_mode=tomtom_data.get("vehicle_count_mode"),
-    )
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=RAW_RETENTION_DAYS)).isoformat().replace("+00:00", "Z")
+    store.prune_raw(cutoff)
 
-    history.record_run(
-        results=results,
-        tomtom_data=tomtom_data,
-        aq_data=aq_data,
-        fuel_data=fuel_data,
-        tomtom_age_s=tomtom_age_s,
-    )
-
-    summary = {
-        "collected_at_utc": _utc_now_iso(),
-        "cycle_start": cycle_start,
-        "traffic_mode": traffic_mode,
-        "traffic_fetch_status": fetch_status,
-        "tomtom_age_s": round(tomtom_age_s, 1) if tomtom_age_s is not None else None,
-        "segments_count": len(segments),
-        "sources": src_ids,
-        "pipeline_run_id": results.get("pipeline_run_id"),
-        "delta_T_total_h": results.get("delta_T_total_h"),
-        "leakage_ils": results.get("leakage_ils"),
-        "db_write": "ok",
-    }
-
-    _log("INFO", "cycle_complete", **summary)
+    summary = {k: cycle[k] for k in ("cycle_id", "status", "provider", "provider_status", "segments_total",
+                                     "segments_ok", "segments_new", "source_updated_utc", "fetched_at_utc", "error")}
+    summary["segments"] = statuses
+    summary["providers_tried"] = [{k: t.get(k) for k in ("provider", "status", "error")} for t in tried]
     return summary
 
 
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
-
 def main() -> int:
-    p = argparse.ArgumentParser(description="Ayalon monitor: headless collector")
+    p = argparse.ArgumentParser(description="Ayalon monitor: headless collector (methodology v2)")
     p.add_argument("--once", action="store_true", help="Run one collection cycle")
+    p.add_argument("--migrate-only", action="store_true", help="Apply DB migration (with backup) and exit")
     args = p.parse_args()
 
+    if args.migrate_only:
+        info = HistoryStore(migrate=False).migrate()
+        _log("INFO", "migration", result=info or "already_current")
+        return 0
     if not args.once:
         p.error("Only --once is supported. Use systemd timer/cron for scheduling.")
 
-    try:
-        out = collect_once()
-        # Human-readable one-liner for journalctl quick scan
-        print(f"OK  mode={out['traffic_mode']}  fetch={out['traffic_fetch_status']}  "
-              f"age={out.get('tomtom_age_s', '?')}s  segs={out['segments_count']}  "
-              f"run={out['pipeline_run_id']}", flush=True)
-        return 0
-    except Exception as exc:
-        _log("ERROR", "cycle_failed", error=str(exc)[:300],
-             traceback=traceback.format_exc()[-500:])
-        return 1
+    t0 = time.monotonic()
+    with _single_instance(LOCK_PATH) as acquired:
+        if not acquired:
+            _log("WARN", "collector_already_running")
+            return 0
+        try:
+            out = collect_once()
+        except Exception as exc:
+            _log("ERROR", "cycle_crashed", error=str(exc)[:300], traceback=traceback.format_exc()[-800:])
+            return 1
+    level = {"ok": "INFO", "partial": "WARN"}.get(out["status"], "ERROR")
+    _log(level, "cycle_complete", duration_s=round(time.monotonic() - t0, 2), **out)
+    return 0 if out["status"] in ("ok", "partial") else 1
 
 
 if __name__ == "__main__":

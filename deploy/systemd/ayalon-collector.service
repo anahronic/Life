@@ -1,15 +1,20 @@
 [Unit]
-Description=Ayalon Monitor Collector (headless)
+Description=Ayalon Monitor Collector (headless, methodology v2)
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=oneshot
+User=admin
+Group=admin
 WorkingDirectory=/opt/Life
 Environment=PYTHONUNBUFFERED=1
-# Secrets/config (recommended to place in /etc/default/ayalon-monitor)
+# Secrets/config: TOMTOM_API_KEY, HERE_API_KEY, TRAFFIC_PROVIDERS (default "here,tomtom").
+# Read by systemd (root) before dropping privileges; keep the file root:root 0600.
 EnvironmentFile=-/etc/default/ayalon-monitor
 ExecStart=/opt/Life/.venv/bin/python /opt/Life/collector.py --once
+# A failed cycle (no provider data) exits 1 so it is visible in `systemctl status`.
+TimeoutStartSec=240
 
 # Hardening (safe defaults)
 NoNewPrivileges=true

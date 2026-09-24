@@ -1,5 +1,11 @@
 Ayalon Real-Time Physical Impact Model
 
+> **Status 2026-09-24 — methodology v2.** TomTom removed Israel from its Traffic API
+> coverage on 2026-09-15, so TomTom returns no data for Ayalon. The collector now
+> supports HERE Traffic API v7 (Israel: flow + incidents) and needs `HERE_API_KEY`.
+> v1 figures (Jan–Sep 2026) are methodologically invalid and are kept only as a
+> flagged archive. See [docs/ayalon_v2_methodology.md](docs/ayalon_v2_methodology.md).
+
 Quickstart
 
 1. Install dependencies:
@@ -8,16 +14,17 @@ Quickstart
 pip install -r requirements.txt
 ```
 
-2. Set environment variables (recommended):
+2. Set environment variables (collector; on the VPS they live in `/etc/default/ayalon-monitor`):
 
 ```bash
-export TOMTOM_API_KEY=your_key_here
-export FUEL_PRICE_ILS=7.5  # optional fallback
+export HERE_API_KEY=...            # real-time provider for Israel
+export TRAFFIC_PROVIDERS=here,tomtom  # preference order (default)
 ```
 
-3. Run Streamlit monitor:
+3. Collect once, then run the dashboard (read-only):
 
 ```bash
+python collector.py --once
 streamlit run traffic_app.py
 ```
 
@@ -27,7 +34,7 @@ GitHub Pages (static landing page)
 - This repo includes a simple landing page in `docs/index.html` plus a Pages workflow.
 - Enable it in GitHub: Settings → Pages → Source: GitHub Actions.
 
-Minimal always-on collection (no server): GitHub Actions + SQLite
+Minimal always-on collection (no server): GitHub Actions + SQLite — RETIRED 2026-09-24 (schedule disabled; history/monitor.sqlite3 is a frozen v1 archive)
 
 This repo includes a scheduled workflow that runs `collector.py --once` and commits the updated SQLite DB back into the repo.
 

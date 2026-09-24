@@ -4,6 +4,7 @@ Ensures API keys and secrets are only loaded from env/secrets, never exposed in 
 """
 
 import os
+import sys
 from typing import Any, Optional
 
 
@@ -17,6 +18,10 @@ class SecureConfig:
         if value is not None and str(value).strip() != "":
             return str(value)
 
+        # Streamlit secrets only inside the Streamlit process; the headless
+        # collector reads its configuration from the environment only.
+        if "streamlit" not in sys.modules:
+            return None
         try:
             import streamlit as st  # type: ignore
 
@@ -45,6 +50,12 @@ class SecureConfig:
         # Verify it's a non-empty string, don't log its value
         return key if len(key) > 10 else None
     
+    @staticmethod
+    def get_here_api_key() -> Optional[str]:
+        """HERE Traffic API v7 key (env HERE_API_KEY or Streamlit secrets). Never logged."""
+        key = SecureConfig._get_value("HERE_API_KEY")
+        return key if key and len(key) > 10 else None
+
     @staticmethod
     def get_enable_sample_mode() -> bool:
         """Allow sample mode for testing without API key."""

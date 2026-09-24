@@ -5,11 +5,14 @@ Wants=network-online.target
 
 [Service]
 Type=simple
+User=admin
+Group=admin
 WorkingDirectory=/opt/Life
 Environment=PYTHONUNBUFFERED=1
+# ProtectHome hides /home; give Streamlit a private writable HOME instead.
+Environment=HOME=/tmp
 EnvironmentFile=-/etc/default/ayalon-monitor
-# Bind to localhost; put Nginx in front for public access.
-# If you intentionally want to expose Streamlit directly, change address to 0.0.0.0
+# Bind to localhost; Nginx proxies /ayalon/ to it (baseUrlPath=ayalon in .streamlit/config.toml).
 ExecStart=/opt/Life/.venv/bin/streamlit run traffic_app.py --server.port 8501 --server.address 127.0.0.1
 Restart=on-failure
 RestartSec=3
@@ -18,6 +21,8 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
+# The UI only reads the database (the collector is the only writer); data/ stays
+# writable so SQLite can roll back a hot journal left by an interrupted writer.
 ReadWritePaths=/opt/Life/data /opt/Life/sources/_cache
 
 [Install]

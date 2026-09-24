@@ -1,33 +1,29 @@
 """
-Health / freshness checks for the Ayalon monitoring pipeline.
+Health / freshness checks for the Ayalon monitoring pipeline (methodology v2).
 
 Invariants:
-  1. Health checks NEVER call TomTom or any external API.
-  2. Traffic freshness is determined solely by the last SUCCESSFUL
-     traffic run in SQLite (filtered by traffic_source_id).
-  3. Fuel pipeline data cannot influence traffic health status.
-  4. States are explicit and distinguishable: healthy / degraded / stale /
-     collector_down / empty / error.
+  1. Health checks NEVER call any external API.
+  2. Traffic freshness is the age of the newest SUCCESSFUL segment
+     observation (segment_observations.status = 'ok'), using the time the
+     measurement refers to (observed_at_utc), not the time a row was written.
+     A cached or re-recorded response can therefore never look fresh.
+  3. Collector liveness is judged separately from the newest collection
+     cycle of any status.
+  4. States: healthy / partial / stale / no_data / collector_down / empty / error.
 """
 
 import os
 import sqlite3
-import time
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any, Dict, Optional
 
-
-# ── Thresholds (seconds) ────────────────────────────────────────────────
-#  Collector fires every 5 min.  Allow some slack.
-TRAFFIC_FRESH_S = 600        # ≤ 10 min → healthy
-TRAFFIC_DEGRADED_S = 1800    # ≤ 30 min → degraded  (a few missed cycles)
-TRAFFIC_STALE_S = 7200       # ≤  2 h   → stale     (collector likely down)
-# >2 h → collector_down
+TRAFFIC_FRESH_S = 600        # newest measurement <= 10 min -> current
+TRAFFIC_STALE_S = 7200       # <= 2 h -> stale; older -> no_data
+COLLECTOR_ALIVE_S = 900      # a cycle (any status) within 15 min -> collector alive
 
 
 def _default_db_path() -> str:
-    return os.environ.get("HISTORY_DB_PATH", "data/monitor.sqlite3")
+    return os.environ.get("HISTORY_DB_PATH", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "monitor.sqlite3"))
 
 
 def _utc_now_ts() -> float:
@@ -35,7 +31,6 @@ def _utc_now_ts() -> float:
 
 
 def _parse_iso_ts(s: Optional[str]) -> Optional[float]:
-    """Parse an ISO-8601 timestamp string to Unix epoch, or None."""
     if not s:
         return None
     try:
@@ -44,96 +39,86 @@ def _parse_iso_ts(s: Optional[str]) -> Optional[float]:
         return None
 
 
-# ── Core: last successful traffic snapshot ──────────────────────────────
-
-def _last_successful_traffic_run(db_path: str) -> Optional[Dict[str, Any]]:
-    """Return the most recent run row that has a valid traffic_source_id
-    and non-null traffic timestamp.  This is the single source of truth
-    for traffic freshness.
-
-    Returns dict with keys: recorded_at_utc, tomtom_fetched_at, traffic_source_id,
-    tomtom_age_s, data_timestamp_utc — or None if no valid traffic run exists.
-    """
+def _query(db_path: str, sql: str, args=()) -> Optional[sqlite3.Row]:
+    con = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, timeout=10)
+    con.row_factory = sqlite3.Row
     try:
-        con = sqlite3.connect(db_path, timeout=10)
-        con.row_factory = sqlite3.Row
-        row = con.execute(
-            """
-            SELECT recorded_at_utc, tomtom_fetched_at, traffic_source_id,
-                   tomtom_age_s, data_timestamp_utc
-            FROM runs
-            WHERE traffic_source_id IS NOT NULL
-              AND traffic_source_id NOT LIKE '%:error%'
-              AND tomtom_fetched_at IS NOT NULL
-            ORDER BY id DESC
-            LIMIT 1
-            """
-        ).fetchone()
+        return con.execute(sql, args).fetchone()
+    finally:
         con.close()
-        return dict(row) if row else None
-    except Exception:
-        return None
 
 
-# ── Health state computation ────────────────────────────────────────────
+def compute_traffic_health(db_path: str = None, now_ts: Optional[float] = None) -> Dict[str, Any]:
+    """Compute traffic health from SQLite only.
 
-def compute_traffic_health(db_path: str = None) -> Dict[str, Any]:
-    """Compute the full traffic health status from SQLite only.
-
-    Returns a dict with:
-      status   — one of: healthy, degraded, stale, collector_down, empty, error
-      age_s    — seconds since the last valid traffic snapshot (or None)
-      message  — human-readable explanation
-      last_traffic_ts — ISO timestamp of last valid traffic snaphot
-      traffic_source_id — e.g. 'tomtom_flow_v4'
+    Returns dict: status, age_s (newest valid measurement), last_traffic_ts,
+    traffic_source_id, last_cycle_status, last_cycle_ts, last_cycle_error,
+    collector_alive, message.
     """
-    if db_path is None:
-        db_path = _default_db_path()
-
-    run = _last_successful_traffic_run(db_path)
-
-    if run is None:
-        return {
-            "status": "empty",
-            "age_s": None,
-            "message": "No valid traffic runs found in database",
-            "last_traffic_ts": None,
-            "traffic_source_id": None,
-        }
-
-    # Prefer tomtom_fetched_at (actual data time), fall back to recorded_at_utc
-    ts_str = run.get("tomtom_fetched_at") or run.get("recorded_at_utc")
-    ts = _parse_iso_ts(ts_str)
-    if ts is None:
-        return {
-            "status": "error",
-            "age_s": None,
-            "message": f"Cannot parse timestamp: {ts_str}",
-            "last_traffic_ts": ts_str,
-            "traffic_source_id": run.get("traffic_source_id"),
-        }
-
-    age_s = _utc_now_ts() - ts
-
-    if age_s < TRAFFIC_FRESH_S:
-        status = "healthy"
-    elif age_s < TRAFFIC_DEGRADED_S:
-        status = "degraded"
-    elif age_s < TRAFFIC_STALE_S:
-        status = "stale"
-    else:
-        status = "collector_down"
-
-    return {
-        "status": status,
-        "age_s": int(age_s),
-        "message": f"Last valid traffic snapshot {int(age_s)}s ago ({status})",
-        "last_traffic_ts": ts_str,
-        "traffic_source_id": run.get("traffic_source_id"),
+    db_path = db_path or _default_db_path()
+    now = now_ts if now_ts is not None else _utc_now_ts()
+    out: Dict[str, Any] = {
+        "status": "empty", "age_s": None, "last_traffic_ts": None, "traffic_source_id": None,
+        "last_cycle_status": None, "last_cycle_ts": None, "last_cycle_error": None,
+        "collector_alive": False, "segments_ok": None, "segments_total": None, "message": "",
     }
+    try:
+        cyc = _query(db_path, "SELECT * FROM collection_cycles ORDER BY started_at_utc DESC LIMIT 1")
+        obs = _query(
+            db_path,
+            "SELECT observed_at_utc, provider FROM segment_observations WHERE status = 'ok' ORDER BY observed_at_utc DESC LIMIT 1",
+        )
+    except sqlite3.OperationalError as exc:
+        # DB missing or not yet migrated to v2
+        out["status"] = "empty"
+        out["message"] = f"No v2 data: {exc}"
+        return out
+    except Exception as exc:  # pragma: no cover - defensive
+        out["status"] = "error"
+        out["message"] = str(exc)[:200]
+        return out
 
+    if cyc is not None:
+        cts = _parse_iso_ts(cyc["started_at_utc"])
+        out.update({
+            "last_cycle_status": cyc["status"],
+            "last_cycle_ts": cyc["started_at_utc"],
+            "last_cycle_error": cyc["error"],
+            "segments_ok": cyc["segments_ok"],
+            "segments_total": cyc["segments_total"],
+            "collector_alive": cts is not None and now - cts <= COLLECTOR_ALIVE_S,
+        })
 
-# ── Cache layer status (informational, no external calls) ──────────────
+    if obs is not None:
+        ts = _parse_iso_ts(obs["observed_at_utc"])
+        if ts is None:
+            out["status"] = "error"
+            out["message"] = f"Cannot parse timestamp: {obs['observed_at_utc']}"
+            return out
+        out["age_s"] = int(round(now - ts))
+        out["last_traffic_ts"] = obs["observed_at_utc"]
+        out["traffic_source_id"] = obs["provider"]
+
+    if cyc is None and obs is None:
+        out["status"] = "empty"
+        out["message"] = "No collection cycles recorded yet"
+        return out
+    if not out["collector_alive"]:
+        out["status"] = "collector_down"
+    elif out["age_s"] is None or out["age_s"] > TRAFFIC_STALE_S:
+        out["status"] = "no_data"
+    elif out["age_s"] > TRAFFIC_FRESH_S:
+        out["status"] = "stale"
+    elif out["last_cycle_status"] == "ok":
+        out["status"] = "healthy"
+    else:
+        out["status"] = "partial"
+    out["message"] = (
+        f"status={out['status']} newest_measurement_age_s={out['age_s']} "
+        f"last_cycle={out['last_cycle_status']} ({out['segments_ok']}/{out['segments_total']})"
+    )
+    return out
+
 
 def check_cache_status() -> Dict[str, Any]:
     """Check cache directory presence and size — purely filesystem."""
@@ -153,8 +138,6 @@ def check_cache_status() -> Dict[str, Any]:
     }
 
 
-# ── Aggregated health (replaces old full_health_check) ──────────────────
-
 def get_health_status(db_path: str = None) -> Dict[str, Any]:
     """Full health check — SQLite + cache, NO external API calls."""
     traffic = compute_traffic_health(db_path)
@@ -162,23 +145,15 @@ def get_health_status(db_path: str = None) -> Dict[str, Any]:
     return {
         "status": traffic["status"],
         "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "checks": {
-            "traffic_freshness": traffic,
-            "cache": cache,
-        },
+        "checks": {"traffic_freshness": traffic, "cache": cache},
     }
 
 
-# ── One-word quick helpers ──────────────────────────────────────────────
-
 def get_quick_status(db_path: str = None) -> str:
-    """Return one-word status: healthy / degraded / stale / collector_down / empty / error.
-
-    NEVER calls TomTom or any external API.
-    """
+    """One-word status. NEVER calls any external API."""
     return compute_traffic_health(db_path or _default_db_path())["status"]
 
 
 def get_quick_status_readonly(db_path: str = None) -> str:
-    """Alias kept for backward compatibility with traffic_app.py."""
+    """Alias kept for backward compatibility."""
     return get_quick_status(db_path)
